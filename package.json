@@ -1,0 +1,40 @@
+{
+    "name": "cpen-321-server",
+    "version": "1.0.0",
+    "description": "CPEN 321 Server Code",
+    "main": "server.js",
+    "scripts": {
+        "build": "tsc",
+        "lint": "tslint -c ./tslint.json ./src/**/*.ts",
+        "start": "node --inspect=5858 -r ts-node/register ./src/server.ts",
+        "start:watch": "nodemon",
+        "test": "jest --watch"
+    },
+    "devDependencies": {
+        "@types/node": "^12.7.4",
+        "jest": "^24.9.0",
+        "nodemon": "^1.19.2",
+        "prettier": "^1.18.2",
+        "ts-node": "^8.3.0",
+        "tslint": "^5.19.0",
+        "tslint-config-prettier": "^1.18.0",
+        "tslint-plugin-prettier": "^2.0.1",
+        "typescript": "^3.6.2"
+    },
+    "dependencies": {
+        "express": "^4.17.1"
+    },
+    "nodemonConfig": {
+        "ignore": [
+            "**/*.test.ts",
+            "**/*.spec.ts",
+            ".git",
+            "node_modules"
+        ],
+        "watch": [
+            "src"
+        ],
+        "exec": "npm start",
+        "ext": "ts"
+    }
+}
