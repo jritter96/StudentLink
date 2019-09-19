@@ -8,6 +8,9 @@
         "no-console": {
             "severity": "warning"
         },
+        "object-literal-sort-keys": {
+            "severity": "off"
+        },
         "semicolon": true,
         "prettier": true,
         "quotemark": [
