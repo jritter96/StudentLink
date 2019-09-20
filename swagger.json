@@ -1,0 +1,57 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "This is the StudentLink Server API ",
+        "version": "0.0.1",
+        "title": "StudentLink API"
+    },
+    "tags": [
+        {
+            "name": "Courses",
+            "description": "Endpoints related to viewing and manipulating Course data"
+        },
+        {
+            "name": "Users",
+            "description": "Endpoints related to viewing and manipulating User data"
+        }
+    ],
+    "schemes": ["http"],
+    "paths": {
+        "/course/{courseId}": {
+            "get": {
+                "tags": ["Courses"],
+                "summary": "Get a Course object by ID",
+                "description": "",
+                "operationId": "",
+                "produces": [],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "courseId",
+                        "description": "The ID of the Course to return",
+                        "required": true,
+                        "type": "string"
+                    }
+                ]
+            }
+        },
+        "/user/{userId}": {
+            "get": {
+                "tags": ["Users"],
+                "summary": "Get a User object by ID",
+                "description": "",
+                "operationId": "",
+                "produces": [],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "userId",
+                        "description": "The ID of the User to return",
+                        "required": true,
+                        "type": "string"
+                    }
+                ]
+            }
+        }
+    }
+}

@@ -8,6 +8,9 @@
         "no-console": {
             "severity": "warning"
         },
+        "no-var-requires": {
+            "severity": "off"
+        },
         "object-literal-sort-keys": {
             "severity": "off"
         },
