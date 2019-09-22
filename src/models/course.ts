@@ -15,7 +15,20 @@ const courseSchema = new mongoose.Schema({
         type: String,
         trim: true,
     },
-    sections: [
+    courseSections: [
+        {
+            type: String,
+            trim: true,
+            required: true,
+        },
+    ],
+    labSections: [
+        {
+            type: String,
+            trim: true,
+        },
+    ],
+    tutorialSections: [
         {
             type: String,
             trim: true,
