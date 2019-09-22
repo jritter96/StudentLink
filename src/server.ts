@@ -1,6 +1,6 @@
 import * as express from 'express';
 import * as swaggerUi from 'swagger-ui-express';
-import * as classRouter from './routes/class';
+import * as courseRouter from './routes/course';
 import * as userRouter from './routes/user';
 
 const server = express();
@@ -9,7 +9,7 @@ const ENDPOINT = process.env.ENDPOINT || 'http://localhost';
 const PORT = process.env.PORT || 3000;
 
 server.use('/user', userRouter);
-server.use('/class', classRouter);
+server.use('/course', courseRouter);
 
 // host API documentation
 server.use('/', swaggerUi.serve, swaggerUi.setup(swaggerDoc));

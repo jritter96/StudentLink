@@ -3,7 +3,7 @@ import * as express from 'express';
 const router = express.Router();
 
 router.get('/', (req, res) => {
-    res.send('GET class using a classId');
+    res.send('GET course using a courseId');
 });
 
 router.post('/', (req, res) => {
