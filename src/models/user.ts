@@ -1,5 +1,12 @@
 import * as mongoose from 'mongoose';
 
+/* User
+ *
+ * firstName - e.g. Connor
+ * lastName - e.g. Fong
+ * courses:
+ *  e.g. ['CPEN331', 'CPEN321', 'CPEN311']
+ */
 const userSchema = new mongoose.Schema(
     {
         firstName: {
