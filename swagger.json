@@ -15,11 +15,15 @@
             "description": "Endpoints related to viewing and manipulating User data"
         }
     ],
-    "schemes": ["http"],
+    "schemes": [
+        "http"
+    ],
     "paths": {
         "/course/{courseId}": {
             "get": {
-                "tags": ["Courses"],
+                "tags": [
+                    "Courses"
+                ],
                 "summary": "Get a Course object by ID",
                 "description": "",
                 "operationId": "",
@@ -35,9 +39,38 @@
                 ]
             }
         },
+        "/course": {
+            "post": {
+                "tags": [
+                    "Courses"
+                ],
+                "summary": "Create a Course by providing a course code and course section",
+                "description": "",
+                "operationId": "",
+                "produces": [],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "courseCode",
+                        "description": "The course code, e.g. 'CPEN321'",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "body",
+                        "name": "courseSection",
+                        "description": "The course section, e.g. 'L1A'",
+                        "required": true,
+                        "type": "string"
+                    }
+                ]
+            }
+        },
         "/user/{userId}": {
             "get": {
-                "tags": ["Users"],
+                "tags": [
+                    "Users"
+                ],
                 "summary": "Get a User object by ID",
                 "description": "",
                 "operationId": "",
@@ -55,7 +88,9 @@
         },
         "/user": {
             "post": {
-                "tags": ["Users"],
+                "tags": [
+                    "Users"
+                ],
                 "summary": "Create a User by providing a first name and last name",
                 "description": "",
                 "operationId": "",
