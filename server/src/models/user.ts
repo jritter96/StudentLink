@@ -6,6 +6,10 @@ import * as mongoose from 'mongoose';
  * lastName - e.g. Fong
  * courses:
  *  e.g. ['CPEN331', 'CPEN321', 'CPEN311']
+ * groups:
+ *  e.g. ['groupID1', 'groupID2', etc.]
+ * schedule: 
+ * e.g. ['10000111100000000001111000000', ..., etc.] 
  * pushNotificationToken - Expo API token used to send push notifications to device
  */
 const userSchema = new mongoose.Schema(
@@ -35,6 +39,19 @@ const userSchema = new mongoose.Schema(
                 required: true,
             },
         ],
+        groups: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                required: true,
+            },
+        ],
+        schedule: [
+            {
+                type: String,
+                trim: true,
+                required: true,
+            },
+        ]
     },
     {
         timestamps: true,
