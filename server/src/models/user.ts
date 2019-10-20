@@ -8,6 +8,8 @@ import * as mongoose from 'mongoose';
  *  e.g. ['CPEN331', 'CPEN321', 'CPEN311']
  * groups:
  *  e.g. ['groupID1', 'groupID2', etc.]
+ * schedule: 
+ * e.g. ['10000111100000000001111000000', ..., etc.] 
  */
 const userSchema = new mongoose.Schema(
     {
@@ -35,6 +37,13 @@ const userSchema = new mongoose.Schema(
         groups: [
             {
                 type: mongoose.Schema.Types.ObjectId,
+                required: true,
+            },
+        ],
+        schedule: [
+            {
+                type: String,
+                trim: true,
                 required: true,
             },
         ]
