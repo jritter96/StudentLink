@@ -6,6 +6,8 @@ import * as mongoose from 'mongoose';
  * lastName - e.g. Fong
  * courses:
  *  e.g. ['CPEN331', 'CPEN321', 'CPEN311']
+ * groups:
+ *  e.g. ['groupID1', 'groupID2', etc.]
  */
 const userSchema = new mongoose.Schema(
     {
@@ -30,6 +32,12 @@ const userSchema = new mongoose.Schema(
                 required: true,
             },
         ],
+        groups: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                required: true,
+            },
+        ]
     },
     {
         timestamps: true,

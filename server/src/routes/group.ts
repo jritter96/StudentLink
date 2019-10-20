@@ -1,56 +1,65 @@
 import * as express from 'express';
-import { generateName } from '../utils/generate-name';
+const Group = require('../models/group');
 const User = require('../models/user');
 
 const router = express.Router();
 
 /*
- * Read a user from the database using its Object ID
+ * Read a group from the database using its Object ID
  *
- * GET /user/:id
+ * GET /group/:id
  */
 router.get('/:id', async (req, res) => {
     try {
-        const user = await User.findOne({ _id: req.params.id });
+        const group = await Group.findOne({ _id: req.params.id });
 
-        if (!user) {
+        if (!group) {
             return res.status(404).send();
         }
 
-        res.send(user);
+        res.send(group);
     } catch (error) {
         res.status(500).send();
     }
 });
 
 /*
- * Create a user
+ * Create a group
  *
- * POST /user
+ * POST /group
+ *
+ * Assume that this is called with fields from one user in the req body
  */
 router.post('/', async (req, res) => {
-    const user = new User({
+    const group = new Group({
         ...req.body,
-        aliasName: generateName(),
-        groups: [],
     });
 
     try {
+
+        const user = await User.findOne({ _id: req.body.members[0]});
+        if (!user) {
+            return res.status(404).send();
+        }
+
+        user.groups.push(group._id)
+        
         await user.save();
-        res.status(201).send(user);
+        await group.save();
+        res.status(201).send(group);
     } catch (error) {
         res.status(400).send(error);
     }
 });
 
 /*
- * Modifies a user
- * PATCH /user/:id
+ * Modifies a group
+ * PATCH /group/:id
  */
 router.patch('/:id', async (req, res) => {
     // collect all of the requested key updates and validate them against allowed changes
     const updates = Object.keys(req.body);
-    const allowedUpdates = ['firstName', 'lastName', 'aliasName', 'courses'];
+    const allowedUpdates = ['members', 'courses', 'meeting_times'];
 
     const isValidOperation = updates.every(update => {
         return allowedUpdates.includes(update);
@@ -61,22 +70,22 @@ router.patch('/:id', async (req, res) => {
     }
 
     try {
-        const user = await User.findOne({ _id: req.params.id });
+        const group = await Group.findOne({ _id: req.params.id });
 
-        if (!user) {
+        if (!group) {
             res.status(404).send();
         }
 
         updates.forEach(update => {
-            user[update] = req.body[update];
+            group[update] = req.body[update];
         });
-
-        await user.save();
-
-        res.send(user);
+        
+        await group.save();
+        res.send(group);
     } catch (error) {
         res.status(400).send(error);
     }
+
 });
 
 module.exports = router;
