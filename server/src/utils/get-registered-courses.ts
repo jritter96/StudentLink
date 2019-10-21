@@ -25,7 +25,4 @@ export const getRegisteredCourses = async function(userId) {
 
 }
 
-// getRegisteredCourses('5d8c51d88a7fc5ae1f4531a3', (err, response, body) => {
-// 	console.log(`err: ${err}, response: ${response}, body: ${body}`)
-// })
 
