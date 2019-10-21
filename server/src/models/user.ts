@@ -30,7 +30,8 @@ const userSchema = new mongoose.Schema(
         },
         courses: [
             {
-                type: mongoose.Schema.Types.ObjectId,
+                type: String,
+                trim:  true,
                 required: true,
             },
         ],
@@ -46,7 +47,11 @@ const userSchema = new mongoose.Schema(
                 trim: true,
                 required: true,
             },
-        ]
+        ],
+        token: {
+            type: String,
+            trim: true
+        }
     },
     {
         timestamps: true,
