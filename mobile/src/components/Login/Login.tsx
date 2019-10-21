@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, KeyboardAvoidingView } from 'react-native';
-import { SketchPicker } from 'react-color';
 import LoginForm from './LoginForm';
 
 interface LoginProps {
     authenticateUserId: Function;
+    HandleSuccessfulLogin: Function;
 }
 
 export default class Login extends Component<LoginProps, {}> {
@@ -19,7 +19,7 @@ export default class Login extends Component<LoginProps, {}> {
                     <Text style={styles.title}>Student Link</Text>
                 </View>
                 <View>
-                    <LoginForm />
+                    <LoginForm HandleSuccessfulLogin={this.props.HandleSuccessfulLogin}/>
                 </View>
             </KeyboardAvoidingView>
         );

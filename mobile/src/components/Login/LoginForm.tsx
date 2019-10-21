@@ -13,6 +13,7 @@ const endpoint = 'http://ec2-18-222-96-240.us-east-2.compute.amazonaws.com';
 
 interface LoginFormProps {
     authenticateUserId: Function;
+    HandleSuccessfulLogin: Function;
 }
 
 interface LoginFormState {
@@ -40,8 +41,8 @@ export default class LoginForm extends Component<
         this.setErrorMessage = this.setErrorMessage.bind(this);
     }
 
-    usernameInput;
-    passwordInput;
+    usernameInput: any;
+    passwordInput: any;
 
     render() {
         return (
@@ -78,13 +79,13 @@ export default class LoginForm extends Component<
         );
     }
 
-    handleUsernameUpdate(input) {
+    handleUsernameUpdate(input: any) {
         this.setState({
             username: input,
         });
     }
 
-    handlePasswordUpdate(input) {
+    handlePasswordUpdate(input: any) {
         this.setState({
             password: input,
         });
@@ -109,7 +110,7 @@ export default class LoginForm extends Component<
             .then(response => {
                 this.setErrorMessage(false);
                 // find id located in response['_id']
-
+                this.props.HandleSuccessfulLogin(response['_id'])
                 // TODO: pass handler to App.tsx
             })
             .catch(error => {
@@ -117,7 +118,7 @@ export default class LoginForm extends Component<
             });
     }
 
-    setErrorMessage(arg) {
+    setErrorMessage(arg: any) {
         if (arg == true) {
             this.setState({
                 errorMessage:
