@@ -10,6 +10,7 @@ import * as mongoose from 'mongoose';
  *  e.g. ['groupID1', 'groupID2', etc.]
  * schedule: 
  * e.g. ['10000111100000000001111000000', ..., etc.] 
+ * pushNotificationToken - Expo API token used to send push notifications to device
  */
 const userSchema = new mongoose.Schema(
     {
@@ -27,6 +28,10 @@ const userSchema = new mongoose.Schema(
             type: String,
             trim: true,
             default: 'Defaulting Defaulter',
+        },
+        pushNotificationToken: {
+            type: String,
+            trim: true,
         },
         courses: [
             {

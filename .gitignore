@@ -73,7 +73,11 @@ typings/
 .idea/*
 
 # config files
+mobile/config/*.env
 server/config/*.env
 
 # server generated output 
 server/dist/*
+
+# vscode files
+**/.vscode/*
