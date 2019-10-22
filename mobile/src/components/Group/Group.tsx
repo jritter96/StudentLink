@@ -1,10 +1,20 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, SafeAreaView, ScrollView, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
-import GroupContainer from './GroupContainer'
+import {
+    StyleSheet,
+    View,
+    SafeAreaView,
+    ScrollView,
+    Text,
+    TouchableOpacity,
+    ActivityIndicator,
+} from 'react-native';
+import GroupContainer from './GroupContainer';
 
 const endpoint = 'http://ec2-18-222-96-240.us-east-2.compute.amazonaws.com';
 
-interface GroupProps { userID: String; }
+interface GroupProps {
+    userID: String;
+}
 
 interface GroupState {
     isLoading: boolean;
@@ -12,7 +22,6 @@ interface GroupState {
 }
 
 export default class Group extends Component<GroupProps, GroupState> {
-
     groups = [];
 
     constructor(props) {
@@ -20,7 +29,7 @@ export default class Group extends Component<GroupProps, GroupState> {
         this.state = {
             isLoading: false,
             groups: this.groups,
-        }
+        };
         this.searchPress = this.searchPress.bind(this);
     }
 
@@ -30,7 +39,7 @@ export default class Group extends Component<GroupProps, GroupState> {
                 <View style={styles.container}>
                     <ActivityIndicator />
                 </View>
-            )
+            );
         } else {
             return (
                 <SafeAreaView style={styles.container}>
@@ -52,9 +61,9 @@ export default class Group extends Component<GroupProps, GroupState> {
     }
 
     renderGroups() {
-        return this.groups.map((memberGroup) =>
+        return this.groups.map(memberGroup => (
             <GroupContainer group={memberGroup} />
-        );
+        ));
     }
 
     searchPress() {
@@ -67,10 +76,10 @@ export default class Group extends Component<GroupProps, GroupState> {
         })
             .then(response => {
                 if (response.ok) return response.json();
-                else throw ('Error: problem retrieving group match');
+                else throw 'Error: problem retrieving group match';
             })
             .then(responseJson => {
-                this.groupMatch(responseJson['members']);
+                this.groupMatch(responseJson['names']);
             })
             .catch(error => {
                 console.log(error);
@@ -84,12 +93,12 @@ export default class Group extends Component<GroupProps, GroupState> {
             memberNames.push(memberItem);
         }
         this.groups.push({
-            name: "Group 1",
+            name: 'Group 1',
             members: memberNames,
         });
         this.setState({
             groups: this.groups,
-        })
+        });
     }
 }
 
@@ -122,5 +131,5 @@ const styles = StyleSheet.create({
         color: 'white',
         textAlign: 'center',
         fontWeight: '700',
-    }
+    },
 });
