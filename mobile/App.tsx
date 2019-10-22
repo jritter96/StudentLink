@@ -4,6 +4,7 @@ import Login from './src/components/Login/Login';
 import Navbar from './src/components/Navbar/Navbar';
 import Chat from './src/components/Chat/Chat';
 import Group from './src/components/Group/Group';
+import Schedule from './src/components/Schedule/Schedule';
 import registerForPushNotificationsAsync from './src/utils/registerForPushNotificationsAsync';
 
 enum Navigation {
@@ -40,12 +41,9 @@ export default class App extends Component {
                     />
                 );
             case Navigation.schedule:
-                {
-                    /*return <Schedule />; */
-                }
-                return null;
+                return <Schedule userID={this.state.userID} />;
             case Navigation.group:
-                return <Group userID={this.state.userID}/>
+                return <Group userID={this.state.userID} />;
             default:
                 return null;
         }
