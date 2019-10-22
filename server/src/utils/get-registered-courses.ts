@@ -14,6 +14,8 @@ export const getRegisteredCourses = async function(userId) {
 
 	let course_code, courseName, courseInDB;
 
+	console.log('token:', user.token)
+
 	return new Promise((resolve, reject) => {
 		request.get(server + '/api/v1/courses', {
 		  'auth': {
@@ -50,7 +52,7 @@ export const getRegisteredCourses = async function(userId) {
 							const response = await generateCourseData(courseName[0], courseName[1]);
 
 							let sections = response['sections']
-							let term1section = sections['101']
+							let term1section = sections['101'] || sections['001']
 							courseDays = term1section['days'].split(" ")
 
 							for (let k = 0; k < courseDays.length; k++) {
