@@ -67,7 +67,7 @@ export default class Schedule extends Component<ScheduleProps, ScheduleState> {
 
     renderCourses() {
         return this.state.courses.map(course => (
-            <View style={styles.courseContainer}>
+            <View style={styles.courseContainer} key={course}>
                 <Text style={styles.courseText}>{course}</Text>
             </View>
         ));

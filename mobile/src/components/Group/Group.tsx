@@ -62,7 +62,7 @@ export default class Group extends Component<GroupProps, GroupState> {
 
     renderGroups() {
         return this.groups.map(memberGroup => (
-            <GroupContainer group={memberGroup} />
+            <GroupContainer group={memberGroup} key={memberGroup} />
         ));
     }
 
