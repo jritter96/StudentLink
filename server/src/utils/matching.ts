@@ -74,7 +74,7 @@ const assignPreferenceScores = async function(userId, callback) {
                 }
             });
 
-            if (common_courses) {
+            if (common_courses && !group.members.includes(user._id)) {
                 pref =
                     (common_courses.length / num_u_courses +
                         common_courses.length / num_g_courses) *
@@ -296,7 +296,11 @@ const createGroup = async function(userId, callback) {
         await user.save();
         await group.save();
 
-        return callback(null, group);
+        const groupCopy = JSON.parse(JSON.stringify(group));
+        groupCopy.names = []
+        groupCopy.names.push(`${user.firstName} ${user.lastName}`)
+
+        return callback(null, groupCopy);
     } catch (error) {
         callback(error);
     }
