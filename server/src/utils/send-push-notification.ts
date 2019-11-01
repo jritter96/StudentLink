@@ -21,19 +21,12 @@ export const pushUserJoinedGroup = async (userTokens, userNew) => {
         options = {
             url: endpoint,
             headers: pushHeaders,
-            body: JSON.stringify(
-                buildPushNotification(
-                    token,
-                    `A new user ${userNew} has joined your study group`
-                )
-            ),
+            body: JSON.stringify(buildPushNotification(token, `A new user ${userNew} has joined your study group`)),
         };
 
         request.post(options, (err, res) => {
             if (err) {
-                console.log(
-                    `Error sending UserJoinedGroup push notification: ${err}`
-                );
+                console.log(`Error sending UserJoinedGroup push notification: ${err}`);
             }
         });
     });
@@ -48,12 +41,7 @@ export const pushTest = async userToken => {
     const options = {
         url: endpoint,
         headers: pushHeaders,
-        body: JSON.stringify(
-            buildPushNotification(
-                userToken,
-                'This is a test push notification.'
-            )
-        ),
+        body: JSON.stringify(buildPushNotification(userToken, 'This is a test push notification.')),
     };
 
     request.post(options, (err, res) => {

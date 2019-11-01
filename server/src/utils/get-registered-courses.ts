@@ -1,32 +1,32 @@
 import * as request from 'request';
 const User = require('../models/user');
 const Course = require('../models/course');
-import {generateCourseData} from './generate-course-data';
+import { generateCourseData } from './generate-course-data';
 
+export const getRegisteredCourses = async userId => {
+    const server = 'https://canvas.ubc.ca';
 
-export const getRegisteredCourses = async function(userId) {
+    const user = await User.findOne({ _id: userId });
 
-	const server = 'https://canvas.ubc.ca'
+    user.schedule = [
+        '11111111111111111111111111111',
+        '11111111111111111111111111111',
+        '11111111111111111111111111111',
+        '11111111111111111111111111111',
+        '11111111111111111111111111111',
+        '11111111111111111111111111111',
+        '11111111111111111111111111111',
+    ];
 
-	const user = await User.findOne({ _id: userId });
+    const courses = await Course.find({});
 
-	user.schedule = [
-		"11111111111111111111111111111",
-		"11111111111111111111111111111",
-		"11111111111111111111111111111",
-		"11111111111111111111111111111",
-		"11111111111111111111111111111",
-		"11111111111111111111111111111",
-		"11111111111111111111111111111",
-	]
+    let courseCode;
+    let courseName;
+    let courseInDB;
 
-	const courses = await Course.find({})
+    console.log('token:', user.token);
 
-	let course_code, courseName, courseInDB;
-
-	console.log('token:', user.token)
-
-	return new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
 		request.get(server + '/api/v1/courses', {
 		  'auth': {
 		    'bearer': user.token
@@ -50,12 +50,12 @@ export const getRegisteredCourses = async function(userId) {
 						
 						courseName = currCourse.name
 						courseName = courseName.split(" ")
-						course_code = courseName[0] + courseName[1]
+						courseCode = courseName[0] + courseName[1]
 						courses.forEach((_course) => {
 						
-							if (course_code === _course.courseCode) {
+							if (courseCode === _course.courseCode) {
 								courseInDB = 1;
-								//console.log('inDB:', course_code)
+								//console.log('inDB:', courseCode)
 							}
 						})
 
@@ -143,10 +143,10 @@ export const getRegisteredCourses = async function(userId) {
 							}
 						}
 
-						if (courseInDB == 0){
+						if (courseInDB === 0){
 
 							const newCourse = new Course({
-	   						    courseCode: course_code,
+	   						    courseCode: courseCode,
 	   						    courseSection: courseName[2],
 	   						    times: courseTimes
 	   						});
@@ -154,7 +154,7 @@ export const getRegisteredCourses = async function(userId) {
 	   						await newCourse.save()
 						}
 
-						user.courses.push(course_code)
+						user.courses.push(courseCode)
 
 						let startIndex, endIndex;
 
@@ -177,8 +177,8 @@ export const getRegisteredCourses = async function(userId) {
 											endIndex += 1
 										}
 										
-										for(let i = startIndex; i < endIndex; i++) {
-											user.schedule[0] = setCharAt(user.schedule[0], i, '0')//.charAt(i) = '1'
+										for(i = startIndex; i < endIndex; i++) {
+											user.schedule[0] = setCharAt(user.schedule[0], i, '0')// charAt(i) = '1'
 										}
 										
 									break;
@@ -293,7 +293,7 @@ export const getRegisteredCourses = async function(userId) {
 									
 								}
 							}
-						})//for each lecture
+						})// for each lecture
 
 					}//if not eng coop
 				} //for each canvas course
@@ -306,7 +306,6 @@ export const getRegisteredCourses = async function(userId) {
 }
 
 function setCharAt(str,index,chr) {
-    if(index > str.length-1) return str;
+    if (index > str.length-1) return str;
     return str.substr(0,index) + chr + str.substr(index+1);
 }
-

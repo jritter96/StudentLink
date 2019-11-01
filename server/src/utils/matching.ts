@@ -35,34 +35,26 @@ const assignPreferenceScores = async function(userId, callback) {
 
             const tasks = [
                 done => {
-                    getCommonCourses(
-                        user.courses,
-                        group.courses,
-                        (err, courses) => {
-                            if (err || !courses || !courses.length) {
-                                done(err);
-                            } else {
-                                common_courses = courses;
-                                done(null);
-                                //callback(err, courses)//TODO: check if need this or fix it
-                            }
+                    getCommonCourses(user.courses, group.courses, (err, courses) => {
+                        if (err || !courses || !courses.length) {
+                            done(err);
+                        } else {
+                            common_courses = courses;
+                            done(null);
+                            //callback(err, courses)//TODO: check if need this or fix it
                         }
-                    );
+                    });
                 },
                 done => {
-                    calcPcntIntersect(
-                        user.schedule,
-                        group.meeting_times,
-                        (err, percent_intersect, meetings) => {
-                            if (err) {
-                                done(err);
-                            } else {
-                                pcntIntersect = percent_intersect;
-                                done(null);
-                                //callback(err)//TODO: check if need this or fix it
-                            }
+                    calcPcntIntersect(user.schedule, group.meeting_times, (err, percent_intersect, meetings) => {
+                        if (err) {
+                            done(err);
+                        } else {
+                            pcntIntersect = percent_intersect;
+                            done(null);
+                            //callback(err)//TODO: check if need this or fix it
                         }
-                    );
+                    });
                 },
             ];
 
@@ -75,10 +67,7 @@ const assignPreferenceScores = async function(userId, callback) {
             });
 
             if (common_courses && !group.members.includes(user._id)) {
-                pref =
-                    (common_courses.length / num_u_courses +
-                        common_courses.length / num_g_courses) *
-                    pcntIntersect;
+                pref = (common_courses.length / num_u_courses + common_courses.length / num_g_courses) * pcntIntersect;
                 if (pref > threshold) {
                     potential_matches.push({ groupId: group._id, pref: pref });
                 }
@@ -89,9 +78,7 @@ const assignPreferenceScores = async function(userId, callback) {
             return callback('No potential matches found');
         }
 
-        let sorted_potential_matches = potential_matches.sort(
-            (pm1, pm2) => pm2.pref - pm1.pref
-        );
+        let sorted_potential_matches = potential_matches.sort((pm1, pm2) => pm2.pref - pm1.pref);
 
         callback(null, sorted_potential_matches);
     } catch (error) {
@@ -100,12 +87,7 @@ const assignPreferenceScores = async function(userId, callback) {
 };
 
 const getCommonCourses = function(user_courses, group_courses, callback) {
-    if (
-        !user_courses ||
-        !user_courses.length ||
-        !group_courses ||
-        !group_courses.length
-    ) {
+    if (!user_courses || !user_courses.length || !group_courses || !group_courses.length) {
         return callback('ERROR: User or Group has no courses to process');
     }
 
@@ -172,11 +154,7 @@ const calcPcntIntersect = function(u_sched, g_meetings, callback) {
     // callback(null, pcntIntersect);
 };
 
-const findGroupForUser = async function(
-    userId,
-    sortedPotentialMatches,
-    callback
-) {
+const findGroupForUser = async function(userId, sortedPotentialMatches, callback) {
     // if (sortedPotentialMatches.size > 0) {
     // 	const group1 = sortedPotentialMatches.shift();
     // 	const group2 = sortedPotentialMatches.shift();
@@ -236,16 +214,12 @@ const joinGroup = async function(userId, groupId, callback) {
             }
         });
 
-        calcPcntIntersect(
-            user.schedule,
-            group.meeting_times,
-            (err, pctIntersect, new_meeting_times) => {
-                if (err) return callback(err);
-                else {
-                    group.meeting_times = new_meeting_times;
-                }
+        calcPcntIntersect(user.schedule, group.meeting_times, (err, pctIntersect, new_meeting_times) => {
+            if (err) return callback(err);
+            else {
+                group.meeting_times = new_meeting_times;
             }
-        );
+        });
 
         group.members.push(userId);
         user.groups.push(groupId);
@@ -264,9 +238,7 @@ const joinGroup = async function(userId, groupId, callback) {
         for (let i = 0; i < group.members.length; i++) {
             curr_member = await _User.findOne({ _id: group.members[i] });
             if (curr_member) {
-                groupCopy.names.push(
-                    `${curr_member.firstName} ${curr_member.lastName}`
-                );
+                groupCopy.names.push(`${curr_member.firstName} ${curr_member.lastName}`);
                 groupUserTokens.push(curr_member.pushNotificationToken);
             }
         }
@@ -297,8 +269,8 @@ const createGroup = async function(userId, callback) {
         await group.save();
 
         const groupCopy = JSON.parse(JSON.stringify(group));
-        groupCopy.names = []
-        groupCopy.names.push(`${user.firstName} ${user.lastName}`)
+        groupCopy.names = [];
+        groupCopy.names.push(`${user.firstName} ${user.lastName}`);
 
         return callback(null, groupCopy);
     } catch (error) {
@@ -325,19 +297,15 @@ export const matchUser = async function(userId, callback) {
             } else {
                 sortedPotentialMatches = sorted_matches;
                 console.log('match potential matches:', sortedPotentialMatches);
-                findGroupForUser(
-                    userId,
-                    sortedPotentialMatches,
-                    (err, group) => {
-                        if (err) {
-                            console.log(err);
-                            return callback(err);
-                        } else {
-                            console.log('found group:', group);
-                            return callback(null, group);
-                        }
+                findGroupForUser(userId, sortedPotentialMatches, (err, group) => {
+                    if (err) {
+                        console.log(err);
+                        return callback(err);
+                    } else {
+                        console.log('found group:', group);
+                        return callback(null, group);
                     }
-                );
+                });
             }
         });
     } catch (error) {
