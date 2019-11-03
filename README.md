@@ -13,17 +13,17 @@
 
 ### Docker Container
 1.  Ensure you have the Docker Daemon setup
-1.  Follow 1-3 from Development setup
-2.  Navigate to `/server/`
-3.  Run `docker build -t <your-username>/studentlink-server .` (you can tag with whatever you like)
-4.  Verify your container was built with `docker images`
-4.  Run `docker run -p 49160:3000 -d <your-username>/studentlink-server` (you can replace 49160 with something else but leave 3000)
-5.  Verify your container is running with `docker ps` and take note of 'CONTAINER_ID'
-6.  When you are done, stop your container with `docker stop <CONTAINER_ID>`
+2.  Follow 1-3 from Development setup
+3.  Navigate to `/server/`
+4.  Run `docker build -t <your-username>/studentlink-server .` (you can tag with whatever you like)
+5.  Verify your container was built with `docker images`
+6.  Run `docker run -p 49160:3000 -d <your-username>/studentlink-server` (you can replace 49160 with something else but leave 3000)
+7.  Verify your container is running with `docker ps` and take note of 'CONTAINER_ID'
+8.  When you are done, stop your container with `docker stop <CONTAINER_ID>`
 
 ## Setup Client Code
 
-1.  Download the Expo client: https://apps.apple.com/app/apple-store/id982107779
+1.  Download the Expo client: <https://apps.apple.com/app/apple-store/id982107779>
 2.  Clone the repository to your computer
 3.  Run `npm install` within the mobile directory
 4.  Run `npm run start` - you should be able to see a QR code at this point
