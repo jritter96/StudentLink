@@ -1,7 +1,9 @@
 import * as request from 'request';
+import * as log from 'log';
+import { generateCourseData } from './generate-course-data';
+
 const User = require('../models/user');
 const Course = require('../models/course');
-import { generateCourseData } from './generate-course-data';
 
 export const getRegisteredCourses = async userId => {
     const server = 'https://canvas.ubc.ca';
@@ -21,7 +23,7 @@ export const getRegisteredCourses = async userId => {
     let courseName;
     let courseInDB;
 
-    // console.log('token:', user.token);
+    // log.debug('token:', user.token);
 
     return new Promise((resolve, reject) => {
         request.get(
@@ -33,7 +35,7 @@ export const getRegisteredCourses = async userId => {
             },
             async (err, response, body) => {
                 if (err || !response) {
-                    console.log('Error in request:', err);
+                    log.error('Error in request:', err);
                     reject({});
                 } else {
                     body = JSON.parse(body);
@@ -41,7 +43,7 @@ export const getRegisteredCourses = async userId => {
                     for (let i = 0; i < body.length; i++) {
                         courseInDB = 0;
                         const currCourse = body[i];
-                        // console.log('cc:', currCourse);
+                        // log.debug('cc:', currCourse);
                         if (
                             !currCourse.access_restricted_by_date === true &&
                             !currCourse.name.includes('Engineering Co-op') &&
@@ -54,7 +56,7 @@ export const getRegisteredCourses = async userId => {
                             courses.forEach(userCourse => {
                                 if (courseCode === userCourse.courseCode) {
                                     courseInDB = 1;
-                                    // console.log('inDB:', courseCode);
+                                    // log.debug('inDB:', courseCode);
                                 }
                             });
 

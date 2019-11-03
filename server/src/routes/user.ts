@@ -1,9 +1,8 @@
 import * as express from 'express';
 import { generateName } from '../utils/generate-name';
 const User = require('../models/user');
-import {matchUser} from '../utils/matching';
-import {getRegisteredCourses} from '../utils/get-registered-courses';
-
+import { matchUser } from '../utils/matching';
+import { getRegisteredCourses } from '../utils/get-registered-courses';
 
 const router = express.Router();
 
@@ -33,7 +32,7 @@ router.get('/:id', async (req, res) => {
  */
 router.post('/:id/courses', async (req, res) => {
     try {
-        const response = await getRegisteredCourses(req.params.id)
+        getRegisteredCourses(req.params.id);
         res.status(201).send();
     } catch (error) {
         res.status(500).send();
@@ -103,13 +102,13 @@ router.post('/:id/push_notification', async (req, res) => {
  */
 router.post('/:id/match', async (req, res) => {
     try {
-        matchUser(req.params.id, (err,group) => {
+        matchUser(req.params.id, (err, group) => {
             if (err) {
                 res.status(400).send(err);
             } else {
                 res.status(201).send(group);
             }
-        })   
+        });
     } catch (error) {
         res.status(400).send(error);
     }
@@ -143,15 +142,7 @@ router.patch('/:id', async (req, res) => {
     // collect all of the requested key updates and validate them against allowed changes
     const updates = Object.keys(req.body);
 
-    const allowedUpdates = [
-        'firstName',
-        'lastName',
-        'aliasName',
-        'courses',
-        'groups',
-        'schedule',
-        'token'
-    ];
+    const allowedUpdates = ['firstName', 'lastName', 'aliasName', 'courses', 'groups', 'schedule', 'token'];
 
     const isValidOperation = updates.every(update => {
         return allowedUpdates.includes(update);

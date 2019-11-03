@@ -8,8 +8,8 @@ import * as mongoose from 'mongoose';
  *  e.g. ['CPEN331', 'CPEN321', 'CPEN311']
  * groups:
  *  e.g. ['groupID1', 'groupID2', etc.]
- * schedule: 
- * e.g. ['10000111100000000001111000000', ..., etc.] 
+ * schedule:
+ * e.g. ['10000111100000000001111000000', ..., etc.]
  * pushNotificationToken - Expo API token used to send push notifications to device
  */
 const userSchema = new mongoose.Schema(
@@ -36,7 +36,7 @@ const userSchema = new mongoose.Schema(
         courses: [
             {
                 type: String,
-                trim:  true,
+                trim: true,
                 required: true,
             },
         ],
@@ -55,8 +55,8 @@ const userSchema = new mongoose.Schema(
         ],
         token: {
             type: String,
-            trim: true
-        }
+            trim: true,
+        },
     },
     {
         timestamps: true,

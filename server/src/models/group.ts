@@ -7,7 +7,7 @@ import * as mongoose from 'mongoose';
  * meeting_times - list of 7 29-bit numbers (stored as strings), 1s show when the group is meeting.
  * The first 1 is to ensure when the string is cast to a number, the size will stay the same so no errors
  * occur when anding two of these numbers. Zero index number is Sunday
- * e.g. ['10000111100000000001111000000', ..., etc.] 
+ * e.g. ['10000111100000000001111000000', ..., etc.]
  */
 const groupSchema = new mongoose.Schema(
     {
@@ -29,7 +29,7 @@ const groupSchema = new mongoose.Schema(
                 trim: true,
                 required: true,
             },
-        ]
+        ],
     },
     {
         timestamps: true,

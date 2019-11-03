@@ -1,4 +1,5 @@
 import * as request from 'request';
+import * as log from 'log';
 const endpoint = process.env.EXPO_PUSH_NOTIFICATION_SERVER;
 
 /*
@@ -26,7 +27,7 @@ export const pushUserJoinedGroup = async (userTokens, userNew) => {
 
         request.post(options, (err, res) => {
             if (err) {
-                console.log(`Error sending UserJoinedGroup push notification: ${err}`);
+                log.error(`Error sending UserJoinedGroup push notification: ${err}`);
             }
         });
     });
@@ -46,7 +47,7 @@ export const pushTest = async userToken => {
 
     request.post(options, (err, res) => {
         if (err) {
-            console.log(`Error sending Test push notification: ${err}`);
+            log.error(`Error sending Test push notification: ${err}`);
         }
     });
 };

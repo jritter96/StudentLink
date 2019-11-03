@@ -1,12 +1,8 @@
 {
-    "extends": [
-        "tslint:recommended",
-        "tslint-plugin-prettier",
-        "tslint-config-prettier"
-    ],
+    "extends": ["tslint:recommended", "tslint-plugin-prettier", "tslint-config-prettier"],
     "rules": {
-        "no-console": {
-            "severity": "warning"
+        "no-bitwise": {
+            "severity": "off"
         },
         "no-var-requires": {
             "severity": "off"
@@ -14,14 +10,11 @@
         "object-literal-sort-keys": {
             "severity": "off"
         },
-        "semicolon": true,
+        "ordered-imports": {
+            "severity": "off"
+        },
+        "semicolon": [true, "always", "strict-bound-class-methods"],
         "prettier": true,
-        "quotemark": [
-            true,
-            "single",
-            "avoid-escape",
-            "avoid-template",
-            "jsx-double"
-        ]
+        "quotemark": [true, "single", "avoid-escape", "avoid-template", "jsx-double"]
     }
 }

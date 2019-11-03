@@ -1,3 +1,4 @@
+import * as log from 'log';
 const mongoose = require('mongoose');
 
 const ENDPOINT = process.env.ENDPOINT_DB;
@@ -11,5 +12,5 @@ mongoose.connect(ENDPOINT, {
 });
 
 mongoose.connection.once('open', () => {
-    console.log(`Connected to database at ${DESC}`);
+    log.notice(`Connected to database at ${DESC}`);
 });

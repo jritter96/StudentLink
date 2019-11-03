@@ -1,4 +1,5 @@
 import * as request from 'request';
+import * as log from 'log';
 const endpoint = process.env.SSC_SERVER;
 
 /*
@@ -22,10 +23,10 @@ export const generateCourseData = (courseCode, courseNumber) => {
     return new Promise((resolve, reject) => {
         request(reqEndpoint, { json: true }, (err, res, body) => {
             if (err) {
-                console.log(`Error retrieving SSC data: ${err}`);
+                log.error(`Error retrieving SSC data: ${err}`);
                 reject({});
             } else if (res == null) {
-                console.log('Error retrieving SSC data: invalid input');
+                log.error('Error retrieving SSC data: invalid input');
                 reject({});
             } else {
                 resolve(body);

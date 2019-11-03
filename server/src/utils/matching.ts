@@ -2,6 +2,7 @@ const User = require('../models/user');
 const Group = require('../models/group');
 const async = require('async');
 import { pushUserJoinedGroup } from './send-push-notification';
+import * as log from 'log';
 
 const MAX_GROUP_SIZE = 4;
 
@@ -24,9 +25,8 @@ const assignPreferenceScores = async (userId, callback) => {
         const numUCourses = user.courses.length;
         let numGCourses;
 
-        // debugging
-        // console.log('groups', groups)
-        // console.log('user', user)
+        // log.debug('groups', groups);
+        // log.debug('user', user);
 
         groups.forEach(group => {
             numGCourses = group.courses.length;
@@ -58,7 +58,7 @@ const assignPreferenceScores = async (userId, callback) => {
                 if (err) {
                     callback(err);
                 } else {
-                    console.log('pref calculated');
+                    // log.debug('pref calculated');
                 }
             });
 
@@ -87,7 +87,7 @@ const getCommonCourses = (userCourses, groupCourses, callback) => {
         return callback('ERROR: User or Group has no courses to process');
     }
 
-    // console.log('u:', user_courses, 'g:', group_courses)
+    // log.debug('u:', user_courses, 'g:', group_courses);
 
     const courses = [];
     userCourses.forEach(uCourse => {
@@ -114,14 +114,14 @@ const calcPcntIntersect = (uSched, gMeetings, callback) => {
 
     for (let i = 0; i < uSched.length; i++) {
         uDayBinary = parseInt(uSched[i], 2);
-        // console.log('user day parsed:', u_day_binary, 'binary value:', u_day_binary.toString(2))
+        // log.debug('user day parsed:', u_day_binary, 'binary value:', u_day_binary.toString(2));
         gDayBinary = parseInt(gMeetings[i], 2);
-        // console.log('group day parsed:', g_day_binary, 'binary value:', g_day_binary.toString(2))
+        // log.debug('group day parsed:', g_day_binary, 'binary value:', g_day_binary.toString(2));
 
         andedValue = uDayBinary & gDayBinary;
         andedValue = andedValue.toString(2);
         potentialMeetingTimes.push(andedValue);
-        // console.log('andedValue:', andedValue)
+        // log.debug('andedValue:', andedValue);
 
         for (let j = 0; j < andedValue.length; j++) {
             if (andedValue.charAt(j) === '1') {
@@ -188,8 +188,7 @@ const findGroupForUser = async (userId, sortedPotentialMatches, callback) => {
     } catch (error) {
         callback(error);
     }
-
-    // console.log('sortedPotentialMatches:', sortedPotentialMatches)
+    // log.debug('sortedPotentialMatches:', sortedPotentialMatches);
 };
 
 const joinGroup = async (userId, groupId, callback) => {
@@ -216,8 +215,8 @@ const joinGroup = async (userId, groupId, callback) => {
         group.members.push(userId);
         user.groups.push(groupId);
 
-        // console.log('group:', group)
-        // console.log('user:', user)
+        // log.debug('group:', group);
+        // log.debug('user:', user);
 
         await group.save();
         await user.save();
@@ -275,31 +274,31 @@ export const matchUser = async (userId, callback) => {
             if (err === 'No potential matches found') {
                 createGroup(userId, (error, group) => {
                     if (error) {
-                        console.log(error);
+                        log.error(error);
                         return callback(error);
                     } else {
                         return callback(null, group);
                     }
                 });
             } else if (err) {
-                console.log(err);
+                log.error(err);
                 return callback(err);
             } else {
                 sortedPotentialMatches = sortedMatches;
-                console.log('match potential matches:', sortedPotentialMatches);
+                // log.debug('match potential matches:', sortedPotentialMatches);
                 findGroupForUser(userId, sortedPotentialMatches, (error, group) => {
                     if (error) {
-                        console.log(error);
+                        log.error(error);
                         return callback(error);
                     } else {
-                        console.log('found group:', group);
+                        // log.debug('found group:', group);
                         return callback(null, group);
                     }
                 });
             }
         });
     } catch (error) {
-        console.log(error);
+        log.error(error);
         callback(error);
     }
 };

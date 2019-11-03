@@ -1,4 +1,5 @@
 import * as express from 'express';
+import * as log from 'log';
 const Group = require('../models/group');
 const User = require('../models/user');
 
@@ -11,16 +12,15 @@ const router = express.Router();
  */
 router.get('/:id', async (req, res) => {
     try {
-        
         const group = await Group.findOne({ _id: req.params.id });
-        
-        let curr_member;
+
+        let currMember;
         const retGroup = [];
 
-        for (let i = 0; i < group.members.length; i++) {
-            curr_member = await User.findOne({ _id: group.members[i] });
-            console.log('member:', curr_member)
-            retGroup.push(`${curr_member.firstName} ${curr_member.lastName}: ${curr_member._id}`)
+        for (const member of group.members) {
+            currMember = await User.findOne({ _id: member });
+            log.debug('member:', currMember);
+            retGroup.push(`${currMember.firstName} ${currMember.lastName}: ${currMember._id}`);
         }
 
         if (!group) {
@@ -46,14 +46,13 @@ router.post('/', async (req, res) => {
     });
 
     try {
-
-        const user = await User.findOne({ _id: req.body.members[0]});
+        const user = await User.findOne({ _id: req.body.members[0] });
         if (!user) {
             return res.status(404).send();
         }
 
-        user.groups.push(group._id)
-        
+        user.groups.push(group._id);
+
         await user.save();
         await group.save();
         res.status(201).send(group);
@@ -89,13 +88,12 @@ router.patch('/:id', async (req, res) => {
         updates.forEach(update => {
             group[update] = req.body[update];
         });
-        
+
         await group.save();
         res.send(group);
     } catch (error) {
         res.status(400).send(error);
     }
-
 });
 
 module.exports = router;
