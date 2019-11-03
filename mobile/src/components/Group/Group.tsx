@@ -14,17 +14,17 @@ import { groupStyles } from '../../styles/group';
 
 const endpoint = 'http://ec2-18-222-96-240.us-east-2.compute.amazonaws.com';
 
-interface GroupProps {
-    userID: String;
+interface IGroupProps {
+    userID: string;
 }
 
-interface GroupState {
+interface IGroupState {
     isLoading: boolean;
     groups: any[];
 }
 
-export default class Group extends Component<GroupProps, GroupState> {
-    groups = [];
+export default class Group extends Component<IGroupProps, IGroupState> {
+    private groups = [];
 
     constructor(props) {
         super(props);
@@ -35,7 +35,7 @@ export default class Group extends Component<GroupProps, GroupState> {
         this.searchPress = this.searchPress.bind(this);
     }
 
-    render() {
+    public render() {
         if (this.state.isLoading) {
             return (
                 <View style={genericStyles.container}>
@@ -64,13 +64,13 @@ export default class Group extends Component<GroupProps, GroupState> {
         }
     }
 
-    renderGroups() {
+    private renderGroups() {
         return this.groups.map(memberGroup => (
             <GroupContainer group={memberGroup} key={memberGroup} />
         ));
     }
 
-    searchPress() {
+    private searchPress() {
         fetch(`${endpoint}/user/${this.props.userID}/match`, {
             method: 'POST',
             headers: {
@@ -79,8 +79,11 @@ export default class Group extends Component<GroupProps, GroupState> {
             },
         })
             .then(response => {
-                if (response.ok) return response.json();
-                else throw 'Error: problem retrieving group match';
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw 'Error: problem retrieving group match';
+                }
             })
             .then(responseJson => {
                 this.groupMatch(responseJson['names']);
@@ -90,7 +93,7 @@ export default class Group extends Component<GroupProps, GroupState> {
             });
     }
 
-    groupMatch(memberList) {
+    private groupMatch(memberList) {
         var memberNames = [];
         for (let memberItem of memberList) {
             // memberItem = memberItem.substring(0, memberItem.indexOf(':'));

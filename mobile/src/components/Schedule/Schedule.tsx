@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
 import {
-    StyleSheet,
     View,
     SafeAreaView,
     ScrollView,
     Text,
     TouchableOpacity,
-    ActivityIndicator,
 } from 'react-native';
 import { genericStyles } from '../../styles/generic';
 import { scheduleStyles } from '../../styles/schedule';

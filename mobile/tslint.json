@@ -6,10 +6,13 @@
         "tslint-config-prettier"
     ],
     "rules": {
-        "no-console": {
-            "severity": "warning"
-        },
         "semicolon": true,
+        "ordered-imports": {
+            "severity": "off"
+        },
+        "object-literal-sort-keys": {
+            "severity": "off"
+        },
         "prettier": true,
         "quotemark": [
             true,
