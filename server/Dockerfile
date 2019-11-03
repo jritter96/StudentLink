@@ -1,7 +1,7 @@
 # Using Node.js LTS
 FROM node:10.16.3-alpine
 
-WORKDIR usr/src/app
+WORKDIR /usr/src/app
 
 # Copy package.json and package-lock.json
 COPY package*.json ./
@@ -10,7 +10,7 @@ COPY package*.json ./
 RUN npm install
 
 # Copy the remaining code (see .dockerignore if something is not showing up)
-ADD . /usr/src/app
+COPY . /usr/src/app
 
 EXPOSE 3000
 
