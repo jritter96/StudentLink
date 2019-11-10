@@ -9,22 +9,20 @@ import {
 } from '../../styles/navbar';
 import { viewEnum } from '../../enum/viewEnum';
 
-interface NavBarProps {
-    handleViewChange: Function;
+interface INavBarProps {
+    handleViewChange: (id: number) => void;
 }
 
 /*
- * active: 0 - Group; 1 - Schedule; 2 - Messages; 3 - Settings
- *
- * active should correspond to the keys in options
+ * active: <viewEnum> - <viewEnumOption>
  */
-interface NavBarState {
-    active: Number;
+interface INavBarState {
+    active: number;
     options: any[];
 }
 
-export default class Navbar extends Component<NavBarProps, NavBarState> {
-    constructor(props: NavBarProps) {
+export default class Navbar extends Component<INavBarProps, INavBarState> {
+    constructor(props: INavBarProps) {
         super(props);
         this.handleSelection = this.handleSelection.bind(this);
         this.renderNavbar = this.renderNavbar.bind(this);
@@ -49,7 +47,7 @@ export default class Navbar extends Component<NavBarProps, NavBarState> {
                     icon: 'ios-text',
                 },
                 {
-                    key: 4,
+                    key: viewEnum.settings,
                     title: 'Settings',
                     icon: 'ios-settings',
                 },
@@ -57,7 +55,7 @@ export default class Navbar extends Component<NavBarProps, NavBarState> {
         };
     }
 
-    render() {
+    public render() {
         return (
             <SafeAreaView style={navbarStyles.navbarContainer}>
                 {this.renderNavbar()}
@@ -66,31 +64,15 @@ export default class Navbar extends Component<NavBarProps, NavBarState> {
     }
 
     // TODO: refactor top level handler to accept an argument (call a single onPressNavButton)
-    handleSelection(selection: Number) {
+    private handleSelection(selection: number) {
         this.setState({
             active: selection,
         });
 
-        switch (selection) {
-            case viewEnum.group:
-                this.props.handleViewChange(selection);
-                break;
-            case viewEnum.schedule:
-                this.props.handleViewChange(selection);
-                break;
-            case viewEnum.chat:
-                this.props.handleViewChange(selection);
-                break;
-            case 4:
-                // TODO: route to settings view
-                break;
-            default:
-                // TODO: describe this logic
-                break;
-        }
+        this.props.handleViewChange(selection);
     }
 
-    renderNavbar() {
+    private renderNavbar() {
         return this.state.options.map(option => (
             <TouchableHighlight
                 key={option.key}
@@ -125,7 +107,7 @@ export default class Navbar extends Component<NavBarProps, NavBarState> {
         ));
     }
 
-    renderSelectionColor(active: Number) {
+    private renderSelectionColor(active: number) {
         if (active === this.state.active) return navbarActiveColor;
         else return navbarBaseColor;
     }
