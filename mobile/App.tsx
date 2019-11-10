@@ -9,21 +9,58 @@ import Schedule from './src/components/Schedule/Schedule';
 import registerForPushNotificationsAsync from './src/utils/registerForPushNotificationsAsync';
 import { viewEnum } from './src/enum/viewEnum';
 
-export default class App extends Component {
+interface IAppState {
+    navigator: number;
+    navBarEnable: boolean;
+    userID: string;
+}
+
+export default class App extends Component<{}, IAppState> {
     constructor(props: any) {
         super(props);
+
         this.handleViewChange = this.handleViewChange.bind(this);
         this.toggleNavBar = this.toggleNavBar.bind(this);
-        this.HandleSuccessfulLogin = this.HandleSuccessfulLogin.bind(this);
+        this.handleSuccessfulLogin = this.handleSuccessfulLogin.bind(this);
+
+        this.state = {
+            navigator: viewEnum.login,
+            navBarEnable: true,
+            userID: '',
+        };
     }
 
-    state = { navigator: viewEnum.login, navBarEnable: true, userID: '' };
+    public render() {
+        return (
+            <View style={appStyles.container}>
+                <View style={appStyles.viewContainer}>
+                    {this.showMainView(this.state.navigator)}
+                </View>
+                {this.showNavBar(this.state.navigator, this.state.navBarEnable)}
+            </View>
+        );
+    }
 
-    ShowMainView(view: any) {
+    public handleViewChange(view) {
+        this.setState({ navigator: view });
+    }
+
+    public toggleNavBar(active: boolean) {
+        this.setState({ navBarEnable: active });
+    }
+
+    public handleSuccessfulLogin(id: string) {
+        this.setState({ userID: id });
+        this.handleViewChange(viewEnum.group);
+        registerForPushNotificationsAsync(id);
+        return;
+    }
+
+    private showMainView(view: any) {
         switch (view) {
             case viewEnum.login:
                 return (
-                    <Login HandleSuccessfulLogin={this.HandleSuccessfulLogin} />
+                    <Login handleSuccessfulLogin={this.handleSuccessfulLogin} />
                 );
             case viewEnum.chat:
                 return <Chat toggleNavBar={this.toggleNavBar} />;
@@ -36,36 +73,10 @@ export default class App extends Component {
         }
     }
 
-    ShowNavBar(showNav: any, navBarEnable: boolean) {
-        if (showNav != viewEnum.login && navBarEnable) {
+    private showNavBar(showNav: any, navBarEnable: boolean) {
+        if (showNav !== viewEnum.login && navBarEnable) {
             return <Navbar handleViewChange={this.handleViewChange} />;
         }
         return null;
-    }
-
-    handleViewChange(view) {
-        this.setState({ navigator: view });
-    }
-
-    toggleNavBar(active: boolean) {
-        this.setState({ navBarEnable: active });
-    }
-
-    HandleSuccessfulLogin(id: String) {
-        this.setState({ userID: id });
-        this.handleViewChange(viewEnum.group);
-        registerForPushNotificationsAsync(id);
-        return;
-    }
-
-    render() {
-        return (
-            <View style={appStyles.container}>
-                <View style={appStyles.viewContainer}>
-                    {this.ShowMainView(this.state.navigator)}
-                </View>
-                {this.ShowNavBar(this.state.navigator, this.state.navBarEnable)}
-            </View>
-        );
     }
 }

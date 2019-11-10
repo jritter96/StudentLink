@@ -10,18 +10,16 @@ import { Ionicons } from '@expo/vector-icons';
 import { loginGradient, loginStyles } from '../../styles/login';
 import LoginForm from './LoginForm';
 
-interface LoginProps {
-    HandleSuccessfulLogin: Function;
+interface ILoginProps {
+    handleSuccessfulLogin: (id: string) => void;
 }
 
-interface LoginState {}
-
-export default class Login extends Component<LoginProps, LoginState> {
-    constructor(props: LoginProps) {
+export default class Login extends Component<ILoginProps, {}> {
+    constructor(props: ILoginProps) {
         super(props);
     }
 
-    render() {
+    public render() {
         return (
             <LinearGradient
                 colors={loginGradient}
@@ -51,8 +49,8 @@ export default class Login extends Component<LoginProps, LoginState> {
                     </View>
                     <View>
                         <LoginForm
-                            HandleSuccessfulLogin={
-                                this.props.HandleSuccessfulLogin
+                            handleSuccessfulLogin={
+                                this.props.handleSuccessfulLogin
                             }
                         />
                     </View>

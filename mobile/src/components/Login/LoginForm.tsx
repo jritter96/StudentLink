@@ -12,22 +12,25 @@ import { loginFormStyles } from '../../styles/loginForm';
 // TODO: find a way to clean this up
 const endpoint = 'http://ec2-18-222-96-240.us-east-2.compute.amazonaws.com';
 
-interface LoginFormProps {
-    HandleSuccessfulLogin: Function;
+interface ILoginFormProps {
+    handleSuccessfulLogin: (id: string) => void;
 }
 
-interface LoginFormState {
-    username: String;
-    password: String;
-    errorMessage: String;
-    forgotPasswordMessage: String;
+interface ILoginFormState {
+    username: string;
+    password: string;
+    errorMessage: string;
+    forgotPasswordMessage: string;
 }
 
 export default class LoginForm extends Component<
-    LoginFormProps,
-    LoginFormState
+    ILoginFormProps,
+    ILoginFormState
 > {
-    constructor(props: LoginFormProps) {
+    private usernameInput: any;
+    private passwordInput: any;
+
+    constructor(props: ILoginFormProps) {
         super(props);
 
         this.state = {
@@ -43,10 +46,7 @@ export default class LoginForm extends Component<
         this.setErrorMessage = this.setErrorMessage.bind(this);
     }
 
-    usernameInput: any;
-    passwordInput: any;
-
-    render() {
+    public render() {
         return (
             <View style={loginFormStyles.container}>
                 <View style={loginFormStyles.errorContainer}>
@@ -90,19 +90,19 @@ export default class LoginForm extends Component<
         );
     }
 
-    handleUsernameUpdate(input: any) {
+    private handleUsernameUpdate(input: any) {
         this.setState({
             username: input,
         });
     }
 
-    handlePasswordUpdate(input: any) {
+    private handlePasswordUpdate(input: any) {
         this.setState({
             password: input,
         });
     }
 
-    loginPress() {
+    private loginPress() {
         fetch(`${endpoint}/user/login`, {
             method: 'POST',
             headers: {
@@ -121,15 +121,15 @@ export default class LoginForm extends Component<
             .then(response => {
                 this.setErrorMessage(false);
                 // find id located in response['_id']
-                this.props.HandleSuccessfulLogin(response['_id']);
+                this.props.handleSuccessfulLogin(response['_id']);
             })
             .catch(error => {
                 this.setErrorMessage(true);
             });
     }
 
-    setErrorMessage(arg: any) {
-        if (arg == true) {
+    private setErrorMessage(arg: any) {
+        if (arg === true) {
             this.setState({
                 errorMessage: 'Sorry! Your username or password was invalid.',
                 forgotPasswordMessage: 'Forgot Password?',

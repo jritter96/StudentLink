@@ -6,6 +6,9 @@
         "tslint-config-prettier"
     ],
     "rules": {
+        "jsx-no-bind": {
+            "severity": "off"
+        },
         "semicolon": true,
         "ordered-imports": {
             "severity": "off"
