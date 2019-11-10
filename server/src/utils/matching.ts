@@ -65,7 +65,7 @@ const assignPreferenceScores = async (userId, callback) => {
             if (commonCourses && !group.members.includes(user._id)) {
                 pref = (commonCourses.length / numUCourses + commonCourses.length / numGCourses) * pcntIntersect;
                 if (pref > threshold) {
-                    potentialMatches.push({ groupId: group._id, pref: { pref } });
+                    potentialMatches.push({ groupId: group._id, names: `${user.firstName} ${user.lastName}`, pref: { pref } });
                 }
             }
         });
@@ -213,6 +213,7 @@ const joinGroup = async (userId, groupId, callback) => {
         });
 
         group.members.push(userId);
+        group.names.push(`${user.firstName} ${user.lastName}`);
         user.groups.push(groupId);
 
         // log.debug('group:', group);
@@ -224,12 +225,10 @@ const joinGroup = async (userId, groupId, callback) => {
         const groupUserTokens = [];
         let currMember;
         const groupCopy = JSON.parse(JSON.stringify(group));
-        groupCopy.names = [];
 
         for (const groupMember of group.members) {
             currMember = await User.findOne({ _id: groupMember });
             if (currMember) {
-                groupCopy.names.push(`${currMember.firstName} ${currMember.lastName}`);
                 groupUserTokens.push(currMember.pushNotificationToken);
             }
         }
@@ -246,10 +245,13 @@ const createGroup = async (userId, callback) => {
     try {
         const user = await User.findOne({ _id: userId });
 
+        const userName = `${user.firstName} ${user.lastName}`;
+
         const group = new Group({
             members: [userId],
             courses: user.courses,
             meeting_times: user.schedule,
+            names: [userName],
         });
 
         user.groups.push(group._id);
@@ -257,11 +259,7 @@ const createGroup = async (userId, callback) => {
         await user.save();
         await group.save();
 
-        const groupCopy = JSON.parse(JSON.stringify(group));
-        groupCopy.names = [];
-        groupCopy.names.push(`${user.firstName} ${user.lastName}`);
-
-        return callback(null, groupCopy);
+        return callback(null, group);
     } catch (error) {
         callback(error);
     }
@@ -285,16 +283,18 @@ export const matchUser = async (userId, callback) => {
                 return callback(err);
             } else {
                 sortedPotentialMatches = sortedMatches;
+                log.debug(sortedPotentialMatches);
+                return callback(null, sortedPotentialMatches);
                 // log.debug('match potential matches:', sortedPotentialMatches);
-                findGroupForUser(userId, sortedPotentialMatches, (error, group) => {
-                    if (error) {
-                        log.error(error);
-                        return callback(error);
-                    } else {
-                        // log.debug('found group:', group);
-                        return callback(null, group);
-                    }
-                });
+                // findGroupForUser(userId, sortedPotentialMatches, (error, group) => {
+                //     if (error) {
+                //         log.error(error);
+                //         return callback(error);
+                //     } else {
+                //         // log.debug('found group:', group);
+                //         return callback(null, group);
+                //     }
+                // });
             }
         });
     } catch (error) {
