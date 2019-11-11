@@ -29,6 +29,9 @@ interface ChatState {
 }
 
 export default class Chat extends Component<ChatProps, ChatState> {
+=======
+export default class Chat extends Component<ChatProps> {
+>>>>>>> refactor chat view to use config file
     constructor(props: any) {
         super(props);
         this.state = {
