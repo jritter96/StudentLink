@@ -36,7 +36,7 @@ export const loginStyles = StyleSheet.create({
         color: 'white',
         marginHorizontal: 5,
     },
-    buttonContainer2: {
+    buttonContainer: {
         marginHorizontal: 25,
         height: 50,
         backgroundColor: '#70CAD1',

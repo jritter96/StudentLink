@@ -8,6 +8,7 @@ import Chat from './src/components/Chat/Chat';
 import Group from './src/components/Group/Group';
 import Schedule from './src/components/Schedule/Schedule';
 import Settings from './src/components/Settings/Settings';
+import Signup from './src/components/Signup/Signup';
 import registerForPushNotificationsAsync from './src/utils/registerForPushNotificationsAsync';
 import { viewEnum } from './src/enum/viewEnum';
 import config from './config/config';
@@ -22,6 +23,8 @@ interface IAppState {
     navBarEnable: boolean;
     userID: string;
 }
+
+console.disableYellowBox = true;
 
 export default class App extends Component<{}, IAppState> {
     constructor(props: any) {
@@ -69,6 +72,7 @@ export default class App extends Component<{}, IAppState> {
 
     public handleSuccessfulLogin(id: string) {
         this.setState({ userID: id });
+        this.toggleNavBar(true);
         this.handleViewChange(viewEnum.group);
 
         // initialize push notifications
@@ -92,7 +96,11 @@ export default class App extends Component<{}, IAppState> {
         switch (view) {
             case viewEnum.login:
                 return (
-                    <Login handleSuccessfulLogin={this.handleSuccessfulLogin} />
+                    <Login
+                        handleViewChange={this.handleViewChange}
+                        handleSuccessfulLogin={this.handleSuccessfulLogin}
+                        toggleNavbar={this.toggleNavBar}
+                    />
                 );
             case viewEnum.chat:
                 return <Chat toggleNavBar={this.toggleNavBar} />;
@@ -108,6 +116,13 @@ export default class App extends Component<{}, IAppState> {
                 return <Group userID={this.state.userID} />;
             case viewEnum.settings:
                 return <Settings userID={this.state.userID} />;
+            case viewEnum.signup:
+                return (
+                    <Signup
+                        handleViewChange={this.handleViewChange}
+                        handleSuccessfulLogin={this.handleSuccessfulLogin}
+                    />
+                );
             default:
                 return null;
         }

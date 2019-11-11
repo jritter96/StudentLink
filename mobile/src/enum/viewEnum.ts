@@ -4,4 +4,5 @@ export enum viewEnum {
     schedule = 2,
     group = 3,
     settings = 4,
+    signup = 5,
 }

@@ -9,14 +9,18 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { loginGradient, loginStyles } from '../../styles/login';
 import LoginForm from './LoginForm';
+import { viewEnum } from '../../enum/viewEnum';
 
 interface ILoginProps {
     handleSuccessfulLogin: (id: string) => void;
+    handleViewChange: Function;
+    toggleNavbar: Function;
 }
 
 export default class Login extends Component<ILoginProps, {}> {
     constructor(props: ILoginProps) {
         super(props);
+        this.signupPress = this.signupPress.bind(this);
     }
 
     public render() {
@@ -55,10 +59,18 @@ export default class Login extends Component<ILoginProps, {}> {
                         />
                     </View>
                 </KeyboardAvoidingView>
-                <TouchableOpacity style={loginStyles.buttonContainer2}>
+                <TouchableOpacity
+                    onPress={this.signupPress}
+                    style={loginStyles.buttonContainer}
+                >
                     <Text style={loginStyles.buttonText}>SIGN UP</Text>
                 </TouchableOpacity>
             </LinearGradient>
         );
+    }
+
+    private signupPress() {
+        this.props.handleViewChange(viewEnum.signup);
+        this.props.toggleNavbar(false);
     }
 }
