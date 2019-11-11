@@ -66,7 +66,7 @@ export default class Chatroom extends Component<ChatroomProps> {
                         renderItem={({item}) => {
                             if (item.direction === 'outgoing') {
                                 return (
-                                    {/*display }
+                                    {/*display outgoing message*/}
                                     <View style={chatroomStyles.outgoingMessageContainer}>
                                         <View style={chatroomStyles.outgoingMessageBox}>
                                             <Text style={chatroomStyles.messageText}>
@@ -78,6 +78,7 @@ export default class Chatroom extends Component<ChatroomProps> {
                             }
                             else {
                                 return (
+                                    {/*display incoming message*/}
                                     <View style={chatroomStyles.incomingMessageContainer}>
                                         <View style={chatroomStyles.incomingMessageBox}>
                                             <Text style={chatroomStyles.messageSender}>
