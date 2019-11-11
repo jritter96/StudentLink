@@ -8,6 +8,7 @@ import {
     TextInput,
     StatusBar,
     SafeAreaView,
+    FlatList,
 } from 'react-native';
 import { chatroomStyles } from '../../styles/chatroom';
 
@@ -25,6 +26,19 @@ export default class Chatroom extends Component<ChatroomProps> {
         alert('send message');
         return;
     }
+
+    Messages = [
+        {
+            direction: 'outgoing',
+            sender: 'Name',
+            message: 'message'
+        },
+        {
+            direction: 'incoming',
+            sender: 'Name',
+            message: 'message'
+        }
+    ]
 
     render() {
         return (
@@ -48,59 +62,65 @@ export default class Chatroom extends Component<ChatroomProps> {
                             </Text>
                         </TouchableOpacity>
                     </View>
-                    <View style={chatroomStyles.whitespace}></View>
-                    <View style={chatroomStyles.scrollContainer}>
-                        <ScrollView
-                            contentContainerStyle={
-                                chatroomStyles.contentContainer
+                </View>
+                <View style={chatroomStyles.backButtonContainer}>
+                    <TouchableOpacity
+                        onPress={this.props.OnPressBackButton.bind(this)}
+                    >
+                        <Text style={chatroomStyles.backButtonTitle}>Back</Text>
+                    </TouchableOpacity>
+                </View>
+                <View style={chatroomStyles.whitespace}></View>
+                <View style={chatroomStyles.scrollContainer}>
+                    <FlatList
+                        inverted
+                        data={this.Messages.reverse()}
+                        renderItem={({item}) => {
+                            if (item.direction === 'outgoing') {
+                                return (
+                                    <View style={chatroomStyles.outgoingMessageContainer}>
+                                        <View style={chatroomStyles.outgoingMessageBox}>
+                                            <Text style={chatroomStyles.messageText}>
+                                                {item.message}
+                                            </Text>
+                                        </View>
+                                    </View>
+                                )
                             }
-                        >
-                            {/*incoming message begin*/}
-                            <View
-                                style={chatroomStyles.incomingMessageContainer}
-                            >
-                                <View style={chatroomStyles.incomingMessageBox}>
-                                    <Text style={chatroomStyles.messageSender}>
-                                        Name
-                                    </Text>
-                                    <Text style={chatroomStyles.messageText}>
-                                        Message
-                                    </Text>
-                                </View>
-                            </View>
-                            {/*incoming message end*/}
-                            {/*outgoing message begin*/}
-                            <View
-                                style={chatroomStyles.outgoingMessageContainer}
-                            >
-                                <View style={chatroomStyles.outgoingMessageBox}>
-                                    <Text style={chatroomStyles.messageText}>
-                                        Message
-                                    </Text>
-                                </View>
-                            </View>
-                            {/*outgoing message end*/}
-                        </ScrollView>
-                    </View>
-                    <View style={chatroomStyles.bottomContainer}>
-                        <ScrollView scrollEnabled={false}>
-                            <TextInput
-                                style={chatroomStyles.input}
-                                multiline={true}
-                            />
-                            <View style={chatroomStyles.sendButtonContainer}>
-                                <TouchableOpacity
-                                    onPress={this._onPressSendButton}
-                                >
-                                    <Text style={chatroomStyles.sendButtonText}>
-                                        Send
-                                    </Text>
-                                </TouchableOpacity>
-                            </View>
-                        </ScrollView>
-                    </View>
-                </KeyboardAvoidingView>
-            </SafeAreaView>
+                            else {
+                                return (
+                                    <View style={chatroomStyles.incomingMessageContainer}>
+                                        <View style={chatroomStyles.incomingMessageBox}>
+                                            <Text style={chatroomStyles.messageSender}>
+                                                {item.sender}
+                                            </Text>
+                                            <Text style={chatroomStyles.messageText}>
+                                                {item.message}
+                                            </Text>
+                                        </View>
+                                    </View>
+                                )
+                            }
+                        }}
+                        keyExtractor={(item, index) => index.toString()}
+                    />
+                </View>
+                <View style={chatroomStyles.bottomContainer}>
+                    <ScrollView scrollEnabled={false}>
+                        <TextInput
+                            style={chatroomStyles.input}
+                            multiline={true}
+                        />
+                        <View style={chatroomStyles.sendButtonContainer}>
+                            <TouchableOpacity onPress={this._onPressSendButton}>
+                                <Text style={chatroomStyles.sendButtonText}>
+                                    Send
+                                </Text>
+                            </TouchableOpacity>
+                        </View>
+                    </ScrollView>
+                </View>
+            </KeyboardAvoidingView>
         );
     }
 }
