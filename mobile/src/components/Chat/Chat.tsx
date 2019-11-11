@@ -15,6 +15,8 @@ interface ChatProps {
     toggleNavBar: Function;
 }
 
+const endpoint = 'http://ec2-18-222-96-240.us-east-2.compute.amazonaws.com';
+
 export default class Chat extends Component<ChatProps> {
     constructor(props: any) {
         super(props);
