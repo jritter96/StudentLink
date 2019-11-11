@@ -5,17 +5,19 @@ import {
     View,
     Text,
     ScrollView,
+    StatusBar,
 } from 'react-native';
 import Chatroom from './Chatroom';
 import { genericStyles } from '../../styles/generic';
 import { chatStyles } from '../../styles/chat';
 import { chatEnum } from '../../enum/chatEnum';
+import config from '../../../config/config';
+
+const endpoint = config.endpoint;
 
 interface ChatProps {
     toggleNavBar: Function;
 }
-
-const endpoint = 'http://ec2-18-222-96-240.us-east-2.compute.amazonaws.com';
 
 export default class Chat extends Component<ChatProps> {
     constructor(props: any) {
@@ -56,6 +58,7 @@ export default class Chat extends Component<ChatProps> {
     ChatMainView() {
         return (
             <SafeAreaView style={genericStyles.container}>
+            <StatusBar barStyle="dark-content" />
                 <View style={genericStyles.titleContainer}>
                     <Text style={genericStyles.title}>Messages</Text>
                 </View>
