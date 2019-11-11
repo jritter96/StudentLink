@@ -85,9 +85,14 @@ export default class Group extends Component<IGroupProps, IGroupState> {
                     throw 'Error: problem retrieving group match';
                 }
             })
+
             .then(responseJson => {
-                this.groupMatch(responseJson['names']);
+                this.chooseGroup(responseJson);
             })
+
+            // .then(responseJson => {
+            //     this.groupMatch(responseJson['names']);
+            // })
             .catch(error => {
                 console.log(error);
             });
@@ -106,5 +111,25 @@ export default class Group extends Component<IGroupProps, IGroupState> {
         this.setState({
             groups: this.groups,
         });
+    }
+
+    private chooseGroup(sortedPotentialMatches) {
+         let i = 0;
+         let currGroup;
+
+        while (sortedPotentialMatches.length > 0 && i < 3) {
+            currGroup = sortedPotentialMatches.shift();
+            this.groups.push({
+                name: `Group ${i+1}`,
+                members: currGroup.names,
+            });
+            i++;
+        }
+
+        this.setState({
+            groups: this.groups,
+        });
+
+
     }
 }
