@@ -1,25 +1,34 @@
 import React, { Component } from 'react';
-import { View, SafeAreaView, Text } from 'react-native';
-import { genericStyles } from '../../styles/generic';
+import {
+    TouchableOpacity,
+    View,
+    Text,
+    ScrollView,
+    SafeAreaView,
+    TextInput,
+    StatusBar,
+} from 'react-native';
 import { userProfileStyles } from '../../styles/userProfile';
 
-export default class UserProfile extends Component {
-    constructor(props) {
-        super(props);
-    }
+interface UserProfileProps {
+    OnPressBackButton: Function;
+}
 
-    public render() {
-        if (this.state.isLoading) {
-            return (
-                <View style={genericStyles.container}>
-                    <ActivityIndicator />
+export default class UserProfile extends Component<UserProfileProps> {
+
+    render() {
+        return (
+            <SafeAreaView>
+                <StatusBar barStyle="dark-content" />
+                <View style={userProfileStyles.backButtonContainer}>
+                    <TouchableOpacity
+                        onPress={this.props.OnPressBackButton.bind(this)}
+                    >
+                        <Text style={userProfileStyles.backButtonTitle}>Back</Text>
+                    </TouchableOpacity>
                 </View>
-            );
-        } else {
-            return (
-                <SafeAreaView style={genericStyles.container}>
-                    <Text>Settings</Text>
-                </SafeAreaView>
-            );
-        }
+                <Text>User Profile</Text>
+            </SafeAreaView>
+        );
     }
+}

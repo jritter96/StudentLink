@@ -25,7 +25,7 @@ export default class App extends Component<{}, IAppState> {
         this.handleSuccessfulLogin = this.handleSuccessfulLogin.bind(this);
 
         this.state = {
-            navigator: viewEnum.login,
+            navigator: viewEnum.settings,
             navBarEnable: true,
             userID: '',
         };
@@ -70,7 +70,10 @@ export default class App extends Component<{}, IAppState> {
             case viewEnum.group:
                 return <Group userID={this.state.userID} />;
             case viewEnum.settings:
-                return <Settings userID={this.state.userID} />;
+                return <Settings 
+                            userID={this.state.userID}
+                            toggleNavBar={this.toggleNavBar}
+                        />;
             default:
                 return null;
         }
