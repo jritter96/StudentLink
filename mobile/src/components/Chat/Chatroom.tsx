@@ -77,7 +77,6 @@ export default class Chatroom extends Component<ChatroomProps> {
                             }
                             else {
                                 return (
-                                    {/*display incoming message*/}
                                     <View style={chatroomStyles.incomingMessageContainer}>
                                         <View style={chatroomStyles.incomingMessageBox}>
                                             <Text style={chatroomStyles.messageSender}>
