@@ -4,6 +4,7 @@ import * as mongoose from 'mongoose';
  *
  * members - e.g. [id1, id2, ..., idn]
  * courses - e.g. ['CPEN331', 'CPEN321', 'CPEN311']
+ * names - e.g. ['firstname1 lastname1', 'firstname2 lastname2']
  * meeting_times - list of 7 29-bit numbers (stored as strings), 1s show when the group is meeting.
  * The first 1 is to ensure when the string is cast to a number, the size will stay the same so no errors
  * occur when anding two of these numbers. Zero index number is Sunday
@@ -27,6 +28,12 @@ const groupSchema = new mongoose.Schema(
             {
                 type: String,
                 trim: true,
+                required: true,
+            },
+        ],
+        names: [
+            {
+                type: String,
                 required: true,
             },
         ],
