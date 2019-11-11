@@ -12,6 +12,9 @@
         "jsx-no-bind": {
             "severity": "off"
         },
+        "jsx-no-lambda": {
+            "severity": "off"
+        },
         "semicolon": true,
         "ordered-imports": {
             "severity": "off"
