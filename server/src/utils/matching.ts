@@ -9,7 +9,7 @@ const MAX_GROUP_SIZE = 4;
 // library to ask for user input?
 // need endpoint for user to request group, us to respond with choices, user to reply with choice, etc.
 
-const assignPreferenceScores = async (userId, callback) => {
+export const assignPreferenceScores = async (userId, callback) => {
     // user is an object with userID, courses, and schedule fields
 
     try {
@@ -65,7 +65,7 @@ const assignPreferenceScores = async (userId, callback) => {
             if (commonCourses && !group.members.includes(user._id)) {
                 pref = (commonCourses.length / numUCourses + commonCourses.length / numGCourses) * pcntIntersect;
                 if (pref > threshold) {
-                    potentialMatches.push({ groupId: group._id, names: `${user.firstName} ${user.lastName}`, pref: { pref } });
+                    potentialMatches.push({ groupId: group._id, pref: { pref } });
                 }
             }
         });
@@ -82,7 +82,7 @@ const assignPreferenceScores = async (userId, callback) => {
     }
 };
 
-const getCommonCourses = (userCourses, groupCourses, callback) => {
+export const getCommonCourses = (userCourses, groupCourses, callback) => {
     if (!userCourses || !userCourses.length || !groupCourses || !groupCourses.length) {
         return callback('ERROR: User or Group has no courses to process');
     }
@@ -102,7 +102,7 @@ const getCommonCourses = (userCourses, groupCourses, callback) => {
     return callback(null, courses);
 };
 
-const calcPcntIntersect = (uSched, gMeetings, callback) => {
+export const calcPcntIntersect = (uSched, gMeetings, callback) => {
     let uDayBinary;
     let gDayBinary;
     let pctIntersect;
@@ -143,37 +143,37 @@ const calcPcntIntersect = (uSched, gMeetings, callback) => {
     return callback(null, pctIntersect, potentialMeetingTimes);
 };
 
-const findGroupForUser = async (userId, sortedPotentialMatches, callback) => {
+export const findGroupForUser = async (userId, sortedPotentialMatches, callback) => {
     // if (sortedPotentialMatches.size > 0) {
-    // 	const group1 = sortedPotentialMatches.shift();
-    // 	const group2 = sortedPotentialMatches.shift();
-    // 	const group3 = sortedPotentialMatches.shift();
-    // 	const choice = promptUsertoChoose(group1, group2, group3);// returns 1, 2, 3 respectively if user chooses one of groups
-    // 														// returns 0 if user wants to regenerate groups
-    // 														// returns -1 if user wants to create own group
-    // 	switch (choice) {
-    // 		case 1:
-    // 		joinGroup(user, group1, callback) // joinGroup will perform updates on the corresponding group object in the DB
-    // 		break;
+    //     const group1 = sortedPotentialMatches.shift();
+    //     const group2 = sortedPotentialMatches.shift();
+    //     const group3 = sortedPotentialMatches.shift();
+    //     const choice = promptUsertoChoose(group1, group2, group3);// returns 1, 2, 3 respectively if user chooses one of groups
+    //                                                         // returns 0 if user wants to regenerate groups
+    //                                                         // returns -1 if user wants to create own group
+    //     switch (choice) {
+    //         case 1:
+    //         joinGroup(user, group1, callback) // joinGroup will perform updates on the corresponding group object in the DB
+    //         break;
 
-    // 		case 2:
-    // 		joinGroup(user, group2, callback)
-    // 		break;
+    //         case 2:
+    //         joinGroup(user, group2, callback)
+    //         break;
 
-    // 		case 3:
-    // 		joinGroup(user, group3, callback)
-    // 		break;
+    //         case 3:
+    //         joinGroup(user, group3, callback)
+    //         break;
 
-    // 		case 0:
-    // 		findGroupForUser(sortedPotentialMatches, callback)
-    // 		break;
+    //         case 0:
+    //         findGroupForUser(sortedPotentialMatches, callback)
+    //         break;
 
-    // 		case -1:
-    // 		createNewGroup(user, callback)
-    // 		break;
-    // 	}
+    //         case -1:
+    //         createNewGroup(user, callback)
+    //         break;
+    //     }
     // } else {
-    // 	createNewGroup(user, callback)
+    //     createNewGroup(user, callback)
     // }
 
     // Above will be for final product, code for MVP below
@@ -191,7 +191,7 @@ const findGroupForUser = async (userId, sortedPotentialMatches, callback) => {
     // log.debug('sortedPotentialMatches:', sortedPotentialMatches);
 };
 
-const joinGroup = async (userId, groupId, callback) => {
+export const joinGroup = async (userId, groupId, callback) => {
     try {
         const user = await User.findOne({ _id: userId });
         const group = await Group.findOne({ _id: groupId });
@@ -213,7 +213,6 @@ const joinGroup = async (userId, groupId, callback) => {
         });
 
         group.members.push(userId);
-        group.names.push(`${user.firstName} ${user.lastName}`);
         user.groups.push(groupId);
 
         // log.debug('group:', group);
@@ -225,10 +224,12 @@ const joinGroup = async (userId, groupId, callback) => {
         const groupUserTokens = [];
         let currMember;
         const groupCopy = JSON.parse(JSON.stringify(group));
+        groupCopy.names = [];
 
         for (const groupMember of group.members) {
             currMember = await User.findOne({ _id: groupMember });
             if (currMember) {
+                groupCopy.names.push(`${currMember.firstName} ${currMember.lastName}`);
                 groupUserTokens.push(currMember.pushNotificationToken);
             }
         }
@@ -241,17 +242,14 @@ const joinGroup = async (userId, groupId, callback) => {
     }
 };
 
-const createGroup = async (userId, callback) => {
+export const createGroup = async (userId, callback) => {
     try {
         const user = await User.findOne({ _id: userId });
-
-        const userName = `${user.firstName} ${user.lastName}`;
 
         const group = new Group({
             members: [userId],
             courses: user.courses,
             meeting_times: user.schedule,
-            names: [userName],
         });
 
         user.groups.push(group._id);
@@ -259,7 +257,11 @@ const createGroup = async (userId, callback) => {
         await user.save();
         await group.save();
 
-        return callback(null, group);
+        const groupCopy = JSON.parse(JSON.stringify(group));
+        groupCopy.names = [];
+        groupCopy.names.push(`${user.firstName} ${user.lastName}`);
+
+        return callback(null, groupCopy);
     } catch (error) {
         callback(error);
     }
@@ -283,18 +285,16 @@ export const matchUser = async (userId, callback) => {
                 return callback(err);
             } else {
                 sortedPotentialMatches = sortedMatches;
-                log.debug(sortedPotentialMatches);
-                return callback(null, sortedPotentialMatches);
                 // log.debug('match potential matches:', sortedPotentialMatches);
-                // findGroupForUser(userId, sortedPotentialMatches, (error, group) => {
-                //     if (error) {
-                //         log.error(error);
-                //         return callback(error);
-                //     } else {
-                //         // log.debug('found group:', group);
-                //         return callback(null, group);
-                //     }
-                // });
+                findGroupForUser(userId, sortedPotentialMatches, (error, group) => {
+                    if (error) {
+                        log.error(error);
+                        return callback(error);
+                    } else {
+                        // log.debug('found group:', group);
+                        return callback(null, group);
+                    }
+                });
             }
         });
     } catch (error) {
