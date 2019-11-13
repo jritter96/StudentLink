@@ -10,17 +10,19 @@ import { createChatMessage, getChat, getChatMembers } from './chatMethods';
 export const initializeChat = service => {
     const io = socketIO(service);
 
-    io.on('connection', (socket, userId: string) => {
+    io.on('connection', socket => {
         log.debug('A new user has connected to the chat');
 
-        // a user is allocated their own listening room
-        socket.join(userId);
+        socket.on('join', async (userId: string, callback) => {
+            // a user is allocated their own listening room
+            socket.join(userId);
 
-        getChat(userId).then(initChat => {
-            socket.emit('init', initChat);
+            // generate mobile-used chat object
+            const initChat = await getChat(userId);
+            callback(initChat);
         });
 
-        io.on('sendMessage', async (sentUserId: string, sentGroupId: string, message: string, callback) => {
+        socket.on('sendMessage', async (sentUserId: string, sentGroupId: string, message: string, callback) => {
             const newMessage = await createChatMessage(sentUserId, sentGroupId, message);
 
             // retrieve a group members list
