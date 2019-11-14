@@ -1,3 +1,5 @@
+export {};
+
 const request = require('supertest');
 const service = require('../../src/service');
 const User = require('../../src/models/user');
