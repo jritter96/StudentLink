@@ -9,8 +9,8 @@
         "start": "env-cmd -f ./config/dev.env node --inspect=5858 -r ts-node/register ./src/server.ts",
         "start:dev": "env-cmd -f ./config/dev.env nodemon",
         "start:prod": "npm run build && env-cmd -f ./config/dev.env node ./dist/server.js",
-        "test": "env-cmd -f ./config/dev.env jest",
-        "test:watch": "env-cmd -f ./config/dev.env jest --watch"
+        "test": "env-cmd -f ./config/test.env jest --forceExit",
+        "test:watch": "env-cmd -f ./config/test.env jest --watch"
     },
     "devDependencies": {
         "@types/jest": "^24.0.23",
