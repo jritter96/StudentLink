@@ -60,6 +60,7 @@ export default class LoginForm extends Component<
                     </TouchableOpacity>
                 </View>
                 <TextInput
+                    testID="emailForm"
                     placeholder="email"
                     placeholderTextColor="rgba(255,255,255,0.4)"
                     keyboardType="email-address"
