@@ -4,9 +4,9 @@ import config from '../../config/config';
 
 const PUSH_ENDPOINT = config.endpoint;
 
-const PUSH_ROUTE = '/push_notification';
+const PUSH_ROUTE = 'push_notification';
 
-export default async function registerForPushNotificationsAsync(_id: String) {
+export default async function registerForPushNotificationsAsync(_id: string) {
     const { status: existingStatus } = await Permissions.getAsync(
         Permissions.NOTIFICATIONS
     );
@@ -36,7 +36,7 @@ export default async function registerForPushNotificationsAsync(_id: String) {
     // console.log(`Endpoint: ${PUSH_ENDPOINT}${_id}${PUSH_ROUTE}`);
 
     // POST the token to your backend server from where you can retrieve it to send push notifications.
-    return fetch(`${PUSH_ENDPOINT}${_id}${PUSH_ROUTE}`, {
+    return fetch(`${PUSH_ENDPOINT}/${_id}/${PUSH_ROUTE}`, {
         method: 'POST',
         headers: {
             Accept: 'application/json',
