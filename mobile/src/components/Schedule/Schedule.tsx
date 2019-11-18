@@ -9,6 +9,7 @@ import {
 import { genericStyles } from '../../styles/generic';
 import { scheduleStyles } from '../../styles/schedule';
 import config from '../../../config/config';
+import { hook } from 'cavy';
 
 const endpoint = config.endpoint;
 
@@ -19,7 +20,8 @@ interface ScheduleProps {
 interface ScheduleState {
     courses: any[];
 }
-export default class Schedule extends Component<ScheduleProps, ScheduleState> {
+
+class Schedule extends Component<ScheduleProps, ScheduleState> {
     constructor(props: ScheduleProps) {
         super(props);
         this.state = { courses: this.tempCourses };
@@ -61,7 +63,12 @@ export default class Schedule extends Component<ScheduleProps, ScheduleState> {
                     onPress={this.getCourses}
                     style={genericStyles.button}
                 >
-                    <Text style={genericStyles.buttonText}>
+                    <Text
+                        style={genericStyles.buttonText}
+                        ref={this.props.generateTestHook(
+                            'Schedule.refreshCoursesBtn'
+                        )}
+                    >
                         Refresh Courses
                     </Text>
                 </TouchableOpacity>
@@ -77,3 +84,6 @@ export default class Schedule extends Component<ScheduleProps, ScheduleState> {
         ));
     }
 }
+
+const TestableSchedule = hook(Schedule);
+export default TestableSchedule;

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Tester, TestHookStore } from 'cavy';
 import { View } from 'react-native';
 import io from 'socket.io-client';
 import { appStyles } from './src/styles/app';
@@ -12,7 +13,12 @@ import registerForPushNotificationsAsync from './src/utils/registerForPushNotifi
 import { viewEnum } from './src/enum/viewEnum';
 import config from './config/config';
 
+import validLoginSpec from './specs/validLoginSpec';
+import invalidLoginSpec from './specs/invalidLoginSpec';
+import groupSearchSpec from './specs/groupSearchSpec';
+
 const endpoint = config.endpoint;
+const testHookStore = new TestHookStore();
 
 interface IAppState {
     chatBody: any[];
@@ -22,7 +28,7 @@ interface IAppState {
     userID: string;
 }
 
-export default class App extends Component<{}, IAppState> {
+export default class AppWrapper extends Component<{}, IAppState> {
     constructor(props: any) {
         super(props);
 
@@ -42,12 +48,20 @@ export default class App extends Component<{}, IAppState> {
 
     public render() {
         return (
-            <View style={appStyles.container}>
-                <View style={appStyles.viewContainer}>
-                    {this.showMainView(this.state.navigator)}
+            <Tester
+                specs={[invalidLoginSpec, validLoginSpec, groupSearchSpec]}
+                store={testHookStore}
+            >
+                <View style={appStyles.container}>
+                    <View style={appStyles.viewContainer}>
+                        {this.showMainView(this.state.navigator)}
+                    </View>
+                    {this.showNavBar(
+                        this.state.navigator,
+                        this.state.navBarEnable
+                    )}
                 </View>
-                {this.showNavBar(this.state.navigator, this.state.navBarEnable)}
-            </View>
+            </Tester>
         );
     }
 
