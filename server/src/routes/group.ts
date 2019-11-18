@@ -14,17 +14,15 @@ router.get('/:id', async (req, res) => {
     try {
         const group = await Group.findOne({ _id: req.params.id });
 
-        let currMember;
-        const retGroup = [];
-
-        for (const member of group.members) {
-            currMember = await User.findOne({ _id: member });
-            log.debug('member:', currMember);
-            retGroup.push(`${currMember.firstName} ${currMember.lastName}: ${currMember._id}`);
-        }
-
         if (!group) {
             return res.status(404).send();
+        }
+
+        const retGroup = [];
+        for (const member of group.members) {
+            const currMember = await User.findOne({ _id: member });
+            log.debug('member:', currMember);
+            retGroup.push(`${currMember.firstName} ${currMember.lastName}: ${currMember._id}`);
         }
 
         res.send(retGroup);
