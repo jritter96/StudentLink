@@ -16,6 +16,8 @@ import config from './config/config';
 import validLoginSpec from './specs/validLoginSpec';
 import invalidLoginSpec from './specs/invalidLoginSpec';
 import groupSearchSpec from './specs/groupSearchSpec';
+import scheduleCourseRefreshSpec from './specs/scheduleCourseRefreshSpec';
+import navbarSpec from './specs/navBarSpec';
 
 const endpoint = config.endpoint;
 const testHookStore = new TestHookStore();
@@ -27,6 +29,8 @@ interface IAppState {
     navBarEnable: boolean;
     userID: string;
 }
+
+console.disableYellowBox = true;
 
 export default class AppWrapper extends Component<{}, IAppState> {
     constructor(props: any) {
@@ -49,7 +53,13 @@ export default class AppWrapper extends Component<{}, IAppState> {
     public render() {
         return (
             <Tester
-                specs={[invalidLoginSpec, validLoginSpec, groupSearchSpec]}
+                specs={[
+                    invalidLoginSpec,
+                    validLoginSpec,
+                    navbarSpec,
+                    groupSearchSpec,
+                    scheduleCourseRefreshSpec,
+                ]}
                 store={testHookStore}
             >
                 <View style={appStyles.container}>

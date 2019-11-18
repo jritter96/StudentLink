@@ -45,7 +45,10 @@ class Group extends Component<IGroupProps, IGroupState> {
             );
         } else {
             return (
-                <SafeAreaView style={genericStyles.container}>
+                <SafeAreaView
+                    style={genericStyles.container}
+                    ref={this.props.generateTestHook('Group.screen')}
+                >
                     <View style={genericStyles.titleContainer}>
                         <Text style={genericStyles.title}>Groups</Text>
                     </View>

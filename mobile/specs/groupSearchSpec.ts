@@ -5,7 +5,8 @@ export default function(spec) {
         spec.it(
             'correctly displays the new group to the user',
             async function() {
-                await spec.notExists('Group.studentGroup');
+                await spec.exists('Navbar.Group');
+                await spec.press('Navbar.Group');
                 await spec.press('Group.searchBtn');
                 await spec.pause(3000);
                 const groupList = await spec.findComponent('Group.groupList');

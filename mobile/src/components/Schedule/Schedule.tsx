@@ -52,23 +52,28 @@ class Schedule extends Component<ScheduleProps, ScheduleState> {
 
     render() {
         return (
-            <SafeAreaView style={genericStyles.container}>
+            <SafeAreaView
+                style={genericStyles.container}
+                ref={this.props.generateTestHook('Schedule.screen')}
+            >
                 <View style={genericStyles.titleContainer}>
                     <Text style={genericStyles.title}>Schedule</Text>
                 </View>
                 <View style={scheduleStyles.scrollContainer}>
-                    <ScrollView>{this.renderCourses()}</ScrollView>
+                    <ScrollView
+                        ref={this.props.generateTestHook('Schedule.courseList')}
+                    >
+                        {this.renderCourses()}
+                    </ScrollView>
                 </View>
                 <TouchableOpacity
                     onPress={this.getCourses}
                     style={genericStyles.button}
+                    ref={this.props.generateTestHook(
+                        'Schedule.refreshCoursesBtn'
+                    )}
                 >
-                    <Text
-                        style={genericStyles.buttonText}
-                        ref={this.props.generateTestHook(
-                            'Schedule.refreshCoursesBtn'
-                        )}
-                    >
+                    <Text style={genericStyles.buttonText}>
                         Refresh Courses
                     </Text>
                 </TouchableOpacity>
