@@ -39,6 +39,19 @@ export default class Chatroom extends Component<ChatroomProps, ChatroomState> {
         return;
     }
 
+    Messages = [
+        {
+            direction: 'outgoing',
+            sender: 'Name',
+            message: 'message'
+        },
+        {
+            direction: 'incoming',
+            sender: 'Name',
+            message: 'message'
+        }
+    ]
+
     render() {
         return (
             <KeyboardAvoidingView
