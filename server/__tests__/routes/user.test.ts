@@ -1,5 +1,6 @@
 export {};
 
+const dbHandler = require('../../__mocks__/db/mongoose');
 const request = require('supertest');
 const service = require('../../src/service');
 const User = require('../../src/models/user');
@@ -13,9 +14,17 @@ const testUser = {
     lastName: 'User',
 };
 
+beforeAll(async () => {
+    await dbHandler.connect();
+});
+
 beforeEach(async () => {
     await User.deleteMany();
     await new User(testUser).save();
+});
+
+afterAll(async () => {
+    await dbHandler.closeDatabase();
 });
 
 test('Can retrieve a valid user', async () => {

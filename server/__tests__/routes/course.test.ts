@@ -1,5 +1,6 @@
 export {};
 
+const dbHandler = require('../../__mocks__/db/mongoose');
 const request = require('supertest');
 const service = require('../../src/service');
 const Course = require('../../src/models/course');
@@ -13,9 +14,17 @@ const testCourse = {
     courseSection: '101',
 };
 
+beforeAll(async () => {
+    await dbHandler.connect();
+});
+
 beforeEach(async () => {
     await Course.deleteMany();
     await new Course(testCourse).save();
+});
+
+afterAll(async () => {
+    await dbHandler.closeDatabase();
 });
 
 test('Can retrieve a valid course', async () => {
