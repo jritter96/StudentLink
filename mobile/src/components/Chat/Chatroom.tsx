@@ -40,19 +40,6 @@ export default class Chatroom extends Component<ChatroomProps, ChatroomState> {
         return;
     }
 
-    Messages = [
-        {
-            direction: 'outgoing',
-            sender: 'Name',
-            message: 'message'
-        },
-        {
-            direction: 'incoming',
-            sender: 'Name',
-            message: 'message'
-        }
-    ]
-
     render() {
         return (
             <KeyboardAvoidingView
@@ -91,7 +78,6 @@ export default class Chatroom extends Component<ChatroomProps, ChatroomState> {
                             }
                             else {
                                 return (
-                                    {/*display incoming message*/}
                                     <View style={chatroomStyles.incomingMessageContainer}>
                                         <View style={chatroomStyles.incomingMessageBox}>
                                             <Text style={chatroomStyles.messageSender}>
