@@ -1,4 +1,5 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/0220bed4bff242779f7e9102ad56a411)](https://www.codacy.com/manual/StudentLink/cpen-321-server?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=DConnorFong/cpen-321-server&amp;utm_campaign=Badge_Grade)
+[![Build Status](https://travis-ci.com/DConnorFong/cpen-321-server.svg?branch=master)](https://travis-ci.com/DConnorFong/cpen-321-server)
 # StudentLink
 
 ## Setup Server Code
