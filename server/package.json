@@ -9,14 +9,15 @@
         "start": "env-cmd -f ./config/dev.env node --inspect=5858 -r ts-node/register ./src/server.ts",
         "start:dev": "env-cmd -f ./config/dev.env nodemon",
         "start:prod": "npm run build && env-cmd -f ./config/dev.env node ./dist/server.js",
-        "test": "env-cmd -f ./config/test.env jest --forceExit --coverage",
-        "test:watch": "env-cmd -f ./config/test.env jest --watch"
+        "test": "env-cmd -f ./config/test.env jest --runInBand --forceExit --coverage",
+        "test:watch": "env-cmd -f ./config/test.env jest --runInBand --watch"
     },
     "devDependencies": {
         "@types/jest": "^24.0.23",
         "@types/node": "^12.7.4",
         "env-cmd": "^10.0.1",
         "jest": "^24.9.0",
+        "mongodb-memory-server": "^6.0.1",
         "nodemon": "^1.19.2",
         "prettier": "^1.18.2",
         "supertest": "^4.0.2",
