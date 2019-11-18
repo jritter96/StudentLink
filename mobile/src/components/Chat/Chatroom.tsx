@@ -19,23 +19,28 @@ interface ChatroomProps {
     messages: any[];
     userID: String;
     groupID: String;
+    socket: any;
+    handleNewMessage: Function;
 }
 
 interface ChatroomState {
     messages: any[];
+    newMessage: String;
 }
 
 export default class Chatroom extends Component<ChatroomProps, ChatroomState> {
     constructor(props: any) {
         super(props);
-        this.state = {messages: this.props.messages};
+        this.state = {
+            messages: this.props.messages
+            newMesssage: ""
+        };
     }
 
-    _onPressSendButton() {
-        {
-            /*send message*/
-        }
-        alert('send message');
+    sendMessage() {
+        this.props.socket.emit("chat message" , this.state.newMessage);
+        this.props.handleNewMessage(this.state.newMessage)
+        this.setState({ newMesssage: "" })
         return;
     }
 
@@ -98,9 +103,11 @@ export default class Chatroom extends Component<ChatroomProps, ChatroomState> {
                         <TextInput
                             style={chatroomStyles.input}
                             multiline={true}
+                            value={this.state.newMessage}
+                            onChangeText={newMessage => {this.setState({ newMessage })}}
                         />
                         <View style={chatroomStyles.sendButtonContainer}>
-                            <TouchableOpacity onPress={this._onPressSendButton}>
+                            <TouchableOpacity onPress={this.sendMessage}>
                                 <Text style={chatroomStyles.sendButtonText}>
                                     Send
                                 </Text>
