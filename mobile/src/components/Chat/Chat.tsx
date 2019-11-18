@@ -131,8 +131,6 @@ export default class Chat extends Component<ChatProps, ChatState> {
     }
 
     render() {
-        this.getGroups();
-        this.getMessages();
         return (
             <View style={genericStyles.container}>
                 {this.ShowChatViews(this.state.chatNav)}
