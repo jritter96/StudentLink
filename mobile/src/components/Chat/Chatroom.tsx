@@ -38,11 +38,24 @@ export default class Chatroom extends Component<ChatroomProps, ChatroomState> {
     }
 
     sendMessage() {
-        this.props.socket.emit("chat message" , this.state.newMessage);
+        this.props.socket.emit("sendMessage" , this.state.newMessage, );
         this.props.handleNewMessage(this.state.newMessage)
         this.setState({ newMesssage: "" })
         return;
     }
+
+    Messages = [
+        {
+            direction: 'outgoing',
+            sender: 'Name',
+            message: 'message'
+        },
+        {
+            direction: 'incoming',
+            sender: 'Name',
+            message: 'message'
+        }
+    ]
 
     render() {
         return (

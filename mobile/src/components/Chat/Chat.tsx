@@ -28,6 +28,8 @@ interface ChatState {
     chatNav: any;
     chatSel: any;
     chatBody: any[];
+    groups: any[];
+    messages:any[];
 }
 
 export default class Chat extends Component<ChatProps, ChatState> {
@@ -105,6 +107,28 @@ export default class Chat extends Component<ChatProps, ChatState> {
                 </View>
             </SafeAreaView>
         );
+    }
+    renderChats() {
+        return this.state.messages.map(chatObject => (
+            <View>
+                <TouchableOpacity
+                    onPress={this.OnPressButton.bind(this, chatObject.groupId)}
+                    onLongPress={this.OnPressButton.bind(this, chatObject.groupId)}
+                    style={chatStyles.buttonContainer}
+                    key={chatObject.groupId}
+                >
+                    <View style={chatStyles.buttonTitleContainer}>
+                        <Text style={chatStyles.buttonTitle}>{chatObject.groupId}</Text>
+                    </View>
+                    <View style={chatStyles.buttonSubtitleContainer}>
+                        <Text style={chatStyles.buttonSubtitle}>
+                            {chatObject.messages[chatObject.messages.length - 1].message.length > MAX_CHARACTERS ? chatObject.messages[chatObject.messages.length - 1].message.substring(0, MAX_CHARACTERS) + "..." : chatObject.messages[chatObject.messages.length - 1].message}
+                        </Text>
+                    </View>
+                </TouchableOpacity>
+                <View style={chatStyles.whiteSpace} />
+            </View>
+        ));
     }
 
     renderChats() {
