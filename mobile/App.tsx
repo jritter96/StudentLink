@@ -36,6 +36,7 @@ export default class App extends Component<{}, IAppState> {
         this.handleScheduleChange = this.handleScheduleChange.bind(this);
         this.handleSuccessfulLogin = this.handleSuccessfulLogin.bind(this);
         this.handleSocketConnection = this.handleSocketConnection.bind(this);
+        this.handleNewMessage = this.appendMessage.bind(this);
 
         this.state = {
             chatBody: [],
@@ -45,6 +46,11 @@ export default class App extends Component<{}, IAppState> {
             navBarEnable: true,
             userID: '',
         };
+    }
+
+    componentDidMount() {
+     this.state.socket.on("chat message", msg => {
+        this.setState({ chatBody: this.state.chatBody.push(msg) })
     }
 
     public render() {
@@ -120,7 +126,7 @@ export default class App extends Component<{}, IAppState> {
         registerForPushNotificationsAsync(id);
 
         // initialize socket functionality
-        this.handleSocketConnection();
+            this.handleSocketConnection();
 
         return;
     }
@@ -144,6 +150,10 @@ export default class App extends Component<{}, IAppState> {
         });
     }
 
+    public handleNewMessage(newMessage: String) {
+
+    }
+
     private showMainView(view: any) {
         switch (view) {
             case viewEnum.login:
@@ -157,6 +167,8 @@ export default class App extends Component<{}, IAppState> {
             case viewEnum.chat:
                 return <Chat toggleNavBar={this.toggleNavBar}
                          userID={this.state.userID}
+                         socket={this.state.socket}
+                         handleNewMessage={this.handleNewMessage}
                         />;
             case viewEnum.schedule:
                 return (

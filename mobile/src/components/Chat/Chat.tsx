@@ -19,126 +19,76 @@ const MAX_CHARACTERS = 36;
 interface ChatProps {
     toggleNavBar: Function;
     userID: String;
+    chatBody: any[];
+    socket: any;
+    handleNewMessage: Function;
 }
 
 interface ChatState {
     chatNav: any;
     chatSel: any;
-    groups: any[];
-    messages:any[];
+    chatBody: any[];
 }
 
 export default class Chat extends Component<ChatProps, ChatState> {
     constructor(props: any) {
         super(props);
         this.state = {
-            groups: this.tempGroups,
-            messages: this.tempMessages,
+            chatBody: this.props.chatBody,
             chatNav: chatEnum.chat,
             chatSel: '',
-            }
+        };
         this.OnPressButton = this.OnPressButton.bind(this);
         this.HandleChatroomReturn = this.HandleChatroomReturn.bind(this);
     }
 
-     tempGroups = [];
-     tempSubMessages = [{
-             senderId: "",
-             senderName: "",
-             message: "",
-             createdAt: "",
-         },
-     ]
-     tempMessages = [{
-             groupId: "",
-             messages: this.tempSubMessages,
-         },
-     ];
-
-    getGroups() {
-        fetch(`${endpoint}/user/${this.props.userID}`, {
-            method: 'GET',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            },
-        })
-            .then(response => {
-                if (response.ok) return response.json();
-            })
-            .then(response => {
-                this.setState({ groups: response['groups'] });
-            })
-            .catch(error => {
-                console.log(error);
-            });
-    }
-    getMessages() {
-        var i: number;
-        var tempArray: any[] = [];
-        for(i = 0; i < this.state.groups.length; i++) {
-            fetch(`${endpoint}/chat/group/${this.state.groups[i]}`, {
-                method: 'GET',
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json',
-                },
-            })
-                .then(response => {
-                    if (response.ok) return response.json();
-                })
-                .then(response => {
-                    tempArray.push(response['chat'])
-                })
-                .catch(error => {
-                    console.log(error);
-                });
-        }
-        this.setState({ messages: tempArray })
-    }
     OnPressButton(chatID: any) {
         this.setState({ chatNav: chatEnum.chatroom });
         this.setState({ chatSel: chatID });
         this.props.toggleNavBar(false);
         return;
     }
+
     HandleChatroomReturn() {
         this.setState({ chatNav: chatEnum.chat });
         this.props.toggleNavBar(true);
         return;
     }
+
     ShowChatViews(view: any) {
         switch (view) {
             case chatEnum.chat:
                 return this.ChatMainView();
             case chatEnum.chatroom:
                 var i: number, chatIndex = 0;
-                for (i = 0; i < this.state.messages.length; i++) {
-                    if (this.state.messages[i].groupId === this.state.chatSel)
-                    {
+                for (i = 0; i < this.state.chatBody.length; i++) {
+                    if (this.state.chatBody[i].groupId === this.state.chatSel) {
                         chatIndex = i;
                         break;
                     }
-                    if (i === this.state.messages.length - 1) {
-                        console.log("err: No message object for groupID " + this.state.chatSel)
+                    if (i === this.state.chatBody.length - 1) {
                         chatIndex = -1;
                     }
                 }
                 if (chatIndex < 0) {
+                    console.log("err: No chat object for groupID " + this.state.chatSel)
                     this.HandleChatroomReturn();
                 }
                 return (
                     <Chatroom
                         OnPressBackButton={this.HandleChatroomReturn.bind(this)}
-                        messages={this.state.messages[chatIndex].messages}
+                        messages={this.state.chatBody[chatIndex].messages}
                         userID={userID}
                         groupID={this.state.chatSel}
+                        socket={this.props.socket}
+                        handleNewMessage={this.props.handleNewMessage}
                     />
                 );
             default:
                 return this.ChatMainView();
         }
     }
+
     ChatMainView() {
         return (
             <SafeAreaView style={genericStyles.container}>
@@ -156,8 +106,9 @@ export default class Chat extends Component<ChatProps, ChatState> {
             </SafeAreaView>
         );
     }
+
     renderChats() {
-        return this.state.messages.map(chatObject => (
+        return this.state.chatBody.map(chatObject => (
             <View>
                 <TouchableOpacity
                     onPress={this.OnPressButton.bind(this, chatObject.groupId)}
