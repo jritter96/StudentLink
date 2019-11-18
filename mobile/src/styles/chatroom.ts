@@ -37,11 +37,10 @@ export const chatroomStyles = StyleSheet.create({
         fontSize: 17,
         color: '#019898',
     },
-    scrollContainer: {
+    listContainer: {
         flex: 14,
         backgroundColor: 'white',
     },
-    contentContainer: {},
     input: {
         height: 40,
         margin: 40,

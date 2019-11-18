@@ -3,7 +3,6 @@ import {
     TouchableOpacity,
     View,
     Text,
-    ScrollView,
     KeyboardAvoidingView,
     TextInput,
     StatusBar,
@@ -32,30 +31,16 @@ export default class Chatroom extends Component<ChatroomProps, ChatroomState> {
     constructor(props: any) {
         super(props);
         this.state = {
-            messages: this.props.messages
-            newMesssage: ""
+            messages: this.props.messages,
+            newMessage: '',
         };
     }
 
     sendMessage() {
-        this.props.socket.emit("sendMessage" , this.state.newMessage, );
-        this.props.handleNewMessage(this.state.newMessage)
-        this.setState({ newMesssage: "" })
+        this.props.socket.emit("sendMessage" , this.state.newMessage, handleNewMessage(newChatObject: any));
+        this.setState({ newMessage: "" })
         return;
     }
-
-    Messages = [
-        {
-            direction: 'outgoing',
-            sender: 'Name',
-            message: 'message'
-        },
-        {
-            direction: 'incoming',
-            sender: 'Name',
-            message: 'message'
-        }
-    ]
 
     render() {
         return (
@@ -76,8 +61,8 @@ export default class Chatroom extends Component<ChatroomProps, ChatroomState> {
                         <Text style={chatroomStyles.backButtonTitle}>Back</Text>
                     </TouchableOpacity>
                 </View>
-                <View style={chatroomStyles.whitespace}></View>
-                <View style={chatroomStyles.scrollContainer}>
+                <View style={chatroomStyles.whitespace} />
+                <View style={chatroomStyles.listContainer}>
                     <FlatList
                         inverted
                         data={this.state.messages.reverse()}

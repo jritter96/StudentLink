@@ -30,7 +30,7 @@ export default class App extends Component<{}, IAppState> {
         this.toggleNavBar = this.toggleNavBar.bind(this);
         this.handleSuccessfulLogin = this.handleSuccessfulLogin.bind(this);
         this.handleSocketConnection = this.handleSocketConnection.bind(this);
-        this.handleNewMessage = this.appendMessage.bind(this);
+        this.handleNewMessage = this.handleNewMessage.bind(this);
 
         this.state = {
             chatBody: [],
@@ -43,7 +43,7 @@ export default class App extends Component<{}, IAppState> {
 
     componentDidMount() {
      this.state.socket.on("chat message", msg => {
-        this.setState({ chatBody: this.state.chatBody.push(msg) })
+        this.setState({ chatBody: this.state.chatBody.push(msg) })})
     }
 
     public render() {
@@ -86,8 +86,9 @@ export default class App extends Component<{}, IAppState> {
         });
     }
 
-    public handleNewMessage(newMessage: String) {
-
+    public handleNewMessage(newChatObject: any) {
+        this.setState({ chatBody: this.state.chatBody.push(newChatObject) })
+        return;
     }
 
     private showMainView(view: any) {
