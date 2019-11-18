@@ -110,8 +110,8 @@ export default class LoginForm extends Component<
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                firstName: this.state.username,
-                lastName: this.state.password,
+                username: this.state.username,
+                password: this.state.password,
             }),
         })
             .then(response => {
