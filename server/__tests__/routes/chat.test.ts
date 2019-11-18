@@ -1,5 +1,6 @@
 export {};
 
+const dbHandler = require('../../__mocks__/db/mongoose');
 const request = require('supertest');
 const mongoose = require('mongoose');
 const service = require('../../src/service');
@@ -34,6 +35,10 @@ const testUser = {
     groups: [testGroupId],
 };
 
+beforeAll(async () => {
+    await dbHandler.connect();
+});
+
 beforeEach(async () => {
     await Group.deleteMany();
     await Chat.deleteMany();
@@ -41,6 +46,10 @@ beforeEach(async () => {
     await new Group(testGroup).save();
     await new Chat(testChat).save();
     await new User(testUser).save();
+});
+
+afterAll(async () => {
+    await dbHandler.closeDatabase();
 });
 
 test('Can retrieve a valid chat', async () => {
@@ -83,8 +92,6 @@ test('Can retrieve a user-specific chat object', async () => {
         .get(`/chat/user/${groupMember1}`)
         .send()
         .expect(200);
-
-    console.log(response.body);
 
     expect(response.body[0].groupId).toEqual(testGroupId.toString());
 });
