@@ -6,7 +6,7 @@ export default function(spec) {
                 await spec.fillIn('LoginForm.email', 'asdf');
                 await spec.fillIn('LoginForm.password', 'jkl');
                 await spec.press('LoginForm.loginBtn');
-                await spec.exists('LoginForm.email');
+                await spec.exists('Login.screen');
             }
         );
     });
