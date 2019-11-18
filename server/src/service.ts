@@ -6,7 +6,6 @@ import * as userRouter from './routes/user';
 import * as groupRouter from './routes/group';
 import * as chatRouter from './routes/chat';
 import { initializeChat } from './chat/chat';
-require('./db/mongoose');
 
 const server = express();
 const service = http.createServer(server);
