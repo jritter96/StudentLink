@@ -20,7 +20,7 @@ const assignPreferenceScores = async (userId, callback) => {
         const potentialMatches = []; // objects with two fields: groupID, pref_score;
         let pref; // temp to store pref value for current group
         let pcntIntersect; // temp to store percent of intersection between user and current group's schedules
-        const threshold = 130; // threshold above which pref will need to be in order for corresponding group to be potential match
+        const threshold = 90; // threshold above which pref will need to be in order for corresponding group to be potential match
         let commonCourses; // common courses between user and current group
         const numUCourses = user.courses.length;
         let numGCourses;
@@ -213,6 +213,7 @@ const joinGroup = async (userId, groupId, callback) => {
         });
 
         group.members.push(userId);
+        group.names.push(`${user.firstName} ${user.lastName}`);
         user.groups.push(groupId);
 
         // log.debug('group:', group);
@@ -224,12 +225,10 @@ const joinGroup = async (userId, groupId, callback) => {
         const groupUserTokens = [];
         let currMember;
         const groupCopy = JSON.parse(JSON.stringify(group));
-        groupCopy.names = [];
 
         for (const groupMember of group.members) {
             currMember = await User.findOne({ _id: groupMember });
             if (currMember) {
-                groupCopy.names.push(`${currMember.firstName} ${currMember.lastName}`);
                 groupUserTokens.push(currMember.pushNotificationToken);
             }
         }
@@ -250,6 +249,7 @@ const createGroup = async (userId, callback) => {
             members: [userId],
             courses: user.courses,
             meeting_times: user.schedule,
+            names: [`${user.firstName} ${user.lastName}`]
         });
 
         user.groups.push(group._id);
@@ -258,8 +258,6 @@ const createGroup = async (userId, callback) => {
         await group.save();
 
         const groupCopy = JSON.parse(JSON.stringify(group));
-        groupCopy.names = [];
-        groupCopy.names.push(`${user.firstName} ${user.lastName}`);
 
         return callback(null, groupCopy);
     } catch (error) {
