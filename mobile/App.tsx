@@ -155,7 +155,9 @@ export default class App extends Component<{}, IAppState> {
                     />
                 );
             case viewEnum.chat:
-                return <Chat toggleNavBar={this.toggleNavBar} />;
+                return <Chat toggleNavBar={this.toggleNavBar}
+                         userID={this.state.userID}
+                        />;
             case viewEnum.schedule:
                 return (
                     <Schedule

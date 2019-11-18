@@ -11,13 +11,26 @@ import {
     FlatList,
 } from 'react-native';
 import { chatroomStyles } from '../../styles/chatroom';
+import config from '../../../config/config';
+
+const endpoint = config.endpoint;
 
 interface ChatroomProps {
     OnPressBackButton: Function;
+    messages: any[];
+    userID: String;
+    groupID: String;
 }
 
-export default class Chatroom extends Component<ChatroomProps> {
-    sstate = { message: '' };
+interface ChatroomState {
+    messages: any[];
+}
+
+export default class Chatroom extends Component<ChatroomProps, ChatroomState> {
+    constructor(props: any) {
+        super(props);
+        this.state = {messages: this.props.messages};
+    }
 
     _onPressSendButton() {
         {
@@ -27,40 +40,16 @@ export default class Chatroom extends Component<ChatroomProps> {
         return;
     }
 
-    Messages = [
-        {
-            direction: 'outgoing',
-            sender: 'Name',
-            message: 'message'
-        },
-        {
-            direction: 'incoming',
-            sender: 'Name',
-            message: 'message'
-        }
-    ]
-
     render() {
         return (
-            <SafeAreaView>
-                <KeyboardAvoidingView
-                    behavior="padding"
-                    style={chatroomStyles.container}
-                >
-                    <StatusBar barStyle="dark-content" />
-                    <View style={chatroomStyles.topContainer}>
-                        <View style={chatroomStyles.titleContainer}>
-                            <Text style={chatroomStyles.title}>Group Name</Text>
-                        </View>
-                    </View>
-                    <View style={chatroomStyles.backButtonContainer}>
-                        <TouchableOpacity
-                            onPress={this.props.OnPressBackButton.bind(this)}
-                        >
-                            <Text style={chatroomStyles.backButtonTitle}>
-                                Back
-                            </Text>
-                        </TouchableOpacity>
+            <KeyboardAvoidingView
+                behavior="padding"
+                style={chatroomStyles.container}
+            >
+                <StatusBar barStyle="dark-content" />
+                <View style={chatroomStyles.topContainer}>
+                    <View style={chatroomStyles.titleContainer}>
+                        <Text style={chatroomStyles.title}>{this.props.groupID}</Text>
                     </View>
                 </View>
                 <View style={chatroomStyles.backButtonContainer}>
@@ -74,11 +63,10 @@ export default class Chatroom extends Component<ChatroomProps> {
                 <View style={chatroomStyles.scrollContainer}>
                     <FlatList
                         inverted
-                        data={this.Messages.reverse()}
+                        data={this.state.messages.reverse()}
                         renderItem={({item}) => {
-                            if (item.direction === 'outgoing') {
+                            if (item.senderId === this.props.userID) {
                                 return (
-                                    {/*display outgoing message*/}
                                     <View style={chatroomStyles.outgoingMessageContainer}>
                                         <View style={chatroomStyles.outgoingMessageBox}>
                                             <Text style={chatroomStyles.messageText}>
@@ -90,11 +78,10 @@ export default class Chatroom extends Component<ChatroomProps> {
                             }
                             else {
                                 return (
-                                    {/*display incoming message*/}
                                     <View style={chatroomStyles.incomingMessageContainer}>
                                         <View style={chatroomStyles.incomingMessageBox}>
                                             <Text style={chatroomStyles.messageSender}>
-                                                {item.sender}
+                                                {item.senderName}
                                             </Text>
                                             <Text style={chatroomStyles.messageText}>
                                                 {item.message}
