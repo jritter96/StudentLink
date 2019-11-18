@@ -87,7 +87,9 @@ export default class App extends Component<{}, IAppState> {
                     <Login handleSuccessfulLogin={this.handleSuccessfulLogin} />
                 );
             case viewEnum.chat:
-                return <Chat toggleNavBar={this.toggleNavBar} />;
+                return <Chat toggleNavBar={this.toggleNavBar}
+                         userID={this.state.userID}
+                        />;
             case viewEnum.schedule:
                 return <Schedule userID={this.state.userID} />;
             case viewEnum.group:

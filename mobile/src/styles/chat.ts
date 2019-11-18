@@ -1,13 +1,12 @@
 import { StyleSheet } from 'react-native';
 
 export const chatStyles = StyleSheet.create({
-    scrollContainer: {
+scrollContainer: {
         flex: 7,
         backgroundColor: 'white',
     },
     contentContainer: {
         flexGrow: 1,
-        justifyContent: 'space-between',
     },
     buttonContainer: {
         backgroundColor: '#019898',
@@ -26,9 +25,10 @@ export const chatStyles = StyleSheet.create({
         color: 'white',
     },
     buttonSubtitleContainer: {
-        flex: 2,
+        flex: 1,
         marginHorizontal: 10,
-        marginBottom: 30,
+        marginTop: 5,
+        marginBottom: 20,
     },
     buttonSubtitle: {
         fontSize: 18,

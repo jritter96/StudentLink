@@ -10,13 +10,26 @@ import {
     FlatList,
 } from 'react-native';
 import { chatroomStyles } from '../../styles/chatroom';
+import config from '../../../config/config';
+
+const endpoint = config.endpoint;
 
 interface ChatroomProps {
     OnPressBackButton: Function;
+    messages: any[];
+    userID: String;
+    groupID: String;
 }
 
-export default class Chatroom extends Component<ChatroomProps> {
-    sstate = { message: '' };
+interface ChatroomState {
+    messages: any[];
+}
+
+export default class Chatroom extends Component<ChatroomProps, ChatroomState> {
+    constructor(props: any) {
+        super(props);
+        this.state = {messages: this.props.messages};
+    }
 
     _onPressSendButton() {
         {
@@ -25,19 +38,6 @@ export default class Chatroom extends Component<ChatroomProps> {
         alert('send message');
         return;
     }
-
-    Messages = [
-        {
-            direction: 'outgoing',
-            sender: 'Name',
-            message: 'message'
-        },
-        {
-            direction: 'incoming',
-            sender: 'Name',
-            message: 'message'
-        }
-    ]
 
     render() {
         return (
@@ -48,7 +48,7 @@ export default class Chatroom extends Component<ChatroomProps> {
                 <StatusBar barStyle="dark-content" />
                 <View style={chatroomStyles.topContainer}>
                     <View style={chatroomStyles.titleContainer}>
-                        <Text style={chatroomStyles.title}>Group Name</Text>
+                        <Text style={chatroomStyles.title}>{this.props.groupID}</Text>
                     </View>
                 </View>
                 <View style={chatroomStyles.backButtonContainer}>
@@ -62,9 +62,9 @@ export default class Chatroom extends Component<ChatroomProps> {
                 <View style={chatroomStyles.scrollContainer}>
                     <FlatList
                         inverted
-                        data={this.Messages.reverse()}
+                        data={this.state.messages.reverse()}
                         renderItem={({item}) => {
-                            if (item.direction === 'outgoing') {
+                            if (item.senderId === this.props.userID) {
                                 return (
                                     <View style={chatroomStyles.outgoingMessageContainer}>
                                         <View style={chatroomStyles.outgoingMessageBox}>
@@ -77,11 +77,10 @@ export default class Chatroom extends Component<ChatroomProps> {
                             }
                             else {
                                 return (
-                                    {/*display incoming message*/}
                                     <View style={chatroomStyles.incomingMessageContainer}>
                                         <View style={chatroomStyles.incomingMessageBox}>
                                             <Text style={chatroomStyles.messageSender}>
-                                                {item.sender}
+                                                {item.senderName}
                                             </Text>
                                             <Text style={chatroomStyles.messageText}>
                                                 {item.message}
