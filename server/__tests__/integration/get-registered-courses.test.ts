@@ -194,4 +194,4 @@ test('getRegisteredCourses for User should update User and Course DBs correctly'
     expect(CPEN331.times[0].minuteStart).toEqual(cpen331ExpectedTimes1.minuteStart);
     expect(CPEN331.times[0].hourEnd).toEqual(cpen331ExpectedTimes1.hourEnd);
     expect(CPEN331.times[0].minuteEnd).toEqual(cpen331ExpectedTimes1.minuteEnd);
-});
+}, 10000);
