@@ -20,14 +20,11 @@ export const genericStyles = StyleSheet.create({
         fontWeight: '700',
     },
     title: {
-        color: '#01a3a4',
+        color: '#444444',
         fontSize: 40,
         fontWeight: 'bold',
-        textAlign: 'center',
-        marginTop: 15,
-        marginBottom: 20,
+        textAlign: 'left',
+        margin: 20,
     },
-    titleContainer: {
-        alignItems: 'center',
-    },
+    titleContainer: {},
 });

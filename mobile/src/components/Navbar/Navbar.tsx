@@ -29,11 +29,11 @@ export default class Navbar extends Component<INavBarProps, INavBarState> {
         this.renderSelectionColor = this.renderSelectionColor.bind(this);
 
         this.state = {
-            active: 0,
+            active: 3,
             options: [
                 {
                     key: viewEnum.group,
-                    title: 'Group',
+                    title: 'Groups',
                     icon: 'ios-people',
                 },
                 {

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View } from 'react-native';
+import { View, StatusBar } from 'react-native';
 import io from 'socket.io-client';
 import { appStyles } from './src/styles/app';
 import Login from './src/components/Login/Login';
@@ -43,6 +43,7 @@ export default class App extends Component<{}, IAppState> {
     public render() {
         return (
             <View style={appStyles.container}>
+                <StatusBar barStyle={this.renderStatusBar()} />
                 <View style={appStyles.viewContainer}>
                     {this.showMainView(this.state.navigator)}
                 </View>
@@ -104,5 +105,11 @@ export default class App extends Component<{}, IAppState> {
             return <Navbar handleViewChange={this.handleViewChange} />;
         }
         return null;
+    }
+
+    private renderStatusBar() {
+        return this.state.navigator === viewEnum.login
+            ? 'light-content'
+            : 'dark-content';
     }
 }
