@@ -16,6 +16,7 @@ const endpoint = config.endpoint;
 
 interface IAppState {
     chatBody: any[];
+    schedule: any[];
     socket: any;
     navigator: number;
     navBarEnable: boolean;
@@ -28,11 +29,13 @@ export default class App extends Component<{}, IAppState> {
 
         this.handleViewChange = this.handleViewChange.bind(this);
         this.toggleNavBar = this.toggleNavBar.bind(this);
+        this.handleScheduleChange = this.handleScheduleChange.bind(this);
         this.handleSuccessfulLogin = this.handleSuccessfulLogin.bind(this);
         this.handleSocketConnection = this.handleSocketConnection.bind(this);
 
         this.state = {
             chatBody: [],
+            schedule: [],
             socket: '',
             navigator: viewEnum.login,
             navBarEnable: true,
@@ -52,12 +55,16 @@ export default class App extends Component<{}, IAppState> {
         );
     }
 
+    public toggleNavBar(active: boolean) {
+        this.setState({ navBarEnable: active });
+    }
+
     public handleViewChange(view) {
         this.setState({ navigator: view });
     }
 
-    public toggleNavBar(active: boolean) {
-        this.setState({ navBarEnable: active });
+    public handleScheduleChange(schedule: any[]) {
+        this.setState({ schedule });
     }
 
     public handleSuccessfulLogin(id: string) {
@@ -90,7 +97,13 @@ export default class App extends Component<{}, IAppState> {
             case viewEnum.chat:
                 return <Chat toggleNavBar={this.toggleNavBar} />;
             case viewEnum.schedule:
-                return <Schedule userID={this.state.userID} />;
+                return (
+                    <Schedule
+                        userID={this.state.userID}
+                        schedule={this.state.schedule}
+                        handleScheduleChange={this.handleScheduleChange}
+                    />
+                );
             case viewEnum.group:
                 return <Group userID={this.state.userID} />;
             case viewEnum.settings:

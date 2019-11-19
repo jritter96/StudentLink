@@ -12,24 +12,47 @@ import config from '../../../config/config';
 
 const endpoint = config.endpoint;
 
-interface ScheduleProps {
-    userID: String;
+interface IScheduleProps {
+    userID: string;
+    schedule: any[];
+    handleScheduleChange: (id: any[]) => void;
 }
 
-interface ScheduleState {
-    courses: any[];
-}
-export default class Schedule extends Component<ScheduleProps, ScheduleState> {
-    constructor(props: ScheduleProps) {
+export default class Schedule extends Component<IScheduleProps, {}> {
+    constructor(props: IScheduleProps) {
         super(props);
-        this.state = { courses: this.tempCourses };
-        this.renderCourses = this.renderCourses.bind(this);
-        this.getCourses = this.getCourses.bind(this);
+        this.getSchedule = this.getSchedule.bind(this);
+        this.renderSchedule = this.renderSchedule.bind(this);
     }
 
-    tempCourses = [];
+    public componentDidMount() {
+        if (this.props.schedule.length === 0) {
+            this.getSchedule();
+        }
+    }
 
-    getCourses() {
+    public render() {
+        return (
+            <SafeAreaView style={genericStyles.container}>
+                <View style={genericStyles.titleContainer}>
+                    <Text style={genericStyles.title}>Schedule</Text>
+                </View>
+                <View style={scheduleStyles.scrollContainer}>
+                    <ScrollView>{this.renderSchedule()}</ScrollView>
+                </View>
+                <TouchableOpacity
+                    onPress={this.getSchedule}
+                    style={genericStyles.button}
+                >
+                    <Text style={genericStyles.buttonText}>
+                        Refresh Courses
+                    </Text>
+                </TouchableOpacity>
+            </SafeAreaView>
+        );
+    }
+
+    private getSchedule() {
         fetch(`${endpoint}/user/${this.props.userID}`, {
             method: 'GET',
             headers: {
@@ -41,39 +64,26 @@ export default class Schedule extends Component<ScheduleProps, ScheduleState> {
                 if (response.ok) return response.json();
             })
             .then(response => {
-                this.setState({ courses: response['courses'] });
+                this.props.handleScheduleChange(response['courses']);
             })
             .catch(error => {
                 console.log(error);
             });
     }
 
-    render() {
-        return (
-            <SafeAreaView style={genericStyles.container}>
-                <View style={genericStyles.titleContainer}>
-                    <Text style={genericStyles.title}>Schedule</Text>
+    private renderSchedule() {
+        if (this.props.schedule == []) {
+            return (
+                <View>
+                    <Text>No courses</Text>
                 </View>
-                <View style={scheduleStyles.scrollContainer}>
-                    <ScrollView>{this.renderCourses()}</ScrollView>
+            );
+        } else {
+            return this.props.schedule.map(event => (
+                <View style={scheduleStyles.courseContainer} key={event}>
+                    <Text style={scheduleStyles.courseText}>{event}</Text>
                 </View>
-                <TouchableOpacity
-                    onPress={this.getCourses}
-                    style={genericStyles.button}
-                >
-                    <Text style={genericStyles.buttonText}>
-                        Refresh Courses
-                    </Text>
-                </TouchableOpacity>
-            </SafeAreaView>
-        );
-    }
-
-    renderCourses() {
-        return this.state.courses.map(course => (
-            <View style={scheduleStyles.courseContainer} key={course}>
-                <Text style={scheduleStyles.courseText}>{course}</Text>
-            </View>
-        ));
+            ));
+        }
     }
 }
