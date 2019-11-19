@@ -164,13 +164,9 @@ export default class Signup extends Component<SignupProps, SignupState> {
                         <TouchableOpacity
                             style={loginStyles.buttonContainer}
                             disabled={this.state.busy}
+                            onPress={this.createUser}
                         >
-                            <Text
-                                style={loginStyles.buttonText}
-                                onPress={this.createUser}
-                            >
-                                SIGN UP
-                            </Text>
+                            <Text style={loginStyles.buttonText}>SIGN UP</Text>
                         </TouchableOpacity>
                     </View>
                 </KeyboardAvoidingView>
