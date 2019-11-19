@@ -37,7 +37,7 @@ export default class App extends Component<{}, IAppState> {
             chatBody: [],
             schedule: [],
             socket: '',
-            navigator: viewEnum.schedule,
+            navigator: viewEnum.login,
             navBarEnable: true,
             userID: '',
         };
