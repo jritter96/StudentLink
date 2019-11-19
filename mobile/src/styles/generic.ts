@@ -6,6 +6,7 @@ export const genericStyles = StyleSheet.create({
         backgroundColor: 'white',
     },
     button: {
+        alignItems: 'center',
         justifyContent: 'center',
         marginVertical: 10,
         marginHorizontal: 10,
@@ -13,6 +14,16 @@ export const genericStyles = StyleSheet.create({
         backgroundColor: '#01a3a4',
         marginBottom: 15,
         borderRadius: 25,
+    },
+    buttonCircular: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginVertical: 10,
+        marginHorizontal: 10,
+        height: 50,
+        width: 50,
+        borderRadius: 25,
+        backgroundColor: '#F26CA7',
     },
     buttonText: {
         color: 'white',
@@ -27,4 +38,9 @@ export const genericStyles = StyleSheet.create({
         margin: 20,
     },
     titleContainer: {},
+    fullWidthContainer: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'center',
+    },
 });

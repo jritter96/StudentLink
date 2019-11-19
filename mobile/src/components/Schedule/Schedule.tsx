@@ -6,6 +6,7 @@ import {
     Text,
     TouchableOpacity,
 } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { genericStyles } from '../../styles/generic';
 import { scheduleStyles } from '../../styles/schedule';
 import config from '../../../config/config';
@@ -40,14 +41,14 @@ export default class Schedule extends Component<IScheduleProps, {}> {
                 <View style={scheduleStyles.scrollContainer}>
                     <ScrollView>{this.renderSchedule()}</ScrollView>
                 </View>
-                <TouchableOpacity
-                    onPress={this.getSchedule}
-                    style={genericStyles.button}
-                >
-                    <Text style={genericStyles.buttonText}>
-                        Refresh Courses
-                    </Text>
-                </TouchableOpacity>
+                <View style={genericStyles.fullWidthContainer}>
+                    <TouchableOpacity
+                        onPress={this.getSchedule}
+                        style={genericStyles.buttonCircular}
+                    >
+                        <Ionicons name="ios-refresh" size={30} color="white" />
+                    </TouchableOpacity>
+                </View>
             </SafeAreaView>
         );
     }
@@ -72,10 +73,12 @@ export default class Schedule extends Component<IScheduleProps, {}> {
     }
 
     private renderSchedule() {
-        if (this.props.schedule == []) {
+        if (this.props.schedule.length === 0) {
             return (
                 <View>
-                    <Text>No courses</Text>
+                    <Text style={scheduleStyles.errorText}>
+                        No courses were found.
+                    </Text>
                 </View>
             );
         } else {

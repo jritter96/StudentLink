@@ -17,4 +17,9 @@ export const scheduleStyles = StyleSheet.create({
         fontWeight: 'bold',
         color: 'white',
     },
+    errorText: {
+        fontSize: 20,
+        color: '#444444',
+        textAlign: 'center',
+    },
 });
