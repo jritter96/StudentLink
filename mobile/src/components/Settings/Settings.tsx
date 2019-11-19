@@ -30,8 +30,8 @@ export default class Group extends Component<IGroupProps, IGroupState> {
             );
         } else {
             return (
-                <SafeAreaView style={genericStyles.container}>
-                    <Text>Settings</Text>
+                <SafeAreaView style={genericStyles.titleContainer}>
+                    <Text style={genericStyles.title}>Settings</Text>
                 </SafeAreaView>
             );
         }
