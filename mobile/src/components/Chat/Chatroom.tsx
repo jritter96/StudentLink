@@ -38,7 +38,7 @@ export default class Chatroom extends Component<ChatroomProps, ChatroomState> {
     }
 
     sendMessage() {
-        this.props.socket.emit("sendMessage" , this.state.newMessage, handleNewMessage(newChatObject: any));
+        this.props.socket.emit("sendMessage" , this.state.newMessage);//, handleNewMessage(newChatObject: any));
         this.setState({ newMessage: "" })
         return;
     }
