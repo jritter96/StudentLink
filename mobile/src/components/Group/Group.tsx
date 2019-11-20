@@ -45,7 +45,7 @@ export default class Group extends Component<IGroupProps, IGroupState> {
         } else {
             return (
                 <SafeAreaView style={genericStyles.container}>
-                    <View style={genericStyles.titleContainer}>
+                    <View>
                         <Text style={genericStyles.title}>Groups</Text>
                     </View>
                     <ScrollView

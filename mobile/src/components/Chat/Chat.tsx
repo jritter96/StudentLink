@@ -54,7 +54,7 @@ export default class Chat extends Component<ChatProps> {
     ChatMainView() {
         return (
             <SafeAreaView style={genericStyles.container}>
-                <View style={genericStyles.titleContainer}>
+                <View>
                     <Text style={genericStyles.title}>Messages</Text>
                 </View>
                 <View style={chatStyles.scrollContainer}>

@@ -37,10 +37,8 @@ export const genericStyles = StyleSheet.create({
         textAlign: 'left',
         margin: 20,
     },
-    titleContainer: {},
-    fullWidthContainer: {
+    titleContainer: {
         flex: 1,
         flexDirection: 'row',
-        justifyContent: 'center',
     },
 });

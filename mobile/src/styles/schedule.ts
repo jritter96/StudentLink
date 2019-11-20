@@ -1,6 +1,15 @@
 import { StyleSheet } from 'react-native';
 
 export const scheduleStyles = StyleSheet.create({
+    scheduleTitle: {
+        color: '#444444',
+        fontSize: 40,
+        fontWeight: 'bold',
+        textAlign: 'left',
+        height: '100%',
+        margin: 20,
+        flex: 5,
+    },
     scrollContainer: {
         flex: 7,
     },

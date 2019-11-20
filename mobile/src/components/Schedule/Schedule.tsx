@@ -10,6 +10,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { genericStyles } from '../../styles/generic';
 import { scheduleStyles } from '../../styles/schedule';
 import config from '../../../config/config';
+import ScheduleCard from './ScheduleCard';
 
 const endpoint = config.endpoint;
 
@@ -36,18 +37,30 @@ export default class Schedule extends Component<IScheduleProps, {}> {
         return (
             <SafeAreaView style={genericStyles.container}>
                 <View style={genericStyles.titleContainer}>
-                    <Text style={genericStyles.title}>Schedule</Text>
-                </View>
-                <View style={scheduleStyles.scrollContainer}>
-                    <ScrollView>{this.renderSchedule()}</ScrollView>
-                </View>
-                <View style={genericStyles.fullWidthContainer}>
+                    <Text style={scheduleStyles.scheduleTitle}>Schedule</Text>
                     <TouchableOpacity
                         onPress={this.getSchedule}
                         style={genericStyles.buttonCircular}
                     >
                         <Ionicons name="ios-refresh" size={30} color="white" />
                     </TouchableOpacity>
+                </View>
+                <View style={scheduleStyles.scrollContainer}>
+                    <ScrollView>
+                        {this.renderSchedule()}
+                        <ScheduleCard
+                            isCourse={true}
+                            eventName="CPEN 321"
+                            eventDate="Monday"
+                            eventTime="3:00 - 4:30 PM"
+                        />
+                        <ScheduleCard
+                            isCourse={false}
+                            eventName="Fun Study Group"
+                            eventDate="Tuesday"
+                            eventTime="5:00 - 6:00 PM"
+                        />
+                    </ScrollView>
                 </View>
             </SafeAreaView>
         );
