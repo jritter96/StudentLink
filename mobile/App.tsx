@@ -30,6 +30,7 @@ export default class App extends Component<{}, IAppState> {
     constructor(props: any) {
         super(props);
 
+        this.handleLogout = this.handleLogout.bind(this);
         this.handleViewChange = this.handleViewChange.bind(this);
         this.toggleNavBar = this.toggleNavBar.bind(this);
         this.handleScheduleChange = this.handleScheduleChange.bind(this);
@@ -84,6 +85,17 @@ export default class App extends Component<{}, IAppState> {
         return;
     }
 
+    public handleLogout() {
+        this.setState({
+            chatBody: [],
+            schedule: [],
+            socket: '',
+            navigator: viewEnum.login,
+            navBarEnable: true,
+            userID: '',
+        });
+    }
+
     private handleSocketConnection() {
         const socket = io(endpoint);
         this.setState({ socket });
@@ -115,7 +127,12 @@ export default class App extends Component<{}, IAppState> {
             case viewEnum.group:
                 return <Group userID={this.state.userID} />;
             case viewEnum.settings:
-                return <Settings userID={this.state.userID} />;
+                return (
+                    <Settings
+                        userID={this.state.userID}
+                        handleLogout={this.handleLogout}
+                    />
+                );
             case viewEnum.signup:
                 return (
                     <Signup

@@ -12,6 +12,7 @@ import { settingsStyles } from '../../styles/settings';
 
 interface IGroupProps {
     userID: string;
+    handleLogout: () => void;
 }
 
 interface IGroupState {
@@ -68,6 +69,7 @@ export default class Group extends Component<IGroupProps, IGroupState> {
                             }}
                         />
                         <TouchableOpacity
+                            onPress={this.props.handleLogout}
                             style={{
                                 ...settingsStyles.button,
                                 ...settingsStyles.logoutButton,
