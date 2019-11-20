@@ -37,13 +37,13 @@ export default class Chatroom extends Component<ChatroomProps, ChatroomState> {
         };
     }
 
-    sendMessage() {
+    private sendMessage() {
         this.props.socket.emit("sendMessage" , this.state.newMessage);//, handleNewMessage(newChatObject: any));
         this.setState({ newMessage: "" })
         return;
     }
 
-    render() {
+    public render() {
         return (
             <KeyboardAvoidingView
                 behavior="padding"

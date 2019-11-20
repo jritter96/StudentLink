@@ -27,8 +27,25 @@ interface ChatProps {
 interface ChatState {
     chatNav: any;
     chatSel: any;
-    chatBody: any[];
 }
+
+const chat = [
+    {
+            groupId: "5daea88ccabc5a004088db28",
+            messages: [
+                {
+                message: "Hello this is a test!",
+                senderId: "41224d776a326fb40f000007",
+                senderName: "Condor",
+              },
+              {
+                message: "Hello this is also a test!",
+                senderId: "41224d776a326fb40f000007",
+                senderName: "C",
+              },
+            ],
+    },
+]
 
 export default class Chat extends Component<ChatProps, ChatState> {
     constructor(props: any) {
@@ -41,20 +58,20 @@ export default class Chat extends Component<ChatProps, ChatState> {
         this.HandleChatroomReturn = this.HandleChatroomReturn.bind(this);
     }
 
-    OnPressButton(chatID: any) {
+    private OnPressButton(chatID: any) {
         this.setState({ chatNav: chatEnum.chatroom });
         this.setState({ chatSel: chatID });
         this.props.toggleNavBar(false);
         return;
     }
 
-    HandleChatroomReturn() {
+    public HandleChatroomReturn() {
         this.setState({ chatNav: chatEnum.chat });
         this.props.toggleNavBar(true);
         return;
     }
 
-    ShowChatViews(view: any) {
+    private ShowChatViews(view: any) {
         switch (view) {
             case chatEnum.chat:
                 return this.ChatMainView();
@@ -88,7 +105,7 @@ export default class Chat extends Component<ChatProps, ChatState> {
         }
     }
 
-    ChatMainView() {
+    private ChatMainView() {
         return (
             <SafeAreaView style={genericStyles.container}>
             <StatusBar barStyle="dark-content" />
@@ -99,6 +116,7 @@ export default class Chat extends Component<ChatProps, ChatState> {
                     <ScrollView
                         contentContainerStyle={chatStyles.contentContainer}
                     >
+                        <Text style={chatStyles.title}>TEST</Text>
                         {this.renderChats()}
                     </ScrollView>
                 </View>
@@ -106,35 +124,38 @@ export default class Chat extends Component<ChatProps, ChatState> {
         );
     }
 
-    renderChats() {
-        return this.props.chatBody.map(chatObject => {
-            chatObject !== null ?
-                <View>
-                    <TouchableOpacity
-                        onPress={this.OnPressButton.bind(this, chatObject.groupId)}
-                        onLongPress={this.OnPressButton.bind(this, chatObject.groupId)}
-                        style={chatStyles.buttonContainer}
-                        key={chatObject.groupId}
-                    >
-                        <View style={chatStyles.buttonTitleContainer}>
-                            <Text style={chatStyles.buttonTitle}>{chatObject.groupId}</Text>
-                        </View>
-                        <View style={chatStyles.buttonSubtitleContainer}>
-                            <Text style={chatStyles.buttonSubtitle}>
-                                {chatObject.messages[chatObject.messages.length - 1].message.length > MAX_CHARACTERS ? chatObject.messages[chatObject.messages.length - 1].message.substring(0, MAX_CHARACTERS) + "..." : chatObject.messages[chatObject.messages.length - 1].message}
-                            </Text>
-                        </View>
-                    </TouchableOpacity>
-                    <View style={chatStyles.whiteSpace} />
-                </View>
-            : null
+    private renderChats() {
+        var tempArray = [], i;
+        console.log("chatBody: ");
+        console.log(this.props.chatBody);
+        for(i = 0; i < this.props.chatBody.length; i++)
+        {
+            if (this.props.chatBody[i] != null) {
+                tempArray[i] = this.props.chatBody[i];
             }
+        }
+        console.log("tempArray: ");
+        console.log(tempArray);
+        return chat.map(chatObject => (
+                <TouchableOpacity
+                    onPress={this.OnPressButton.bind(this, chatObject.groupId)}
+                    onLongPress={this.OnPressButton.bind(this, chatObject.groupId)}
+                    style={chatStyles.buttonContainer}
+                >
+                    <View style={chatStyles.buttonTitleContainer}>
+                        <Text style={chatStyles.buttonTitle}>{chatObject.groupId}</Text>
+                    </View>
+                    <View style={chatStyles.buttonSubtitleContainer}>
+                        <Text style={chatStyles.buttonSubtitle}>
+                            {chatObject.messages[chatObject.messages.length - 1].message.length > MAX_CHARACTERS ? chatObject.messages[chatObject.messages.length - 1].message.substring(0, MAX_CHARACTERS) + "..." : chatObject.messages[chatObject.messages.length - 1].message}
+                        </Text>
+                    </View>
+                </TouchableOpacity>
+            )
         );
     }
 
-    render() {
-            console.log("Test: ");
-            console.log(this.props.chatBody);
+    public render() {
         return (
             <View style={genericStyles.container}>
                 {this.ShowChatViews(this.state.chatNav)}
