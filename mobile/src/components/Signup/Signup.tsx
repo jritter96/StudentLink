@@ -12,6 +12,7 @@ import { signupStyles } from '../../styles/signup';
 import { LinearGradient } from 'expo-linear-gradient';
 import { loginGradient, loginStyles } from '../../styles/login';
 import { loginFormStyles } from '../../styles/loginForm';
+import { viewEnum } from '../../enum/viewEnum';
 
 const endpoint = 'http://ec2-18-222-96-240.us-east-2.compute.amazonaws.com';
 
@@ -55,6 +56,7 @@ export default class Signup extends Component<SignupProps, SignupState> {
         );
         this.createUser = this.createUser.bind(this);
         this.handleCanvasTokenUpdate = this.handleCanvasTokenUpdate.bind(this);
+        this.backToLoginPress = this.backToLoginPress.bind(this);
     }
 
     private firstnameInput: any;
@@ -121,7 +123,7 @@ export default class Signup extends Component<SignupProps, SignupState> {
                         <TextInput
                             placeholder="username"
                             placeholderTextColor="rgba(255,255,255,0.4)"
-                            keyboardType="username-address"
+                            keyboardType="email-address"
                             returnKeyType="next"
                             autoCapitalize="none"
                             autoCorrect={false}
@@ -162,11 +164,19 @@ export default class Signup extends Component<SignupProps, SignupState> {
                             style={signupStyles.input}
                         />
                         <TouchableOpacity
-                            style={loginStyles.buttonContainer}
+                            style={signupStyles.buttonContainerSignup}
                             disabled={this.state.busy}
                             onPress={this.createUser}
                         >
                             <Text style={loginStyles.buttonText}>SIGN UP</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={signupStyles.buttonContainerBack}
+                            onPress={this.backToLoginPress}
+                        >
+                            <Text style={loginStyles.buttonText}>
+                                BACK TO LOGIN
+                            </Text>
                         </TouchableOpacity>
                     </View>
                 </KeyboardAvoidingView>
@@ -253,5 +263,9 @@ export default class Signup extends Component<SignupProps, SignupState> {
                 errorMessage: '',
             });
         }
+    }
+
+    private backToLoginPress() {
+        this.props.handleViewChange(viewEnum.login);
     }
 }
