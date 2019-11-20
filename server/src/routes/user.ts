@@ -1,6 +1,7 @@
 import * as express from 'express';
 import { generateName } from '../utils/generate-name';
 const User = require('../models/user');
+const Course = require('../models/course');
 import { matchUser } from '../utils/matching';
 import { getRegisteredCourses } from '../utils/get-registered-courses';
 
@@ -20,6 +21,35 @@ router.get('/:id', async (req, res) => {
         }
 
         res.send(user);
+    } catch (error) {
+        res.status(500).send();
+    }
+});
+
+/*
+ * Gets all the data for the courses taken by a user
+ *
+ * GET /user/:id/courses
+ */
+router.get('/:id/courses', async (req, res) => {
+    try {
+        const user = await User.findOne({ _id: req.params.id });
+
+        if (!user) {
+            return res.status(404).send();
+        }
+
+        const userCopy = JSON.parse(JSON.stringify(user));
+        let currCourse;
+        userCopy.coursesObj = [];
+
+        for (let i = 0; i < userCopy.courses.length ; i++) {
+            currCourse = await Course.findOne({courseCode: userCopy.courses[i]});
+            userCopy.coursesObj.push(currCourse);
+            console.log('cheez');
+        }
+
+        res.send(userCopy);
     } catch (error) {
         res.status(500).send();
     }
