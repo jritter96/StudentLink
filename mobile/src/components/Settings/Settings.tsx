@@ -1,8 +1,14 @@
 import React, { Component } from 'react';
-import { View, SafeAreaView, Text, ActivityIndicator } from 'react-native';
+import {
+    View,
+    SafeAreaView,
+    Text,
+    ActivityIndicator,
+    ScrollView,
+    TouchableOpacity,
+} from 'react-native';
 import { genericStyles } from '../../styles/generic';
-
-const endpoint = 'http://ec2-18-222-96-240.us-east-2.compute.amazonaws.com';
+import { settingsStyles } from '../../styles/settings';
 
 interface IGroupProps {
     userID: string;
@@ -30,8 +36,48 @@ export default class Group extends Component<IGroupProps, IGroupState> {
             );
         } else {
             return (
-                <SafeAreaView style={genericStyles.titleContainer}>
-                    <Text style={genericStyles.title}>Settings</Text>
+                <SafeAreaView>
+                    <View>
+                        <Text style={genericStyles.title}>Settings</Text>
+                    </View>
+                    <ScrollView
+                        contentContainerStyle={settingsStyles.container}
+                    >
+                        <View
+                            style={{
+                                borderBottomColor: '#AAAAAA',
+                                borderBottomWidth: 1,
+                                marginVertical: 10,
+                            }}
+                        />
+                        <TouchableOpacity
+                            style={{
+                                ...settingsStyles.button,
+                                ...settingsStyles.submitButton,
+                            }}
+                        >
+                            <Text style={settingsStyles.settingsButtonText}>
+                                SUBMIT
+                            </Text>
+                        </TouchableOpacity>
+                        <View
+                            style={{
+                                borderBottomColor: '#AAAAAA',
+                                borderBottomWidth: 1,
+                                marginVertical: 10,
+                            }}
+                        />
+                        <TouchableOpacity
+                            style={{
+                                ...settingsStyles.button,
+                                ...settingsStyles.logoutButton,
+                            }}
+                        >
+                            <Text style={settingsStyles.settingsButtonText}>
+                                LOG OUT
+                            </Text>
+                        </TouchableOpacity>
+                    </ScrollView>
                 </SafeAreaView>
             );
         }
