@@ -284,15 +284,17 @@ export const matchUser = async (userId, callback) => {
             } else {
                 sortedPotentialMatches = sortedMatches;
                 // log.debug('match potential matches:', sortedPotentialMatches);
-                findGroupForUser(userId, sortedPotentialMatches, (error, group) => {
-                    if (error) {
-                        log.error(error);
-                        return callback(error);
-                    } else {
-                        // log.debug('found group:', group);
-                        return callback(null, group);
-                    }
-                });
+                log.debug('sorted groups', sortedPotentialMatches);
+                return callback(null, sortedPotentialMatches);
+                // findGroupForUser(userId, sortedPotentialMatches, (error, group) => {
+                //     if (error) {
+                //         log.error(error);
+                //         return callback(error);
+                //     } else {
+                //         // log.debug('found group:', group);
+                //         return callback(null, group);
+                //     }
+                // });
             }
         });
     } catch (error) {
