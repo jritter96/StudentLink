@@ -12,6 +12,7 @@ export const scheduleStyles = StyleSheet.create({
     },
     scrollContainer: {
         flex: 7,
+        backgroundColor: '#F1F1F1',
     },
     courseContainer: {
         height: 50,
