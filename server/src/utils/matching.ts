@@ -65,7 +65,7 @@ const assignPreferenceScores = async (userId, callback) => {
             if (commonCourses && !group.members.includes(user._id)) {
                 pref = (commonCourses.length / numUCourses + commonCourses.length / numGCourses) * pcntIntersect;
                 if (pref > threshold) {
-                    potentialMatches.push({ groupId: group._id, pref: { pref } });
+                    potentialMatches.push({ group: { group }, pref: pref });
                 }
             }
         });
