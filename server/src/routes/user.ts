@@ -1,6 +1,7 @@
 import * as express from 'express';
 import { generateName } from '../utils/generate-name';
 const User = require('../models/user');
+const Course = require('../models/course');
 import { matchUser } from '../utils/matching';
 import { getRegisteredCourses } from '../utils/get-registered-courses';
 
@@ -19,7 +20,17 @@ router.get('/:id', async (req, res) => {
             return res.status(404).send();
         }
 
-        res.send(user);
+        const userCopy = JSON.parse(JSON.stringify(user));
+        let currCourse;
+        userCopy.coursesObj = [];
+
+        for (let i = 0; i < userCopy.courses.length ; i++) {
+            currCourse = await Course.findOne({courseCode: userCopy.courses[i]});
+            userCopy.coursesObj.push(currCourse);
+            console.log('cheez');
+        }
+
+        res.send(userCopy);
     } catch (error) {
         res.status(500).send();
     }
