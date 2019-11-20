@@ -21,11 +21,20 @@ export const signupStyles = StyleSheet.create({
         marginHorizontal: 25,
         borderRadius: 25,
     },
-    buttonContainer: {
+    buttonContainerSignup: {
         height: 50,
         backgroundColor: '#F26CA7',
         paddingVertical: 15,
+        marginHorizontal: 25,
         marginBottom: 15,
+        borderRadius: 25,
+    },
+    buttonContainerBack: {
+        height: 50,
+        backgroundColor: '#70CAD1',
+        paddingVertical: 15,
+        marginHorizontal: 25,
+        marginBottom: 25,
         borderRadius: 25,
     },
     buttonText: {
