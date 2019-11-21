@@ -19,6 +19,7 @@ interface IGroupProps {
 
 interface IGroupState {
     isLoading: boolean;
+    showCanvasModal: boolean;
 }
 
 export default class Group extends Component<IGroupProps, IGroupState> {
@@ -27,7 +28,10 @@ export default class Group extends Component<IGroupProps, IGroupState> {
 
         this.state = {
             isLoading: false,
+            showCanvasModal: true,
         };
+
+        this.toggleCanvasModal = this.toggleCanvasModal.bind(this);
     }
 
     public render() {
@@ -40,7 +44,10 @@ export default class Group extends Component<IGroupProps, IGroupState> {
         } else {
             return (
                 <SafeAreaView>
-                    <CanvasModal />
+                    <CanvasModal
+                        visible={this.state.showCanvasModal}
+                        toggleVisible={this.toggleCanvasModal}
+                    />
                     <View>
                         <Text style={genericStyles.title}>Settings</Text>
                     </View>
@@ -88,5 +95,11 @@ export default class Group extends Component<IGroupProps, IGroupState> {
                 </SafeAreaView>
             );
         }
+    }
+
+    public toggleCanvasModal(toggle: boolean) {
+        this.setState({
+            showCanvasModal: toggle,
+        });
     }
 }
