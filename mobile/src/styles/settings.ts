@@ -13,6 +13,12 @@ export const settingsStyles = StyleSheet.create({
         height: '5%',
         borderRadius: 30,
     },
+    header: {
+        color: '#444444',
+        fontSize: 20,
+        fontWeight: 'bold',
+        marginHorizontal: 20,
+    },
     logoutButton: {
         backgroundColor: '#F73666',
     },

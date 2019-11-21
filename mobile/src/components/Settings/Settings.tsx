@@ -10,6 +10,8 @@ import {
 import { genericStyles } from '../../styles/generic';
 import { settingsStyles } from '../../styles/settings';
 
+import CanvasModal from '../Modal/CanvasModal';
+
 interface IGroupProps {
     userID: string;
     handleLogout: () => void;
@@ -38,6 +40,7 @@ export default class Group extends Component<IGroupProps, IGroupState> {
         } else {
             return (
                 <SafeAreaView>
+                    <CanvasModal />
                     <View>
                         <Text style={genericStyles.title}>Settings</Text>
                     </View>
@@ -51,6 +54,8 @@ export default class Group extends Component<IGroupProps, IGroupState> {
                                 marginVertical: 10,
                             }}
                         />
+
+                        <Text style={settingsStyles.header}>Edit Profile</Text>
                         <TouchableOpacity
                             style={{
                                 ...settingsStyles.button,
