@@ -32,7 +32,7 @@ export const modalStyles = StyleSheet.create({
     buttonContainer: {
         flex: 1,
         borderRadius: 20,
-        backgroundColor: '#947BD3',
+        backgroundColor: '#F26CA7',
         marginHorizontal: 20,
         paddingVertical: 10,
     },

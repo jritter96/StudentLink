@@ -40,7 +40,7 @@ export default class Login extends Component<ILoginProps, {}> {
                             <Text style={loginStyles.title}>StudentLink</Text>
                             <Ionicons
                                 style={loginStyles.iconTitle}
-                                name="ios-school"
+                                name="md-school"
                                 size={45}
                                 color="white"
                             />

@@ -7,9 +7,10 @@ import {
     ScrollView,
     TouchableOpacity,
 } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { genericStyles } from '../../styles/generic';
 import { settingsStyles } from '../../styles/settings';
-
+import { infoButtonStyles } from '../../styles/button';
 import CanvasModal from '../Modal/CanvasModal';
 
 interface IGroupProps {
@@ -63,6 +64,19 @@ export default class Group extends Component<IGroupProps, IGroupState> {
                         />
 
                         <Text style={settingsStyles.header}>Edit Profile</Text>
+                        <TouchableOpacity
+                            onPress={this.toggleCanvasModal.bind(this, true)}
+                            style={{
+                                ...genericStyles.buttonCircular,
+                                ...infoButtonStyles.color,
+                            }}
+                        >
+                            <Ionicons
+                                name="md-information"
+                                size={50}
+                                color="#FFFFFF"
+                            />
+                        </TouchableOpacity>
                         <TouchableOpacity
                             style={{
                                 ...settingsStyles.button,
