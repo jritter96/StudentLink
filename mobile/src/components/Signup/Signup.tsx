@@ -9,10 +9,13 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { signupStyles } from '../../styles/signup';
+import { genericStyles } from '../../styles/generic';
+import { infoButtonStyles } from '../../styles/button';
 import { LinearGradient } from 'expo-linear-gradient';
 import { loginGradient, loginStyles } from '../../styles/login';
 import { loginFormStyles } from '../../styles/loginForm';
 import { viewEnum } from '../../enum/viewEnum';
+import CanvasModal from '../Modal/CanvasModal';
 
 const endpoint = 'http://ec2-18-222-96-240.us-east-2.compute.amazonaws.com';
 
@@ -29,6 +32,7 @@ interface SignupState {
     canvasToken: string;
     errorMessage: string;
     busy: boolean;
+    showCanvasModal: boolean;
 }
 
 export default class Signup extends Component<SignupProps, SignupState> {
@@ -43,6 +47,7 @@ export default class Signup extends Component<SignupProps, SignupState> {
             canvasToken: '',
             errorMessage: '',
             busy: false,
+            showCanvasModal: false,
         };
 
         this.handleFirstnameUpdate = this.handleFirstnameUpdate.bind(this);
@@ -52,6 +57,7 @@ export default class Signup extends Component<SignupProps, SignupState> {
         this.createUser = this.createUser.bind(this);
         this.handleCanvasTokenUpdate = this.handleCanvasTokenUpdate.bind(this);
         this.backToLoginPress = this.backToLoginPress.bind(this);
+        this.toggleCanvasModal = this.toggleCanvasModal.bind(this);
     }
 
     private firstnameInput: any;
@@ -68,6 +74,10 @@ export default class Signup extends Component<SignupProps, SignupState> {
                     flex: 1,
                 }}
             >
+                <CanvasModal
+                    visible={this.state.showCanvasModal}
+                    toggleVisible={this.toggleCanvasModal}
+                />
                 <KeyboardAvoidingView
                     behavior="padding"
                     style={signupStyles.container}
@@ -138,14 +148,50 @@ export default class Signup extends Component<SignupProps, SignupState> {
                             ref={input => (this.passwordInput = input)}
                             style={signupStyles.input}
                         />
-                        <TextInput
-                            placeholder="canvas token"
-                            placeholderTextColor="rgba(255,255,255,0.4)"
-                            returnKeyType="go"
-                            onChangeText={this.handleCanvasTokenUpdate}
-                            ref={input => (this.canvasTokenInput = input)}
-                            style={signupStyles.input}
-                        />
+                        <View
+                            style={{
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                height: 50,
+                                marginHorizontal: 25,
+                                marginBottom: 15,
+                            }}
+                        >
+                            <TextInput
+                                placeholder="canvas token"
+                                placeholderTextColor="rgba(255,255,255,0.4)"
+                                returnKeyType="go"
+                                onChangeText={this.handleCanvasTokenUpdate}
+                                ref={input => (this.canvasTokenInput = input)}
+                                style={{
+                                    flex: 5,
+                                    backgroundColor: 'rgba(255,255,255,0.3)',
+                                    borderRadius: 25,
+                                    color: '#FFFFFF',
+                                    height: 50,
+                                    paddingHorizontal: 25,
+                                    width: '60%',
+                                }}
+                            />
+                            <TouchableOpacity
+                                onPress={this.toggleCanvasModal.bind(
+                                    this,
+                                    true
+                                )}
+                                style={{
+                                    ...genericStyles.buttonCircular,
+                                    ...infoButtonStyles.color,
+                                    ...{ flex: 1 },
+                                }}
+                            >
+                                <Ionicons
+                                    name="md-information"
+                                    size={50}
+                                    color="#FFFFFF"
+                                />
+                            </TouchableOpacity>
+                        </View>
                         <TouchableOpacity
                             style={signupStyles.buttonContainerSignup}
                             disabled={this.state.busy}
@@ -165,6 +211,12 @@ export default class Signup extends Component<SignupProps, SignupState> {
                 </KeyboardAvoidingView>
             </LinearGradient>
         );
+    }
+
+    public toggleCanvasModal(toggle: boolean) {
+        this.setState({
+            showCanvasModal: toggle,
+        });
     }
 
     private handleFirstnameUpdate(input: any) {

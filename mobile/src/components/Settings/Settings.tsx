@@ -29,7 +29,7 @@ export default class Group extends Component<IGroupProps, IGroupState> {
 
         this.state = {
             isLoading: false,
-            showCanvasModal: true,
+            showCanvasModal: false,
         };
 
         this.toggleCanvasModal = this.toggleCanvasModal.bind(this);
