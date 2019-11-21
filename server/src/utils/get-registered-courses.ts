@@ -18,9 +18,9 @@ export const getRegisteredCourses = async userId => {
         '11111111111111111111111111111',
     ];
 
-    const courses = await Course.find({});
-    let courseCode;
-    let courseName;
+    const dbCourses = await Course.find({});
+    let userCourseCode;
+    let userCourseName;
     let courseInDB;
 
     // log.debug('token:', user.token);
@@ -40,125 +40,49 @@ export const getRegisteredCourses = async userId => {
                 } else {
                     body = JSON.parse(body);
                     user.courses = [];
-                    for (let j = 0; j < body.length; j++) {
+
+                    for (const userCourse of body) {
+
                         courseInDB = 0;
-                        const currCourse = body[j];
                         // log.debug('cc:', currCourse);
                         if (
-                            !currCourse.access_restricted_by_date === true &&
-                            !currCourse.name.includes('Engineering Co-op') &&
-                            !currCourse.name.includes('Safety') &&
-                            !currCourse.name.includes('Capstone')
+                            !userCourse.access_restricted_by_date === true &&
+                            !userCourse.name.includes('Engineering Co-op') &&
+                            !userCourse.name.includes('Safety') &&
+                            !userCourse.name.includes('Capstone')
                         ) {
-                            courseName = currCourse.name;
-                            courseName = courseName.split(' ');
-                            courseCode = courseName[0] + courseName[1];
-                            courses.forEach(userCourse => {
-                                if (courseCode === userCourse.courseCode) {
+                            userCourseName = userCourse.name.split(' ');
+                            userCourseCode = userCourseName[0] + userCourseName[1];
+                            dbCourses.forEach(dbCourse => {
+                                if (userCourseCode === dbCourse.courseCode) {
                                     courseInDB = 1;
                                     // log.debug('inDB:', courseCode);
                                 }
                             });
 
                             const courseTimes = [];
-                            const Response = await generateCourseData(courseName[0], courseName[1]);
+                            const Response = await generateCourseData(userCourseName[0], userCourseName[1]);
                             const Sections = 'sections';
                             const Days = 'days';
-                            const Start = 'start';
-                            const End = 'end';
                             const sections = Response[Sections];
                             const term1section = sections['101'] || sections['001'];
-                            const courseDays = term1section[Days].split(' ');
+                            const courseDays = term1section[Days].trim().split(' ');
 
                             for (const currDay of courseDays) {
-                                switch (currDay) {
-                                    case 'Sun':
-                                        courseTimes.push({
-                                            day: 0,
-                                            hourStart: parseInt(term1section[Start].substring(0, 2), 10),
-                                            minuteStart: parseInt(term1section[Start].substring(3, 5), 10),
-                                            hourEnd: parseInt(term1section[End].substring(0, 2), 10),
-                                            minuteEnd: parseInt(term1section[End].substring(3, 5), 10),
-                                        });
-                                        break;
-
-                                    case 'Mon':
-                                        courseTimes.push({
-                                            day: 1,
-                                            hourStart: parseInt(term1section[Start].substring(0, 2), 10),
-                                            minuteStart: parseInt(term1section[Start].substring(3, 5), 10),
-                                            hourEnd: parseInt(term1section[End].substring(0, 2), 10),
-                                            minuteEnd: parseInt(term1section[End].substring(3, 5), 10),
-                                        });
-                                        break;
-
-                                    case 'Tue':
-                                        courseTimes.push({
-                                            day: 2,
-                                            hourStart: parseInt(term1section[Start].substring(0, 2), 10),
-                                            minuteStart: parseInt(term1section[Start].substring(3, 5), 10),
-                                            hourEnd: parseInt(term1section[End].substring(0, 2), 10),
-                                            minuteEnd: parseInt(term1section[End].substring(3, 5), 10),
-                                        });
-                                        break;
-
-                                    case 'Wed':
-                                        courseTimes.push({
-                                            day: 3,
-                                            hourStart: parseInt(term1section[Start].substring(0, 2), 10),
-                                            minuteStart: parseInt(term1section[Start].substring(3, 5), 10),
-                                            hourEnd: parseInt(term1section[End].substring(0, 2), 10),
-                                            minuteEnd: parseInt(term1section[End].substring(3, 5), 10),
-                                        });
-                                        break;
-
-                                    case 'Thu':
-                                        courseTimes.push({
-                                            day: 4,
-                                            hourStart: parseInt(term1section[Start].substring(0, 2), 10),
-                                            minuteStart: parseInt(term1section[Start].substring(3, 5), 10),
-                                            hourEnd: parseInt(term1section[End].substring(0, 2), 10),
-                                            minuteEnd: parseInt(term1section[End].substring(3, 5), 10),
-                                        });
-                                        break;
-
-                                    case 'Fri':
-                                        courseTimes.push({
-                                            day: 5,
-                                            hourStart: parseInt(term1section[Start].substring(0, 2), 10),
-                                            minuteStart: parseInt(term1section[Start].substring(3, 5), 10),
-                                            hourEnd: parseInt(term1section[End].substring(0, 2), 10),
-                                            minuteEnd: parseInt(term1section[End].substring(3, 5), 10),
-                                        });
-                                        break;
-
-                                    case 'Sat':
-                                        courseTimes.push({
-                                            day: 6,
-                                            hourStart: parseInt(term1section[Start].substring(0, 2), 10),
-                                            minuteStart: parseInt(term1section[Start].substring(3, 5), 10),
-                                            hourEnd: parseInt(term1section[End].substring(0, 2), 10),
-                                            minuteEnd: parseInt(term1section[End].substring(3, 5), 10),
-                                        });
-                                        break;
-                                }
+                                buildCourseTimes(currDay, term1section, courseTimes);
                             }
 
                             if (courseInDB === 0) {
                                 const newCourse = new Course({
-                                    courseCode: courseCode,
-                                    courseSection: courseName[2],
+                                    courseCode: userCourseCode,
+                                    courseSection: userCourseName[2],
                                     times: courseTimes,
                                 });
 
                                 await newCourse.save();
                             }
 
-                            user.courses.push(courseCode);
-
-                            let startIndex;
-                            let endIndex;
-                            let i;
+                            user.courses.push(userCourseCode);
 
                             courseTimes.forEach(courseObj => {
                                 if (
@@ -166,105 +90,7 @@ export const getRegisteredCourses = async userId => {
                                     courseObj.hourEnd <= 22 &&
                                     !(courseObj.hourEnd === 22 && courseObj.minuteEnd === 30)
                                 ) {
-                                    switch (courseObj.day) {
-                                        case 0:
-                                            startIndex = courseObj.hourStart * 2 - 15;
-                                            if (courseObj.minuteStart === 30) {
-                                                startIndex += 1;
-                                            }
-                                            endIndex = courseObj.hourEnd * 2 - 15;
-                                            if (courseObj.minuteEnd === 30) {
-                                                endIndex += 1;
-                                            }
-                                            for (i = startIndex; i < endIndex; i++) {
-                                                user.schedule[0] = setCharAt(user.schedule[0], i, '0');
-                                            }
-                                            break;
-
-                                        case 1:
-                                            startIndex = courseObj.hourStart * 2 - 15;
-                                            if (courseObj.minuteStart === 30) {
-                                                startIndex += 1;
-                                            }
-                                            endIndex = courseObj.hourEnd * 2 - 15;
-                                            if (courseObj.minuteEnd === 30) {
-                                                endIndex += 1;
-                                            }
-                                            for (i = startIndex; i < endIndex; i++) {
-                                                user.schedule[1] = setCharAt(user.schedule[1], i, '0');
-                                            }
-                                            break;
-
-                                        case 2:
-                                            startIndex = courseObj.hourStart * 2 - 15;
-                                            if (courseObj.minuteStart === 30) {
-                                                startIndex += 1;
-                                            }
-                                            endIndex = courseObj.hourEnd * 2 - 15;
-                                            if (courseObj.minuteEnd === 30) {
-                                                endIndex += 1;
-                                            }
-                                            for (i = startIndex; i < endIndex; i++) {
-                                                user.schedule[2] = setCharAt(user.schedule[2], i, '0');
-                                            }
-                                            break;
-
-                                        case 3:
-                                            startIndex = courseObj.hourStart * 2 - 15;
-                                            if (courseObj.minuteStart === 30) {
-                                                startIndex += 1;
-                                            }
-                                            endIndex = courseObj.hourEnd * 2 - 15;
-                                            if (courseObj.minuteEnd === 30) {
-                                                endIndex += 1;
-                                            }
-                                            for (i = startIndex; i < endIndex; i++) {
-                                                user.schedule[3] = setCharAt(user.schedule[3], i, '0');
-                                            }
-                                            break;
-
-                                        case 4:
-                                            startIndex = courseObj.hourStart * 2 - 15;
-                                            if (courseObj.minuteStart === 30) {
-                                                startIndex += 1;
-                                            }
-                                            endIndex = courseObj.hourEnd * 2 - 15;
-                                            if (courseObj.minuteEnd === 30) {
-                                                endIndex += 1;
-                                            }
-                                            for (i = startIndex; i < endIndex; i++) {
-                                                user.schedule[4] = setCharAt(user.schedule[4], i, '0');
-                                            }
-                                            break;
-
-                                        case 5:
-                                            startIndex = courseObj.hourStart * 2 - 15;
-                                            if (courseObj.minuteStart === 30) {
-                                                startIndex += 1;
-                                            }
-                                            endIndex = courseObj.hourEnd * 2 - 15;
-                                            if (courseObj.minuteEnd === 30) {
-                                                endIndex += 1;
-                                            }
-                                            for (i = startIndex; i < endIndex; i++) {
-                                                user.schedule[5] = setCharAt(user.schedule[5], i, '0');
-                                            }
-                                            break;
-
-                                        case 6:
-                                            startIndex = courseObj.hourStart * 2 - 15;
-                                            if (courseObj.minuteStart === 30) {
-                                                startIndex += 1;
-                                            }
-                                            endIndex = courseObj.hourEnd * 2 - 15;
-                                            if (courseObj.minuteEnd === 30) {
-                                                endIndex += 1;
-                                            }
-                                            for (i = startIndex; i < endIndex; i++) {
-                                                user.schedule[6] = setCharAt(user.schedule[6], i, '0');
-                                            }
-                                            break;
-                                    }
+                                    buildUserSchedule(user, courseObj);
                                 }
                             }); // for each lecture
                         } // if not eng coop
@@ -282,4 +108,67 @@ function setCharAt(str, index, chr) {
         return str;
     }
     return str.substr(0, index) + chr + str.substr(index + 1);
+}
+
+function buildCourseTimes(currDay, section, courseTimes) {
+    const Start = 'start';
+    const End = 'end';
+
+    const courseTime = {
+        day: -1,
+        hourStart: parseInt(section[Start].substring(0, 2), 10),
+        minuteStart: parseInt(section[Start].substring(3, 5), 10),
+        hourEnd: parseInt(section[End].substring(0, 2), 10),
+        minuteEnd: parseInt(section[End].substring(3, 5), 10),
+    };
+
+    switch (currDay) {
+        case 'Sun':
+            courseTime.day = 0;
+            break;
+
+        case 'Mon':
+            courseTime.day = 1;
+            break;
+
+        case 'Tue':
+            courseTime.day = 2;
+            break;
+
+        case 'Wed':
+            courseTime.day = 3;
+            break;
+
+        case 'Thu':
+            courseTime.day = 4;
+            break;
+
+        case 'Fri':
+            courseTime.day = 5;
+            break;
+
+        case 'Sat':
+            courseTime.day = 6;
+            break;
+    }
+
+    courseTimes.push(courseTime);
+}
+
+function buildUserSchedule(user, course) {
+    let startIndex;
+    let endIndex;
+
+    startIndex = course.hourStart * 2 - 15;
+    if (course.minuteStart === 30) {
+        startIndex += 1;
+    }
+    endIndex = course.hourEnd * 2 - 15;
+    if (course.minuteEnd === 30) {
+        endIndex += 1;
+    }
+
+    for (let i = startIndex; i < endIndex; i++) {
+        user.schedule[course.day] = setCharAt(user.schedule[course.day], i, '0');
+    }
 }
