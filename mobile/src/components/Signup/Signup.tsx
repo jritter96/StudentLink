@@ -26,7 +26,6 @@ interface SignupState {
     lastname: string;
     username: string;
     password: string;
-    pushNotificationToken: string;
     canvasToken: string;
     errorMessage: string;
     busy: boolean;
@@ -41,7 +40,6 @@ export default class Signup extends Component<SignupProps, SignupState> {
             lastname: '',
             username: '',
             password: '',
-            pushNotificationToken: '',
             canvasToken: '',
             errorMessage: '',
             busy: false,
@@ -51,9 +49,6 @@ export default class Signup extends Component<SignupProps, SignupState> {
         this.handleLastnameUpdate = this.handleLastnameUpdate.bind(this);
         this.handleUsernameUpdate = this.handleUsernameUpdate.bind(this);
         this.handlePasswordUpdate = this.handlePasswordUpdate.bind(this);
-        this.handleNotificationTokenUpdate = this.handleNotificationTokenUpdate.bind(
-            this
-        );
         this.createUser = this.createUser.bind(this);
         this.handleCanvasTokenUpdate = this.handleCanvasTokenUpdate.bind(this);
         this.backToLoginPress = this.backToLoginPress.bind(this);
@@ -63,7 +58,6 @@ export default class Signup extends Component<SignupProps, SignupState> {
     private lastnameInput: any;
     private usernameInput: any;
     private passwordInput: any;
-    private notificationTokenInput: any;
     private canvasTokenInput: any;
 
     public render() {
@@ -145,17 +139,6 @@ export default class Signup extends Component<SignupProps, SignupState> {
                             style={signupStyles.input}
                         />
                         <TextInput
-                            placeholder="push notification token"
-                            placeholderTextColor="rgba(255,255,255,0.4)"
-                            returnKeyType="next"
-                            onSubmitEditing={() =>
-                                this.canvasTokenInput.focus()
-                            }
-                            onChangeText={this.handleNotificationTokenUpdate}
-                            ref={input => (this.notificationTokenInput = input)}
-                            style={signupStyles.input}
-                        />
-                        <TextInput
                             placeholder="canvas token"
                             placeholderTextColor="rgba(255,255,255,0.4)"
                             returnKeyType="go"
@@ -208,12 +191,6 @@ export default class Signup extends Component<SignupProps, SignupState> {
         });
     }
 
-    private handleNotificationTokenUpdate(input: any) {
-        this.setState({
-            pushNotificationToken: input,
-        });
-    }
-
     private handleCanvasTokenUpdate(input: any) {
         this.setState({
             canvasToken: input,
@@ -233,7 +210,6 @@ export default class Signup extends Component<SignupProps, SignupState> {
                 lastName: this.state.lastname,
                 username: this.state.username,
                 password: this.state.password,
-                pushNotificationToken: this.state.pushNotificationToken,
                 token: this.state.canvasToken,
             }),
         })

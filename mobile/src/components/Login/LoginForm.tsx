@@ -59,7 +59,7 @@ export default class LoginForm extends Component<
                     </TouchableOpacity>
                 </View>
                 <TextInput
-                    placeholder="email"
+                    placeholder="username"
                     placeholderTextColor="rgba(255,255,255,0.4)"
                     keyboardType="email-address"
                     returnKeyType="next"
