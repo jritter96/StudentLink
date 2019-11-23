@@ -1,8 +1,8 @@
 import { StyleSheet } from 'react-native';
 
 export const chatStyles = StyleSheet.create({
-scrollContainer: {
-        flex: 7,
+    scrollContainer: {
+        flex: 5,
         backgroundColor: 'white',
     },
     contentContainer: {
