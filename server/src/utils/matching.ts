@@ -1,7 +1,10 @@
 const User = require('../models/user');
 const Group = require('../models/group');
+const Chat = require('../models/chat');
 const async = require('async');
+const mongoose = require('mongoose');
 import { pushUserJoinedGroup } from './send-push-notification';
+import { generateName } from '../utils/generate-name';
 import * as log from 'log';
 
 const MAX_GROUP_SIZE = 4;
@@ -244,18 +247,27 @@ const joinGroup = async (userId, groupId, callback) => {
 const createGroup = async (userId, callback) => {
     try {
         const user = await User.findOne({ _id: userId });
+        const groupId = mongoose.Types.ObjectId();
 
         const group = new Group({
+            _id: groupId,
             members: [userId],
             courses: user.courses,
             meeting_times: user.schedule,
-            names: [`${user.firstName} ${user.lastName}`]
+            names: [`${user.firstName} ${user.lastName}`],
+            groupName: generateName(),
+        });
+
+        const chat = new Chat({
+            groupId,
+            messages: [],
         });
 
         user.groups.push(group._id);
 
         await user.save();
         await group.save();
+        await chat.save();
 
         const groupCopy = JSON.parse(JSON.stringify(group));
 
