@@ -67,8 +67,48 @@ export default class App extends Component<{}, IAppState> {
         this.setState({ navigator: view });
     }
 
-    public handleScheduleChange(schedule: any[]) {
-        this.setState({ schedule });
+    public handleScheduleChange(courseSchedule: any[], groupSchedule: any[]) {
+        const newSchedule = [];
+
+        // iterate through courses
+        for (const events of courseSchedule) {
+            for (const event of events.times) {
+                newSchedule.push({
+                    isCourse: true,
+                    eventName: events.courseCode,
+                    day: event.day,
+                    hourStart: event.hourStart,
+                    minuteStart: event.minuteStart,
+                    hourEnd: event.hourEnd,
+                    minuteEnd: event.minuteEnd,
+                });
+            }
+        }
+
+        // iterate through groups
+        // TODO: populate properly
+        for (const event of groupSchedule) {
+            newSchedule.push({
+                isCourse: false,
+                eventName: 'Placeholder',
+                day: 1,
+                hourStart: 10,
+                minuteStart: 30,
+                hourEnd: 12,
+                minuteEnd: 30,
+            });
+        }
+
+        // sort
+        newSchedule.sort((a, b) => {
+            return (
+                a.day - b.day ||
+                a.hourStart - b.hourStart ||
+                a.hourEnd - b.hourEnd
+            );
+        });
+
+        this.setState({ schedule: newSchedule });
     }
 
     public handleSuccessfulLogin(id: string) {

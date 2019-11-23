@@ -11,13 +11,14 @@ import { genericStyles } from '../../styles/generic';
 import { scheduleStyles } from '../../styles/schedule';
 import config from '../../../config/config';
 import ScheduleCard from './ScheduleCard';
+import { getDayOfWeek, formatTime } from '../../utils/date';
 
 const endpoint = config.endpoint;
 
 interface IScheduleProps {
     userID: string;
     schedule: any[];
-    handleScheduleChange: (id: any[]) => void;
+    handleScheduleChange: (a: any[], b: any[]) => void;
 }
 
 export default class Schedule extends Component<IScheduleProps, {}> {
@@ -49,12 +50,6 @@ export default class Schedule extends Component<IScheduleProps, {}> {
                     <ScrollView>
                         {this.renderSchedule()}
                         <ScheduleCard
-                            isCourse={true}
-                            eventName="CPEN 321"
-                            eventDate="Monday"
-                            eventTime="3:00 - 4:30 PM"
-                        />
-                        <ScheduleCard
                             isCourse={false}
                             eventName="Fun Study Group"
                             eventDate="Tuesday"
@@ -67,7 +62,9 @@ export default class Schedule extends Component<IScheduleProps, {}> {
     }
 
     private getSchedule() {
-        fetch(`${endpoint}/user/${this.props.userID}`, {
+        let courseResponse = [];
+
+        fetch(`${endpoint}/user/${this.props.userID}/courses`, {
             method: 'GET',
             headers: {
                 Accept: 'application/json',
@@ -78,7 +75,27 @@ export default class Schedule extends Component<IScheduleProps, {}> {
                 if (response.ok) return response.json();
             })
             .then(response => {
-                this.props.handleScheduleChange(response['courses']);
+                courseResponse = response['coursesObj'];
+            })
+            .then(() => {
+                fetch(`${endpoint}/user/${this.props.userID}/groups`, {
+                    method: 'GET',
+                    headers: {
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json',
+                    },
+                })
+                    .then(response => {
+                        if (response.ok) return response.json();
+                    })
+                    .then(response => {
+                        console.log(response['groupsObj']);
+
+                        this.props.handleScheduleChange(
+                            courseResponse,
+                            response['groupsObj']
+                        );
+                    });
             })
             .catch(error => {
                 console.log(error);
@@ -96,9 +113,18 @@ export default class Schedule extends Component<IScheduleProps, {}> {
             );
         } else {
             return this.props.schedule.map(event => (
-                <View style={scheduleStyles.courseContainer} key={event}>
-                    <Text style={scheduleStyles.courseText}>{event}</Text>
-                </View>
+                <ScheduleCard
+                    key={`${event._id}${event.hourStart}${event.hourEnd}`}
+                    isCourse={event.isCourse}
+                    eventName={event.eventName}
+                    eventDate={getDayOfWeek(event.day)}
+                    eventTime={formatTime(
+                        event.hourStart,
+                        event.minuteStart,
+                        event.hourEnd,
+                        event.minuteEnd
+                    )}
+                />
             ));
         }
     }
