@@ -74,6 +74,7 @@ export default class App extends Component<{}, IAppState> {
         for (const events of courseSchedule) {
             for (const event of events.times) {
                 newSchedule.push({
+                    _id: events._id,
                     isCourse: true,
                     eventName: events.courseCode,
                     day: event.day,
@@ -89,6 +90,7 @@ export default class App extends Component<{}, IAppState> {
         // TODO: populate properly
         for (const event of groupSchedule) {
             newSchedule.push({
+                _id: event._id,
                 isCourse: false,
                 eventName: event.groupName,
                 day: 1,
