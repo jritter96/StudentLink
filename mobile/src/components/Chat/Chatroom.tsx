@@ -75,6 +75,9 @@ export default class Chatroom extends Component<ChatroomProps, ChatroomState> {
                                                 <Text style={chatroomStyles.messageText}>
                                                     {item.message}
                                                 </Text>
+                                                <Text style={chatroomStyles.messageTimeStamp}>
+                                                    {item.createdAt.substring(0,10) + " " + item.createdAt.substring(11, 16)}
+                                                </Text>
                                             </View>
                                         </View>
                                     )
@@ -88,6 +91,9 @@ export default class Chatroom extends Component<ChatroomProps, ChatroomState> {
                                                 </Text>
                                                 <Text style={chatroomStyles.messageText}>
                                                     {item.message}
+                                                </Text>
+                                                <Text style={chatroomStyles.messageTimeStamp}>
+                                                    {item.createdAt.substring(0,10) + " " + item.createdAt.substring(11, 16)}
                                                 </Text>
                                             </View>
                                         </View>

@@ -14,7 +14,7 @@ import { chatEnum } from '../../enum/chatEnum';
 import config from '../../../config/config';
 
 const endpoint = config.endpoint;
-const MAX_CHARACTERS = 36;
+const MAX_CHARACTERS = 33;
 
 interface ChatProps {
     toggleNavBar: Function;

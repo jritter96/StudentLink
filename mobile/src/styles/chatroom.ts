@@ -73,12 +73,17 @@ export const chatroomStyles = StyleSheet.create({
         flexDirection: 'row-reverse',
     },
     messageSender: {
-        fontSize: 13,
+        fontSize: 14,
         fontWeight: 'bold',
         color: 'white',
     },
     messageText: {
-        fontSize: 12,
+        fontSize: 13,
+        color: 'white',
+        marginBottom: 5,
+    },
+    messageTimeStamp: {
+        fontSize: 7,
         color: 'white',
     },
     sendButtonContainer: {
