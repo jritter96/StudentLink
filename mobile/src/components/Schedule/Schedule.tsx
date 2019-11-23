@@ -24,6 +24,7 @@ interface IScheduleProps {
 export default class Schedule extends Component<IScheduleProps, {}> {
     constructor(props: IScheduleProps) {
         super(props);
+        this.buildSchedule = this.buildSchedule.bind(this);
         this.getSchedule = this.getSchedule.bind(this);
         this.renderSchedule = this.renderSchedule.bind(this);
     }
@@ -40,7 +41,7 @@ export default class Schedule extends Component<IScheduleProps, {}> {
                 <View style={genericStyles.titleContainer}>
                     <Text style={scheduleStyles.scheduleTitle}>Schedule</Text>
                     <TouchableOpacity
-                        onPress={this.getSchedule}
+                        onPress={this.buildSchedule}
                         style={genericStyles.buttonCircular}
                     >
                         <Ionicons name="ios-refresh" size={30} color="white" />
@@ -59,6 +60,24 @@ export default class Schedule extends Component<IScheduleProps, {}> {
                 </View>
             </SafeAreaView>
         );
+    }
+
+    private buildSchedule() {
+        fetch(`${endpoint}/user/${this.props.userID}/courses`, {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+        })
+            .then(response => {
+                if (response.ok) this.getSchedule();
+            })
+            .catch(error => {
+                console.log(error);
+            });
+
+        this.getSchedule();
     }
 
     private getSchedule() {
