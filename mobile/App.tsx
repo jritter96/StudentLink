@@ -48,12 +48,15 @@ export default class App extends Component<{}, IAppState> {
         };
     }
 
-    componentDidMount() {
-        if (this.state.navigator !== viewEnum.login) {
-            this.state.socket.on("message", newMessage => {
-            this.setState({ chatBody: this.state.chatBody.push(newMessage) })});
-        }
-    }
+    // TODO: place newMessage in correct group (based on groupId), don't initialize this here.
+    // It should go with the socket definition under handleSocketConnection()
+    // componentDidMount() {
+    //     if (this.state.navigator !== viewEnum.login) {
+    //         this.state.socket.on('message', (groupId, newMessage) => {
+    //             this.setState({ chatBody: this.state.chatBody.push(newMessage) });
+    //         });
+    //     }
+    // }
 
     public render() {
         return (
@@ -128,7 +131,7 @@ export default class App extends Component<{}, IAppState> {
         registerForPushNotificationsAsync(id);
 
         // initialize socket functionality
-            this.handleSocketConnection();
+        this.handleSocketConnection();
 
         return;
     }
@@ -152,9 +155,16 @@ export default class App extends Component<{}, IAppState> {
         });
     }
 
-    public handleNewMessage(newChatObject: any) {
-        this.setState({ chatBody: this.state.chatBody.push(newChatObject) })
-        return;
+    public handleNewMessage(groupId: any, newChatObject: any) {
+        const newChatBody = this.state.chatBody;
+
+        for (const group of newChatBody) {
+            if (group.groupId === groupId) {
+                group.messages.push(newChatObject);
+            }
+        }
+
+        this.setState({ chatBody: newChatBody });
     }
 
     private showMainView(view: any) {
@@ -168,13 +178,15 @@ export default class App extends Component<{}, IAppState> {
                     />
                 );
             case viewEnum.chat:
-                return <Chat
-                         toggleNavBar={this.toggleNavBar}
-                         userID={this.state.userID}
-                         chatBody={this.state.chatBody}
-                         socket={this.state.socket}
-                         handleNewMessage={this.handleNewMessage}
-                        />;
+                return (
+                    <Chat
+                        toggleNavBar={this.toggleNavBar}
+                        userID={this.state.userID}
+                        chatBody={this.state.chatBody}
+                        socket={this.state.socket}
+                        handleNewMessage={this.handleNewMessage}
+                    />
+                );
             case viewEnum.schedule:
                 return (
                     <Schedule
