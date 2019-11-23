@@ -14,7 +14,7 @@ import config from '../../../config/config';
 const endpoint = config.endpoint;
 
 interface ChatroomProps {
-    OnPressBackButton: Function;
+    handleChatroomReturn: Function;
     messages: any[];
     userID: String;
     groupID: String;
@@ -35,11 +35,18 @@ export default class Chatroom extends Component<ChatroomProps, ChatroomState> {
             newMessage: '',
         };
         this.sendMessage = this.sendMessage.bind(this);
+        this.OnPressBackButton = this.OnPressBackButton.bind(this);
     }
 
     private sendMessage() {
-        this.props.socket.emit("sendMessage", this.props.userID, this.props.groupID, this.state.newMessage);// this.props.handleNewMessage(newChatObject: any));
+        this.props.socket.emit("sendMessage", this.props.userID, this.props.groupID, this.state.newMessage);//, this.props.handleNewMessage(newChatObject: any));
         this.setState({ newMessage: "" })
+        return;
+    }
+
+    private OnPressBackButton() {
+        this.state.messages.reverse();
+        this.props.handleChatroomReturn();
         return;
     }
 
@@ -57,7 +64,7 @@ export default class Chatroom extends Component<ChatroomProps, ChatroomState> {
                 </View>
                 <View style={chatroomStyles.backButtonContainer}>
                     <TouchableOpacity
-                        onPress={this.props.OnPressBackButton.bind(this)}
+                        onPress={this.OnPressBackButton}
                     >
                         <Text style={chatroomStyles.backButtonTitle}>Back</Text>
                     </TouchableOpacity>

@@ -75,7 +75,7 @@ export default class Chat extends Component<ChatProps, ChatState> {
                 }
                 return (
                     <Chatroom
-                        OnPressBackButton={this.HandleChatroomReturn.bind(this)}
+                        handleChatroomReturn={this.HandleChatroomReturn.bind(this)}
                         messages={this.props.chatBody[chatIndex].messages}
                         userID={this.props.userID}
                         groupID={this.state.chatSel}
