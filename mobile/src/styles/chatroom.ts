@@ -15,11 +15,12 @@ export const chatroomStyles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         top: 20,
+        width: 240,
         position: 'absolute',
     },
     title: {
         color: 'black',
-        fontSize: 25,
+        fontSize: 22,
         fontWeight: 'bold',
         textAlign: 'center',
     },
@@ -89,6 +90,7 @@ export const chatroomStyles = StyleSheet.create({
         backgroundColor: '#d3d3d3',
         alignItems: 'center',
         justifyContent: 'center',
+        zIndex: 2,
     },
     sendButtonText: {
         fontSize: 18,

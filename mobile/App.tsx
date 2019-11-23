@@ -153,6 +153,7 @@ export default class App extends Component<{}, IAppState> {
     }
 
     public handleNewMessage(newChatObject: any) {
+        //this.state.socket.emit("sendMessage", userID, groupID, newMessage); // test
         this.setState({ chatBody: this.state.chatBody.push(newChatObject) })
         return;
     }
@@ -168,7 +169,8 @@ export default class App extends Component<{}, IAppState> {
                     />
                 );
             case viewEnum.chat:
-                return <Chat toggleNavBar={this.toggleNavBar}
+                return <Chat
+                         toggleNavBar={this.toggleNavBar}
                          userID={this.state.userID}
                          chatBody={this.state.chatBody}
                          socket={this.state.socket}

@@ -8,6 +8,9 @@ import {
     StatusBar,
     SafeAreaView,
     FlatList,
+    ScrollView,
+    TouchableWithoutFeedback,
+    Keyboard,
 } from 'react-native';
 import { chatroomStyles } from '../../styles/chatroom';
 import config from '../../../config/config';
@@ -20,7 +23,7 @@ interface ChatroomProps {
     userID: String;
     groupID: String;
     socket: any;
-    handleNewMessage: Function;
+    handleNewMessage: (newChatObject: any) => void;
 }
 
 interface ChatroomState {
@@ -35,10 +38,11 @@ export default class Chatroom extends Component<ChatroomProps, ChatroomState> {
             messages: this.props.messages,
             newMessage: '',
         };
+        this.sendMessage = this.sendMessage.bind(this);
     }
 
     private sendMessage() {
-        this.props.socket.emit("sendMessage" , this.state.newMessage);//, handleNewMessage(newChatObject: any));
+        this.props.socket.emit("sendMessage", this.props.userID, this.props.groupID, this.state.newMessage);// this.props.handleNewMessage(newChatObject: any));
         this.setState({ newMessage: "" })
         return;
     }
@@ -63,42 +67,42 @@ export default class Chatroom extends Component<ChatroomProps, ChatroomState> {
                     </TouchableOpacity>
                 </View>
                 <View style={chatroomStyles.whitespace} />
-                <View style={chatroomStyles.listContainer}>
-                    <FlatList
-                        inverted
-                        data={this.state.messages.reverse()}
-                        renderItem={({item}) => {
-                            if (item.senderId === this.props.userID) {
-                                return (
-                                    <View style={chatroomStyles.outgoingMessageContainer}>
-                                        <View style={chatroomStyles.outgoingMessageBox}>
-                                            <Text style={chatroomStyles.messageText}>
-                                                {item.message}
-                                            </Text>
+                    <View style={chatroomStyles.listContainer}>
+                        <FlatList
+                            inverted
+                            data={this.state.messages.reverse()}
+                            renderItem={({item}) => {
+                                if (item.senderId === this.props.userID) {
+                                    return (
+                                        <View style={chatroomStyles.outgoingMessageContainer}>
+                                            <View style={chatroomStyles.outgoingMessageBox}>
+                                                <Text style={chatroomStyles.messageText}>
+                                                    {item.message}
+                                                </Text>
+                                            </View>
                                         </View>
-                                    </View>
-                                )
-                            }
-                            else {
-                                return (
-                                    <View style={chatroomStyles.incomingMessageContainer}>
-                                        <View style={chatroomStyles.incomingMessageBox}>
-                                            <Text style={chatroomStyles.messageSender}>
-                                                {item.senderName}
-                                            </Text>
-                                            <Text style={chatroomStyles.messageText}>
-                                                {item.message}
-                                            </Text>
+                                    )
+                                }
+                                else {
+                                    return (
+                                        <View style={chatroomStyles.incomingMessageContainer}>
+                                            <View style={chatroomStyles.incomingMessageBox}>
+                                                <Text style={chatroomStyles.messageSender}>
+                                                    {item.senderName}
+                                                </Text>
+                                                <Text style={chatroomStyles.messageText}>
+                                                    {item.message}
+                                                </Text>
+                                            </View>
                                         </View>
-                                    </View>
-                                )
-                            }
-                        }}
-                        keyExtractor={(item, index) => index.toString()}
-                    />
-                </View>
+                                    )
+                                }
+                            }}
+                            keyExtractor={(item, index) => index.toString()}
+                        />
+                    </View>
                 <View style={chatroomStyles.bottomContainer}>
-                    <ScrollView scrollEnabled={false}>
+                    <View>
                         <TextInput
                             style={chatroomStyles.input}
                             multiline={true}
@@ -112,7 +116,7 @@ export default class Chatroom extends Component<ChatroomProps, ChatroomState> {
                                 </Text>
                             </TouchableOpacity>
                         </View>
-                    </ScrollView>
+                    </View>
                 </View>
             </KeyboardAvoidingView>
         );

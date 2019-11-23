@@ -21,31 +21,13 @@ interface ChatProps {
     userID: String;
     chatBody: any[];
     socket: any;
-    handleNewMessage: Function;
+    handleNewMessage: (newChatObject: any) => void;
 }
 
 interface ChatState {
     chatNav: any;
     chatSel: any;
 }
-
-const chat = [
-    {
-            groupId: "5daea88ccabc5a004088db28",
-            messages: [
-                {
-                message: "Hello this is a test!",
-                senderId: "41224d776a326fb40f000007",
-                senderName: "Condor",
-              },
-              {
-                message: "Hello this is also a test!",
-                senderId: "41224d776a326fb40f000007",
-                senderName: "C",
-              },
-            ],
-    },
-]
 
 export default class Chat extends Component<ChatProps, ChatState> {
     constructor(props: any) {
@@ -59,8 +41,8 @@ export default class Chat extends Component<ChatProps, ChatState> {
     }
 
     private OnPressButton(chatID: any) {
-        this.setState({ chatNav: chatEnum.chatroom });
         this.setState({ chatSel: chatID });
+        this.setState({ chatNav: chatEnum.chatroom });
         this.props.toggleNavBar(false);
         return;
     }
@@ -94,7 +76,7 @@ export default class Chat extends Component<ChatProps, ChatState> {
                     <Chatroom
                         OnPressBackButton={this.HandleChatroomReturn.bind(this)}
                         messages={this.props.chatBody[chatIndex].messages}
-                        userID={userID}
+                        userID={this.props.userID}
                         groupID={this.state.chatSel}
                         socket={this.props.socket}
                         handleNewMessage={this.props.handleNewMessage}
@@ -107,7 +89,7 @@ export default class Chat extends Component<ChatProps, ChatState> {
 
     private ChatMainView() {
         return (
-            <SafeAreaView style={genericStyles.container}>
+            <View style={genericStyles.container}>
             <StatusBar barStyle="dark-content" />
                 <View style={genericStyles.titleContainer}>
                     <Text style={genericStyles.title}>Messages</Text>
@@ -116,27 +98,24 @@ export default class Chat extends Component<ChatProps, ChatState> {
                     <ScrollView
                         contentContainerStyle={chatStyles.contentContainer}
                     >
-                        <Text style={chatStyles.title}>TEST</Text>
                         {this.renderChats()}
                     </ScrollView>
                 </View>
-            </SafeAreaView>
+            </View>
         );
     }
 
     private renderChats() {
         var tempArray = [], i;
-        console.log("chatBody: ");
-        console.log(this.props.chatBody);
         for(i = 0; i < this.props.chatBody.length; i++)
         {
             if (this.props.chatBody[i] != null) {
                 tempArray[i] = this.props.chatBody[i];
             }
         }
-        console.log("tempArray: ");
-        console.log(tempArray);
-        return chat.map(chatObject => (
+        console.log(this.props.chatBody);
+        return tempArray.map(chatObject => (
+            <View key={chatObject.groupID}>
                 <TouchableOpacity
                     onPress={this.OnPressButton.bind(this, chatObject.groupId)}
                     onLongPress={this.OnPressButton.bind(this, chatObject.groupId)}
@@ -147,19 +126,20 @@ export default class Chat extends Component<ChatProps, ChatState> {
                     </View>
                     <View style={chatStyles.buttonSubtitleContainer}>
                         <Text style={chatStyles.buttonSubtitle}>
-                            {chatObject.messages[chatObject.messages.length - 1].message.length > MAX_CHARACTERS ? chatObject.messages[chatObject.messages.length - 1].message.substring(0, MAX_CHARACTERS) + "..." : chatObject.messages[chatObject.messages.length - 1].message}
+                            {chatObject.messages.length === 0 ? "No Messages" : chatObject.messages[chatObject.messages.length - 1].message.length > MAX_CHARACTERS ? chatObject.messages[chatObject.messages.length - 1].message.substring(0, MAX_CHARACTERS) + "..." : chatObject.messages[chatObject.messages.length - 1].message}
                         </Text>
                     </View>
                 </TouchableOpacity>
-            )
-        );
+                <View style={chatStyles.whiteSpace} />
+            </View>
+        ));
     }
 
     public render() {
         return (
-            <View style={genericStyles.container}>
+            <SafeAreaView style={genericStyles.container}>
                 {this.ShowChatViews(this.state.chatNav)}
-            </View>
+            </SafeAreaView>
         );
     }
 }

@@ -37,6 +37,5 @@ scrollContainer: {
     },
     whiteSpace: {
         height: 10,
-        backgroundColor: 'red'
     },
 });
