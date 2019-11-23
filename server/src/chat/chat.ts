@@ -30,12 +30,12 @@ export const initializeChat = service => {
 
             // iterate through the list and send socket messages to each member
             for (const member of chatMembers) {
-                io.to(member).emit('message', newMessage);
+                io.to(member).emit('message', sentGroupId, newMessage);
             }
 
             // TODO: emit push notifications
 
-            callback(newMessage);
+            callback(sentGroupId, newMessage);
         });
     });
 
