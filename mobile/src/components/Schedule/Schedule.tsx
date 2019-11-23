@@ -89,8 +89,6 @@ export default class Schedule extends Component<IScheduleProps, {}> {
                         if (response.ok) return response.json();
                     })
                     .then(response => {
-                        console.log(response['groupsObj']);
-
                         this.props.handleScheduleChange(
                             courseResponse,
                             response['groupsObj']
@@ -114,7 +112,7 @@ export default class Schedule extends Component<IScheduleProps, {}> {
         } else {
             return this.props.schedule.map(event => (
                 <ScheduleCard
-                    key={`${event._id}${event.hourStart}${event.hourEnd}`}
+                    key={`${event._id}${event.day}${event.hourStart}${event.hourEnd}`}
                     isCourse={event.isCourse}
                     eventName={event.eventName}
                     eventDate={getDayOfWeek(event.day)}

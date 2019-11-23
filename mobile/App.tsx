@@ -90,7 +90,7 @@ export default class App extends Component<{}, IAppState> {
         for (const event of groupSchedule) {
             newSchedule.push({
                 isCourse: false,
-                eventName: 'Placeholder',
+                eventName: event.groupName,
                 day: 1,
                 hourStart: 10,
                 minuteStart: 30,
