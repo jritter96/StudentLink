@@ -128,7 +128,7 @@ export default class App extends Component<{}, IAppState> {
         registerForPushNotificationsAsync(id);
 
         // initialize socket functionality
-        this.handleSocketConnection();
+            this.handleSocketConnection();
 
         return;
     }
@@ -153,7 +153,6 @@ export default class App extends Component<{}, IAppState> {
     }
 
     public handleNewMessage(newChatObject: any) {
-        //this.state.socket.emit("sendMessage", userID, groupID, newMessage); // test
         this.setState({ chatBody: this.state.chatBody.push(newChatObject) })
         return;
     }

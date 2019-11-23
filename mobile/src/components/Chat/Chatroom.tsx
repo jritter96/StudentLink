@@ -6,11 +6,7 @@ import {
     KeyboardAvoidingView,
     TextInput,
     StatusBar,
-    SafeAreaView,
     FlatList,
-    ScrollView,
-    TouchableWithoutFeedback,
-    Keyboard,
 } from 'react-native';
 import { chatroomStyles } from '../../styles/chatroom';
 import config from '../../../config/config';
