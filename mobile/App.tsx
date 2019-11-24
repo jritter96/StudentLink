@@ -18,6 +18,7 @@ const endpoint = config.endpoint;
 interface IAppState {
     chatBody: any[];
     schedule: any[];
+    groups: any[];
     socket: any;
     navigator: number;
     navBarEnable: boolean;
@@ -37,12 +38,14 @@ export default class App extends Component<{}, IAppState> {
         this.handleViewChange = this.handleViewChange.bind(this);
         this.toggleNavBar = this.toggleNavBar.bind(this);
         this.handleScheduleChange = this.handleScheduleChange.bind(this);
+        this.handleGroupsChange = this.handleGroupsChange.bind(this);
         this.handleSuccessfulLogin = this.handleSuccessfulLogin.bind(this);
         this.handleSocketConnection = this.handleSocketConnection.bind(this);
 
         this.state = {
             chatBody: [],
             schedule: [],
+            groups: [],
             socket: '',
             navigator: viewEnum.login,
             navBarEnable: true,
@@ -119,6 +122,10 @@ export default class App extends Component<{}, IAppState> {
         this.setState({ schedule: newSchedule });
     }
 
+    public handleGroupsChange(groups: any[]) {
+        this.setState({ groups });
+    }
+
     public handleSuccessfulLogin(response: any) {
         this.setState({
             userID: response['_id'],
@@ -126,6 +133,7 @@ export default class App extends Component<{}, IAppState> {
             lastName: response['lastName'],
             createdAt: response['createdAt'],
         });
+
         this.toggleNavBar(true);
         this.handleViewChange(viewEnum.group);
 
@@ -178,7 +186,13 @@ export default class App extends Component<{}, IAppState> {
                     />
                 );
             case viewEnum.group:
-                return <Group userID={this.state.userID} />;
+                return (
+                    <Group
+                        userID={this.state.userID}
+                        groups={this.state.groups}
+                        handleGroupsChange={this.handleGroupsChange}
+                    />
+                );
             case viewEnum.settings:
                 return (
                     <Settings

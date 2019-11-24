@@ -1,76 +1,87 @@
 import React, { Component } from 'react';
-import {
-    View,
-    SafeAreaView,
-    ScrollView,
-    Text,
-    TouchableOpacity,
-    ActivityIndicator,
-} from 'react-native';
-import GroupContainer from './GroupContainer';
+import { View, SafeAreaView, ActivityIndicator, Modal } from 'react-native';
 import { genericStyles } from '../../styles/generic';
-import { groupStyles } from '../../styles/group';
+import DefaultGroupView from './DefaultGroupView';
 import config from '../../../config/config';
-
-const endpoint = config.endpoint;
+import ChooseAGroupModal from '../Modal/ChooseAGroupModal';
 
 interface IGroupProps {
     userID: string;
+    handleGroupsChange: Function;
+    groups: any[];
 }
 
 interface IGroupState {
     isLoading: boolean;
-    groups: any[];
+    displayResults: boolean;
+    searchLoading: boolean;
+    searchResults: any[];
 }
 
-export default class Group extends Component<IGroupProps, IGroupState> {
-    private groups = [];
+const endpoint = config.endpoint;
 
+export default class Group extends Component<IGroupProps, IGroupState> {
     constructor(props) {
         super(props);
         this.state = {
-            isLoading: false,
-            groups: this.groups,
+            isLoading: true,
+            displayResults: false,
+            searchLoading: false,
+            searchResults: [],
         };
+        this.getGroups = this.getGroups.bind(this);
         this.searchPress = this.searchPress.bind(this);
+        this.toggleModal = this.toggleModal.bind(this);
+        this.joinGroup = this.joinGroup.bind(this);
+    }
+
+    public componentDidMount() {
+        if (this.props.groups.length === 0) {
+            this.getGroups();
+        } else {
+            this.setState({ isLoading: false });
+        }
     }
 
     public render() {
+        return (
+            <SafeAreaView style={genericStyles.container}>
+                {this.renderGroupView()}
+            </SafeAreaView>
+        );
+    }
+
+    private renderGroupView() {
         if (this.state.isLoading) {
-            return (
-                <View style={genericStyles.container}>
-                    <ActivityIndicator />
-                </View>
-            );
+            return <ActivityIndicator />;
         } else {
             return (
-                <SafeAreaView style={genericStyles.container}>
-                    <View>
-                        <Text style={genericStyles.title}>Groups</Text>
-                    </View>
-                    <ScrollView
-                        contentContainerStyle={groupStyles.contentContainer}
-                    >
-                        {this.renderGroups()}
-                    </ScrollView>
-                    <TouchableOpacity
-                        style={genericStyles.button}
-                        onPress={this.searchPress}
-                    >
-                        <Text style={genericStyles.buttonText}>Search</Text>
-                    </TouchableOpacity>
-                </SafeAreaView>
+                <View style={genericStyles.container}>
+                    <DefaultGroupView
+                        userID={this.props.userID}
+                        searchPress={this.searchPress}
+                        groups={this.props.groups}
+                        getGroups={this.getGroups}
+                    />
+                    <ChooseAGroupModal
+                        visible={this.state.displayResults}
+                        toggleVisible={this.toggleModal}
+                        searchResults={this.state.searchResults}
+                        isLoading={this.state.searchLoading}
+                        joinGroup={this.joinGroup}
+                    />
+                </View>
             );
         }
     }
 
-    private renderGroups() {
-        return this.groups.map(memberGroup => (
-            <GroupContainer group={memberGroup} key={memberGroup} />
-        ));
+    private toggleModal(toggle: boolean) {
+        this.setState({ displayResults: toggle });
     }
 
     private searchPress() {
+        this.toggleModal(true);
+        this.setState({ searchLoading: true });
         fetch(`${endpoint}/user/${this.props.userID}/match`, {
             method: 'POST',
             headers: {
@@ -82,29 +93,102 @@ export default class Group extends Component<IGroupProps, IGroupState> {
                 if (response.ok) {
                     return response.json();
                 } else {
-                    throw 'Error: problem retrieving group match';
+                    throw `Error: problem retrieving user's groups`;
                 }
             })
             .then(responseJson => {
-                this.groupMatch(responseJson['names']);
+                var searchResults = [];
+                if (responseJson[0]) {
+                    for (var group of responseJson) {
+                        var names = group['group']['names'];
+                        var id = group['group']['_id'];
+                        searchResults.push({
+                            name: 'Study Group ' + (searchResults.length + 1),
+                            members: names,
+                            id: id,
+                        });
+                    }
+                    this.setState({
+                        searchLoading: false,
+                        searchResults: searchResults,
+                    });
+                } else {
+                    this.setState({
+                        searchLoading: false,
+                        searchResults: [],
+                        displayResults: false,
+                    });
+                    this.getGroups();
+                }
             })
             .catch(error => {
                 console.log(error);
             });
     }
 
-    private groupMatch(memberList) {
-        var memberNames = [];
-        for (let memberItem of memberList) {
-            // memberItem = memberItem.substring(0, memberItem.indexOf(':'));
-            memberNames.push(memberItem);
-        }
-        this.groups.push({
-            name: 'Group 1',
-            members: memberNames,
-        });
-        this.setState({
-            groups: this.groups,
-        });
+    private getGroups() {
+        fetch(`${endpoint}/user/${this.props.userID}/groups`, {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+        })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw `Error: problem retrieving user's groups`;
+                }
+            })
+            .then(responseJson => {
+                var groups = [];
+                for (var group of responseJson['groupsObj']) {
+                    var names = group['names'];
+                    var id = group['id'];
+                    groups.push({
+                        name: 'Group ' + (groups.length + 1),
+                        members: names,
+                        id: id,
+                    });
+                }
+                this.props.handleGroupsChange(groups);
+                this.setState({ isLoading: false });
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    }
+
+    private joinGroup(groupID, name) {
+        this.toggleModal(false);
+        fetch(`${endpoint}/group/join/${groupID}/${this.props.userID}`, {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+        })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw `Error: problem retrieving user's groups`;
+                }
+            })
+            .then(responseJson => {
+                var groups = this.props.groups;
+                var names = responseJson['names'];
+                var id = responseJson['_id'];
+                groups.push({
+                    name: name,
+                    members: names,
+                    id: id,
+                });
+                this.props.handleGroupsChange(groups);
+            })
+            .catch(error => {
+                console.log(error);
+            });
     }
 }
