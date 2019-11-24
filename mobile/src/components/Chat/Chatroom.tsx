@@ -31,6 +31,7 @@ export default class Chatroom extends Component<ChatroomProps, ChatroomState> {
             newMessage: '',
         };
         this.sendMessage = this.sendMessage.bind(this);
+        this.reloadChatroom = this.reloadChatroom.bind(this);
     }
 
     private sendMessage() {

@@ -181,7 +181,9 @@ export default class App extends Component<{}, IAppState> {
             }
         }
         this.setState({ chatBody: newChatBody });
-        this.refs.chat.reloadChatroom();
+        if (this.state.navigator === viewEnum.chat) {
+            this.refs.chat.reloadChatroom(groupId);
+        }
     }
 
     private showMainView(view: any) {

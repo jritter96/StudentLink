@@ -35,10 +35,13 @@ export default class Chat extends Component<ChatProps, ChatState> {
         };
         this.OnPressButton = this.OnPressButton.bind(this);
         this.HandleChatroomReturn = this.HandleChatroomReturn.bind(this);
+        this.reloadChatroom = this.reloadChatroom.bind(this);
     }
 
-    public reloadChatroom() {
-        this.refs.chatroom.reloadChatroom();
+    public reloadChatroom(groupId: String) {
+        if (this.state.chatNav === chatEnum.chatroom && this.state.chatSel === groupId) {
+            this.refs.chatroom.reloadChatroom();
+        }
         return;
     }
 
