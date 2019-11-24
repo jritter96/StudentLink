@@ -103,7 +103,9 @@ export default class Group extends Component<IGroupProps, IGroupState> {
                         var names = group['group']['names'];
                         var id = group['group']['_id'];
                         searchResults.push({
-                            name: 'Study Group ' + (searchResults.length + 1),
+                            name: group['groupName']
+                                ? group['groupName']
+                                : 'Study Group ' + (searchResults.length + 1),
                             members: names,
                             id: id,
                         });
@@ -147,7 +149,9 @@ export default class Group extends Component<IGroupProps, IGroupState> {
                     var names = group['names'];
                     var id = group['id'];
                     groups.push({
-                        name: 'Group ' + (groups.length + 1),
+                        name: group['groupName']
+                            ? group['groupName']
+                            : 'Group ' + (groups.length + 1),
                         members: names,
                         id: id,
                     });
