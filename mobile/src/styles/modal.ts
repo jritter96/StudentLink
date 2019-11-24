@@ -42,4 +42,8 @@ export const modalStyles = StyleSheet.create({
         fontWeight: 'bold',
         textAlign: 'center',
     },
+    chooseAGroupContent: {
+        flexGrow: 1,
+        justifyContent: 'space-between',
+    },
 });
