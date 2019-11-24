@@ -168,7 +168,7 @@ export default class App extends Component<{}, IAppState> {
         this.state.socket.emit('join', this.state.userID, chatBody => {
             this.setState({ chatBody });
         });
-        this.state.socket.on("message", groupId, newMessage => {
+        this.state.socket.on('message', (groupId, newMessage) => {
             this.handleNewMessage(groupId, newMessage);
         });
     }
@@ -203,7 +203,7 @@ export default class App extends Component<{}, IAppState> {
                         chatBody={this.state.chatBody}
                         socket={this.state.socket}
                         handleNewMessage={this.handleNewMessage}
-                     />
+                    />
                 );
             case viewEnum.schedule:
                 return (
