@@ -41,6 +41,7 @@ export default class App extends Component<{}, IAppState> {
         this.handleGroupsChange = this.handleGroupsChange.bind(this);
         this.handleSuccessfulLogin = this.handleSuccessfulLogin.bind(this);
         this.handleSocketConnection = this.handleSocketConnection.bind(this);
+        this.handleNewMessage = this.handleNewMessage.bind(this);
 
         this.state = {
             chatBody: [],
@@ -54,6 +55,13 @@ export default class App extends Component<{}, IAppState> {
             lastName: '',
             createdAt: '',
         };
+    }
+
+    componentDidMount() {
+        if (this.state.navigator !== viewEnum.login) {
+            this.state.socket.on("message", newMessage => {
+            this.setState({ chatBody: this.state.chatBody.push(newMessage) })});
+        }
     }
 
     public render() {
@@ -141,7 +149,7 @@ export default class App extends Component<{}, IAppState> {
         registerForPushNotificationsAsync(this.state.userID);
 
         // initialize socket functionality
-        this.handleSocketConnection();
+            this.handleSocketConnection();
 
         return;
     }
@@ -167,6 +175,25 @@ export default class App extends Component<{}, IAppState> {
         this.state.socket.emit('join', this.state.userID, chatBody => {
             this.setState({ chatBody });
         });
+        this.state.socket.on("message", groupId, newMessage => {
+            this.handleNewMessage(groupID, newMessage);
+        });
+    }
+
+    public handleNewMessage(groupId: String, newChatObject: any) {
+        const newChatBody = this.state.chatBody;
+        for (const group of newChatBody) {
+            if (group.groupId === groupId) {
+                group.messages.push(newChatObject);
+            }
+        }
+        this.setState({ chatBody: newChatBody });
+        this.refs.chat.reloadChatroom();
+    }
+
+    public handleNewMessage(newChatObject: any) {
+        this.setState({ chatBody: this.state.chatBody.push(newChatObject) })
+        return;
     }
 
     private showMainView(view: any) {
@@ -180,7 +207,16 @@ export default class App extends Component<{}, IAppState> {
                     />
                 );
             case viewEnum.chat:
-                return <Chat toggleNavBar={this.toggleNavBar} />;
+                return (
+                    <Chat
+                        ref="chat"
+                        toggleNavBar={this.toggleNavBar}
+                        userID={this.state.userID}
+                        chatBody={this.state.chatBody}
+                        socket={this.state.socket}
+                        handleNewMessage={this.handleNewMessage}
+                     />
+                );
             case viewEnum.schedule:
                 return (
                     <Schedule
