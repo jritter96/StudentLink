@@ -78,10 +78,6 @@ export default class Chat extends Component<ChatProps, ChatState> {
                     console.log("err: No chat object for groupID " + this.state.chatSel)
                     this.HandleChatroomReturn();
                 }
-                console.log("chat index: ");
-                console.log(chatIndex);
-                console.log("Chatbody: ");
-                console.log(this.props.chatBody);
                 return (
                     <Chatroom
                         ref="chatroom"

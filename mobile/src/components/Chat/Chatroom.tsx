@@ -79,7 +79,9 @@ export default class Chatroom extends Component<ChatroomProps, ChatroomState> {
                                                     {item.message}
                                                 </Text>
                                                 <Text style={chatroomStyles.messageTimeStamp}>
-                                                    {new Date(item.createdAt).toLocaleDateString('en-US') + " " + new Date(item.createdAt).toLocaleTimeString('en-US').substring(0, 4) + new Date(item.createdAt).toLocaleTimeString('en-US').substring(7, 11)}
+                                                    {new Date(item.createdAt).toLocaleDateString('en-US') + " "
+                                                    + new Date(item.createdAt).toLocaleTimeString('en-US').substring(0, 4)
+                                                    + new Date(item.createdAt).toLocaleTimeString('en-US').substring(7, 11)}
                                                 </Text>
                                             </View>
                                         </View>
@@ -96,7 +98,9 @@ export default class Chatroom extends Component<ChatroomProps, ChatroomState> {
                                                     {item.message}
                                                 </Text>
                                                 <Text style={chatroomStyles.messageTimeStamp}>
-                                                    {new Date(item.createdAt).toLocaleDateString('en-US') + " " + new Date(item.createdAt).toLocaleTimeString('en-US').substring(0, 4) + new Date(item.createdAt).toLocaleTimeString('en-US').substring(7, 11)}
+                                                    {new Date(item.createdAt).toLocaleDateString('en-US') + " "
+                                                    + new Date(item.createdAt).toLocaleTimeString('en-US').substring(0, 4)
+                                                    + new Date(item.createdAt).toLocaleTimeString('en-US').substring(7, 11)}
                                                 </Text>
                                             </View>
                                         </View>
