@@ -9,9 +9,6 @@ import * as log from 'log';
 
 const MAX_GROUP_SIZE = 4;
 
-// library to ask for user input?
-// need endpoint for user to request group, us to respond with choices, user to reply with choice, etc.
-
 const assignPreferenceScores = async (userId, callback) => {
     // user is an object with userID, courses, and schedule fields
 
@@ -68,7 +65,7 @@ const assignPreferenceScores = async (userId, callback) => {
             if (commonCourses && !group.members.includes(user._id)) {
                 pref = (commonCourses.length / numUCourses + commonCourses.length / numGCourses) * pcntIntersect;
                 if (pref > threshold) {
-                    potentialMatches.push({ groupId: group._id, pref: { pref } });
+                    potentialMatches.push({ group: { group }, pref: pref });
                 }
             }
         });
@@ -144,54 +141,6 @@ const calcPcntIntersect = (uSched, gMeetings, callback) => {
     pctIntersect = (100 * u1Count) / g1Count;
 
     return callback(null, pctIntersect, potentialMeetingTimes);
-};
-
-const findGroupForUser = async (userId, sortedPotentialMatches, callback) => {
-    // if (sortedPotentialMatches.size > 0) {
-    // 	const group1 = sortedPotentialMatches.shift();
-    // 	const group2 = sortedPotentialMatches.shift();
-    // 	const group3 = sortedPotentialMatches.shift();
-    // 	const choice = promptUsertoChoose(group1, group2, group3);// returns 1, 2, 3 respectively if user chooses one of groups
-    // 														// returns 0 if user wants to regenerate groups
-    // 														// returns -1 if user wants to create own group
-    // 	switch (choice) {
-    // 		case 1:
-    // 		joinGroup(user, group1, callback) // joinGroup will perform updates on the corresponding group object in the DB
-    // 		break;
-
-    // 		case 2:
-    // 		joinGroup(user, group2, callback)
-    // 		break;
-
-    // 		case 3:
-    // 		joinGroup(user, group3, callback)
-    // 		break;
-
-    // 		case 0:
-    // 		findGroupForUser(sortedPotentialMatches, callback)
-    // 		break;
-
-    // 		case -1:
-    // 		createNewGroup(user, callback)
-    // 		break;
-    // 	}
-    // } else {
-    // 	createNewGroup(user, callback)
-    // }
-
-    // Above will be for final product, code for MVP below
-    try {
-        joinGroup(userId, sortedPotentialMatches[0].groupId, (err, group) => {
-            if (err) {
-                return callback(err);
-            } else {
-                return callback(null, group);
-            }
-        });
-    } catch (error) {
-        callback(error);
-    }
-    // log.debug('sortedPotentialMatches:', sortedPotentialMatches);
 };
 
 export const joinGroup = async (userId, groupId, callback) => {
@@ -296,15 +245,7 @@ export const matchUser = async (userId, callback) => {
             } else {
                 sortedPotentialMatches = sortedMatches;
                 // log.debug('match potential matches:', sortedPotentialMatches);
-                findGroupForUser(userId, sortedPotentialMatches, (error, group) => {
-                    if (error) {
-                        log.error(error);
-                        return callback(error);
-                    } else {
-                        // log.debug('found group:', group);
-                        return callback(null, group);
-                    }
-                });
+                return callback(null, sortedPotentialMatches);
             }
         });
     } catch (error) {
