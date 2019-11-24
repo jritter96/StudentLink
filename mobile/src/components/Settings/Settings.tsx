@@ -11,16 +11,19 @@ import { genericStyles } from '../../styles/generic';
 import { settingsStyles } from '../../styles/settings';
 import SettingsForm from './SettingsForm';
 
-interface IGroupProps {
+interface ISettingsProps {
     userID: string;
     handleLogout: () => void;
 }
 
-interface IGroupState {
+interface ISettingsState {
     isLoading: boolean;
 }
 
-export default class Group extends Component<IGroupProps, IGroupState> {
+export default class Settings extends Component<
+    ISettingsProps,
+    ISettingsState
+> {
     constructor(props) {
         super(props);
 
@@ -44,7 +47,7 @@ export default class Group extends Component<IGroupProps, IGroupState> {
                     </View>
                     <ScrollView
                         contentContainerStyle={settingsStyles.container}
-                        keyboardShouldPersistTaps={true}
+                        keyboardShouldPersistTaps="always"
                     >
                         <View
                             style={{
@@ -53,7 +56,6 @@ export default class Group extends Component<IGroupProps, IGroupState> {
                                 marginVertical: 10,
                             }}
                         />
-
                         <Text style={settingsStyles.header}>Edit Profile</Text>
                         <SettingsForm userID={this.props.userID} />
                         <View
@@ -66,8 +68,11 @@ export default class Group extends Component<IGroupProps, IGroupState> {
                         <TouchableOpacity
                             onPress={this.props.handleLogout}
                             style={{
-                                ...settingsStyles.button,
+                                ...genericStyles.button,
                                 ...settingsStyles.logoutButton,
+                                ...{
+                                    marginHorizontal: 25,
+                                },
                             }}
                         >
                             <Text style={settingsStyles.settingsButtonText}>

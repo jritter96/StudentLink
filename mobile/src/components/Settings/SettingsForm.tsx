@@ -83,6 +83,7 @@ export default class SettingsForm extends Component<
                     style={{
                         ...loginFormStyles.input,
                         ...{
+                            backgroundColor: '#FFFFFF',
                             borderColor: '#444444',
                             borderWidth: 1,
                             color: '#444444',
@@ -93,11 +94,14 @@ export default class SettingsForm extends Component<
                     placeholder="Last Name"
                     placeholderTextColor="#444444"
                     returnKeyType="go"
+                    autoCapitalize="none"
+                    autoCorrect={false}
                     onChangeText={this.handleLastNameUpdate}
                     ref={input => (this.lastNameInput = input)}
                     style={{
                         ...loginFormStyles.input,
                         ...{
+                            backgroundColor: '#FFFFFF',
                             borderColor: '#444444',
                             borderWidth: 1,
                             color: '#444444',
@@ -117,6 +121,8 @@ export default class SettingsForm extends Component<
                         placeholder="Canvas Token"
                         placeholderTextColor="#444444"
                         returnKeyType="go"
+                        autoCapitalize="none"
+                        autoCorrect={false}
                         onChangeText={this.handleCanvasTokenUpdate}
                         ref={input => (this.canvasTokenInput = input)}
                         style={{
@@ -130,6 +136,7 @@ export default class SettingsForm extends Component<
                                 width: '60%',
                             },
                             ...{
+                                backgroundColor: '#FFFFFF',
                                 borderColor: '#444444',
                                 borderWidth: 1,
                                 color: '#444444',
