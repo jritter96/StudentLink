@@ -116,6 +116,7 @@ export default class Settings extends Component<
                                 ...settingsStyles.logoutButton,
                                 ...{
                                     marginHorizontal: 25,
+                                    marginBottom: 100,
                                 },
                             }}
                         >

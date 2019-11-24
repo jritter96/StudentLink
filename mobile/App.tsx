@@ -253,7 +253,8 @@ export default class App extends Component<{}, IAppState> {
     }
 
     private renderStatusBar() {
-        return this.state.navigator === viewEnum.login || viewEnum.signup
+        return this.state.navigator === viewEnum.login ||
+            this.state.navigator === viewEnum.signup
             ? 'light-content'
             : 'dark-content';
     }
