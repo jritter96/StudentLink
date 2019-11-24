@@ -10,9 +10,7 @@ import Chatroom from './Chatroom';
 import { genericStyles } from '../../styles/generic';
 import { chatStyles } from '../../styles/chat';
 import { chatEnum } from '../../enum/chatEnum';
-import config from '../../../config/config';
 
-const endpoint = config.endpoint;
 const MAX_CHARACTERS = 33;
 
 interface ChatProps {
@@ -77,6 +75,10 @@ export default class Chat extends Component<ChatProps, ChatState> {
                     console.log("err: No chat object for groupID " + this.state.chatSel)
                     this.HandleChatroomReturn();
                 }
+                console.log("chat index: ");
+                console.log(chatIndex);
+                console.log("Chatbody: ");
+                console.log(this.props.chatBody);
                 return (
                     <Chatroom
                         ref="chatroom"
@@ -119,7 +121,6 @@ export default class Chat extends Component<ChatProps, ChatState> {
                 tempArray[i] = this.props.chatBody[i];
             }
         }
-        console.log(this.props.chatBody);
         return tempArray.map(chatObject => (
             <View key={chatObject.groupID}>
                 <TouchableOpacity
@@ -132,7 +133,12 @@ export default class Chat extends Component<ChatProps, ChatState> {
                     </View>
                     <View style={chatStyles.buttonSubtitleContainer}>
                         <Text style={chatStyles.buttonSubtitle}>
-                            {chatObject.messages.length === 0 ? "No Messages" : chatObject.messages[chatObject.messages.length - 1].message.length > MAX_CHARACTERS ? chatObject.messages[chatObject.messages.length - 1].message.substring(0, MAX_CHARACTERS) + "..." : chatObject.messages[chatObject.messages.length - 1].message}
+                            {chatObject.messages.length === 0 ?
+                                "No Messages" :
+                                chatObject.messages[chatObject.messages.length - 1].message.length > MAX_CHARACTERS ?
+                                    chatObject.messages[chatObject.messages.length - 1].message.substring(0, MAX_CHARACTERS) + "..." :
+                                    chatObject.messages[chatObject.messages.length - 1].message
+                            }
                         </Text>
                     </View>
                 </TouchableOpacity>

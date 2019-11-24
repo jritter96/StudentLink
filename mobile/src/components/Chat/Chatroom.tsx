@@ -8,9 +8,6 @@ import {
     FlatList,
 } from 'react-native';
 import { chatroomStyles } from '../../styles/chatroom';
-import config from '../../../config/config';
-
-const endpoint = config.endpoint;
 
 interface ChatroomProps {
     handleChatroomReturn: Function;
@@ -45,7 +42,6 @@ export default class Chatroom extends Component<ChatroomProps, ChatroomState> {
     }
 
     public reloadChatroom() {
-        console.log("forced update");
         this.setState({ messages: [...this.props.messages] });
         return;
     }
@@ -82,7 +78,7 @@ export default class Chatroom extends Component<ChatroomProps, ChatroomState> {
                                                     {item.message}
                                                 </Text>
                                                 <Text style={chatroomStyles.messageTimeStamp}>
-                                                    {new Date(item.createdAt).toLocaleDateString('en-US') + " " + new Date(item.createdAt).toLocaleTimeString('en-US').substring(0, 4) + new Date(item.createdAt).toLocaleTimeString('en-US').substring(7, 10)}
+                                                    {new Date(item.createdAt).toLocaleDateString('en-US') + " " + new Date(item.createdAt).toLocaleTimeString('en-US').substring(0, 4) + new Date(item.createdAt).toLocaleTimeString('en-US').substring(7, 11)}
                                                 </Text>
                                             </View>
                                         </View>
@@ -99,7 +95,7 @@ export default class Chatroom extends Component<ChatroomProps, ChatroomState> {
                                                     {item.message}
                                                 </Text>
                                                 <Text style={chatroomStyles.messageTimeStamp}>
-                                                    {new Date(item.createdAt).toLocaleDateString('en-US') + " " + new Date(item.createdAt).toLocaleTimeString('en-US').substring(0, 4) + new Date(item.createdAt).toLocaleTimeString('en-US').substring(7, 10)}
+                                                    {new Date(item.createdAt).toLocaleDateString('en-US') + " " + new Date(item.createdAt).toLocaleTimeString('en-US').substring(0, 4) + new Date(item.createdAt).toLocaleTimeString('en-US').substring(7, 11)}
                                                 </Text>
                                             </View>
                                         </View>
