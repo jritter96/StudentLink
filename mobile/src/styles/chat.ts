@@ -9,7 +9,7 @@ export const chatStyles = StyleSheet.create({
         flexGrow: 1,
     },
     buttonContainer: {
-        backgroundColor: '#019898',
+        backgroundColor: '#23C9FF',
         marginHorizontal: 10,
         borderRadius: 10,
     },

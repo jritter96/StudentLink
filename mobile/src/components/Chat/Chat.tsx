@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import Chatroom from './Chatroom';
 import { genericStyles } from '../../styles/generic';
+import { scheduleStyles } from '../../styles/schedule';
 import { chatStyles } from '../../styles/chat';
 import { chatEnum } from '../../enum/chatEnum';
 
@@ -107,9 +108,14 @@ export default class Chat extends Component<ChatProps, ChatState> {
         return (
             <View style={genericStyles.container}>
                 <View style={genericStyles.titleContainer}>
-                    <Text style={genericStyles.title}>Messages</Text>
+                    <Text style={scheduleStyles.scheduleTitle}>Messages</Text>
                 </View>
-                <View style={chatStyles.scrollContainer}>
+                <View
+                    style={{
+                        ...chatStyles.scrollContainer,
+                        ...{ backgroundColor: '#F1F1F1' },
+                    }}
+                >
                     <ScrollView
                         contentContainerStyle={chatStyles.contentContainer}
                     >

@@ -272,7 +272,7 @@ export default class Signup extends Component<SignupProps, SignupState> {
             .then(response => {
                 this.setErrorMessage(false);
                 // find id located in response['_id']
-                this.props.handleSuccessfulLogin(response['_id']);
+                this.props.handleSuccessfulLogin(response);
             })
             .catch(error => {
                 this.setErrorMessage(true);
