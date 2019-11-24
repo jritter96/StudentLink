@@ -127,6 +127,7 @@ export default class App extends Component<{}, IAppState> {
 
     public handleGroupsChange(groups: any[]) {
         this.setState({ groups });
+        this.reloadChatBody();
     }
 
     public handleSuccessfulLogin(response: any) {
@@ -186,6 +187,29 @@ export default class App extends Component<{}, IAppState> {
         if (this.state.navigator === viewEnum.chat) {
             this.refs.chat.reloadChatroom(groupId);
         }
+    }
+
+    private reloadChatBody() {
+        fetch(`${endpoint}/chat/user/${this.state.userID}`, {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+        })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw `Error: problem retrieving user's chat object`;
+                }
+            })
+            .then(responseJson => {
+                this.setState({ chatBody: responseJson });
+            })
+            .catch(error => {
+                console.log(error);
+            });
     }
 
     private showMainView(view: any) {
