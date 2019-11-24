@@ -61,7 +61,6 @@ export default class Group extends Component<IGroupProps, IGroupState> {
                         userID={this.props.userID}
                         searchPress={this.searchPress}
                         groups={this.props.groups}
-                        getGroups={this.getGroups}
                     />
                     <ChooseAGroupModal
                         visible={this.state.displayResults}

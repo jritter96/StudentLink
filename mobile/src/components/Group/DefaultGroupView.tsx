@@ -10,7 +10,6 @@ interface DefaultGroupProps {
     userID: string;
     groups: any[];
     searchPress: () => void;
-    getGroups: Function;
 }
 
 export default class DefaultGroupView extends Component<DefaultGroupProps> {
@@ -24,10 +23,13 @@ export default class DefaultGroupView extends Component<DefaultGroupProps> {
                 <View style={genericStyles.titleContainer}>
                     <Text style={scheduleStyles.scheduleTitle}>Groups</Text>
                     <TouchableOpacity
-                        onPress={this.props.getGroups}
-                        style={genericStyles.buttonCircular}
+                        onPress={this.props.searchPress}
+                        style={{
+                            ...genericStyles.buttonCircular,
+                            ...{ backgroundColor: '#70CAD1' },
+                        }}
                     >
-                        <Ionicons name="ios-refresh" size={30} color="white" />
+                        <Ionicons name="ios-search" size={30} color="white" />
                     </TouchableOpacity>
                 </View>
                 <View style={scheduleStyles.scrollContainer}>
@@ -37,12 +39,6 @@ export default class DefaultGroupView extends Component<DefaultGroupProps> {
                         {this.renderGroups()}
                     </ScrollView>
                 </View>
-                <TouchableOpacity
-                    style={genericStyles.button}
-                    onPress={this.props.searchPress}
-                >
-                    <Text style={genericStyles.buttonText}>Search</Text>
-                </TouchableOpacity>
             </View>
         );
     }
