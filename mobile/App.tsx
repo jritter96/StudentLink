@@ -150,10 +150,14 @@ export default class App extends Component<{}, IAppState> {
         this.setState({
             chatBody: [],
             schedule: [],
+            groups: [],
             socket: '',
             navigator: viewEnum.login,
             navBarEnable: true,
             userID: '',
+            firstName: '',
+            lastName: '',
+            createdAt: '',
         });
     }
 
