@@ -39,7 +39,10 @@ export default class Chat extends Component<ChatProps, ChatState> {
     }
 
     public reloadChatroom(groupId: String) {
-        if (this.state.chatNav === chatEnum.chatroom && this.state.chatSel === groupId) {
+        if (
+            this.state.chatNav === chatEnum.chatroom &&
+            this.state.chatSel === groupId
+        ) {
             this.refs.chatroom.reloadChatroom();
         }
         return;
@@ -64,7 +67,8 @@ export default class Chat extends Component<ChatProps, ChatState> {
             case chatEnum.chat:
                 return this.ChatMainView();
             case chatEnum.chatroom:
-                var i: number, chatIndex = 0;
+                var i: number,
+                    chatIndex = 0;
                 for (i = 0; i < this.props.chatBody.length; i++) {
                     if (this.props.chatBody[i].groupId === this.state.chatSel) {
                         chatIndex = i;
@@ -75,17 +79,17 @@ export default class Chat extends Component<ChatProps, ChatState> {
                     }
                 }
                 if (chatIndex < 0) {
-                    console.log("err: No chat object for groupID " + this.state.chatSel)
+                    console.log(
+                        'err: No chat object for groupID ' + this.state.chatSel
+                    );
                     this.HandleChatroomReturn();
                 }
-                console.log("chat index: ");
-                console.log(chatIndex);
-                console.log("Chatbody: ");
-                console.log(this.props.chatBody);
                 return (
                     <Chatroom
                         ref="chatroom"
-                        handleChatroomReturn={this.HandleChatroomReturn.bind(this)}
+                        handleChatroomReturn={this.HandleChatroomReturn.bind(
+                            this
+                        )}
                         messages={this.props.chatBody[chatIndex].messages}
                         userID={this.props.userID}
                         groupID={this.state.chatSel}
@@ -117,31 +121,41 @@ export default class Chat extends Component<ChatProps, ChatState> {
     }
 
     private renderChats() {
-        var tempArray = [], i;
-        for(i = 0; i < this.props.chatBody.length; i++)
-        {
+        var tempArray = [],
+            i;
+        for (i = 0; i < this.props.chatBody.length; i++) {
             if (this.props.chatBody[i] != null) {
                 tempArray[i] = this.props.chatBody[i];
             }
         }
         return tempArray.map(chatObject => (
-            <View key={chatObject.groupID}>
+            <View key={`${chatObject.groupID}${chatObject._id}`}>
                 <TouchableOpacity
                     onPress={this.OnPressButton.bind(this, chatObject.groupId)}
-                    onLongPress={this.OnPressButton.bind(this, chatObject.groupId)}
+                    onLongPress={this.OnPressButton.bind(
+                        this,
+                        chatObject.groupId
+                    )}
                     style={chatStyles.buttonContainer}
                 >
                     <View style={chatStyles.buttonTitleContainer}>
-                        <Text style={chatStyles.buttonTitle}>{chatObject.groupName}</Text>
+                        <Text style={chatStyles.buttonTitle}>
+                            {chatObject.groupName}
+                        </Text>
                     </View>
                     <View style={chatStyles.buttonSubtitleContainer}>
                         <Text style={chatStyles.buttonSubtitle}>
-                            {chatObject.messages.length === 0 ?
-                                "No Messages" :
-                                chatObject.messages[chatObject.messages.length - 1].message.length > MAX_CHARACTERS ?
-                                    chatObject.messages[chatObject.messages.length - 1].message.substring(0, MAX_CHARACTERS) + "..." :
-                                    chatObject.messages[chatObject.messages.length - 1].message
-                            }
+                            {chatObject.messages.length === 0
+                                ? 'No Messages'
+                                : chatObject.messages[
+                                      chatObject.messages.length - 1
+                                  ].message.length > MAX_CHARACTERS
+                                ? chatObject.messages[
+                                      chatObject.messages.length - 1
+                                  ].message.substring(0, MAX_CHARACTERS) + '...'
+                                : chatObject.messages[
+                                      chatObject.messages.length - 1
+                                  ].message}
                         </Text>
                     </View>
                 </TouchableOpacity>
