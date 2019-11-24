@@ -166,6 +166,15 @@ router.post('/:id/match', async (req, res) => {
  * POST /user
  */
 router.post('/', async (req, res) => {
+
+    const allUsers = await User.find({});
+
+    for(const user of allUsers) {
+        if (user.username === req.body.username) {
+            res.status(400).send('Username already exists');
+        }
+    }
+
     const user = new User({
         ...req.body,
         aliasName: generateName(),
