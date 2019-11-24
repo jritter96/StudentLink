@@ -22,6 +22,9 @@ interface IAppState {
     navigator: number;
     navBarEnable: boolean;
     userID: string;
+    firstName: string;
+    lastName: string;
+    createdAt: string;
 }
 
 console.disableYellowBox = true;
@@ -44,6 +47,9 @@ export default class App extends Component<{}, IAppState> {
             navigator: viewEnum.login,
             navBarEnable: true,
             userID: '',
+            firstName: '',
+            lastName: '',
+            createdAt: '',
         };
     }
 
@@ -113,13 +119,18 @@ export default class App extends Component<{}, IAppState> {
         this.setState({ schedule: newSchedule });
     }
 
-    public handleSuccessfulLogin(id: string) {
-        this.setState({ userID: id });
+    public handleSuccessfulLogin(response: any) {
+        this.setState({
+            userID: response['_id'],
+            firstName: response['firstName'],
+            lastName: response['lastName'],
+            createdAt: response['createdAt'],
+        });
         this.toggleNavBar(true);
         this.handleViewChange(viewEnum.group);
 
         // initialize push notifications
-        registerForPushNotificationsAsync(id);
+        registerForPushNotificationsAsync(this.state.userID);
 
         // initialize socket functionality
         this.handleSocketConnection();
@@ -172,6 +183,9 @@ export default class App extends Component<{}, IAppState> {
                 return (
                     <Settings
                         userID={this.state.userID}
+                        firstName={this.state.firstName}
+                        lastName={this.state.lastName}
+                        createdAt={this.state.createdAt}
                         handleLogout={this.handleLogout}
                     />
                 );

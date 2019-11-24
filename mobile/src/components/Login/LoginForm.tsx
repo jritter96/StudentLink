@@ -119,8 +119,7 @@ export default class LoginForm extends Component<
             })
             .then(response => {
                 this.setErrorMessage(false);
-                // find id located in response['_id']
-                this.props.handleSuccessfulLogin(response['_id']);
+                this.props.handleSuccessfulLogin(response);
             })
             .catch(error => {
                 this.setErrorMessage(true);
