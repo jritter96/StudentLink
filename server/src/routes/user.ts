@@ -41,9 +41,8 @@ router.get('/:id/courses', async (req, res) => {
         }
 
         const userCopy = JSON.parse(JSON.stringify(user));
-        userCopy.coursesObj = await Course.find({courseCode: {$in: userCopy.courses}});
+        userCopy.coursesObj = await Course.find({ courseCode: { $in: userCopy.courses } });
         res.send(userCopy);
-
     } catch (error) {
         res.status(500).send();
     }
@@ -63,9 +62,8 @@ router.get('/:id/groups', async (req, res) => {
         }
 
         const userCopy = JSON.parse(JSON.stringify(user));
-        userCopy.groupsObj = await Group.find({_id: {$in: userCopy.groups}});
+        userCopy.groupsObj = await Group.find({ _id: { $in: userCopy.groups } });
         res.send(userCopy);
-        
     } catch (error) {
         res.status(500).send();
     }
@@ -104,7 +102,7 @@ router.post('/login', async (req, res) => {
             });
         }
 
-        res.send({ _id: user._id });
+        res.send({ _id: user._id, firstName: user.firstName, lastName: user.lastName, createdAt: user.createdAt });
     } catch (error) {
         res.status(400).send(error);
     }
@@ -166,10 +164,9 @@ router.post('/:id/match', async (req, res) => {
  * POST /user
  */
 router.post('/', async (req, res) => {
-
     const allUsers = await User.find({});
 
-    for(const user of allUsers) {
+    for (const user of allUsers) {
         if (user.username === req.body.username) {
             res.status(400).send('Username already exists');
         }
