@@ -1,6 +1,8 @@
 import * as socketIO from 'socket.io';
 import * as log from 'log';
 import { createChatMessage, getChat, getChatMembers } from './chatMethods';
+import { pushChatMessage } from '../utils/send-push-notification';
+const User = require('../models/user');
 
 /*
  * A simple chat service implemented using socket.io for StudentLink
@@ -33,9 +35,10 @@ export const initializeChat = service => {
             // iterate through the list and send socket messages to each member
             for (const member of chatMembers) {
                 io.to(member).emit('message', sentGroupId, newMessage);
-            }
 
-            // TODO: emit push notifications
+                const user = await User.findOne({ _id: member });
+                pushChatMessage([user.pushNotificationToken], newMessage.senderName, newMessage.message);
+            }
 
             callback(sentGroupId, newMessage);
         });
