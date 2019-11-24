@@ -7,11 +7,9 @@ import {
     ScrollView,
     TouchableOpacity,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
 import { genericStyles } from '../../styles/generic';
 import { settingsStyles } from '../../styles/settings';
-import { infoButtonStyles } from '../../styles/button';
-import CanvasModal from '../Modal/CanvasModal';
+import SettingsForm from './SettingsForm';
 
 interface IGroupProps {
     userID: string;
@@ -20,7 +18,6 @@ interface IGroupProps {
 
 interface IGroupState {
     isLoading: boolean;
-    showCanvasModal: boolean;
 }
 
 export default class Group extends Component<IGroupProps, IGroupState> {
@@ -29,10 +26,7 @@ export default class Group extends Component<IGroupProps, IGroupState> {
 
         this.state = {
             isLoading: false,
-            showCanvasModal: false,
         };
-
-        this.toggleCanvasModal = this.toggleCanvasModal.bind(this);
     }
 
     public render() {
@@ -45,15 +39,12 @@ export default class Group extends Component<IGroupProps, IGroupState> {
         } else {
             return (
                 <SafeAreaView>
-                    <CanvasModal
-                        visible={this.state.showCanvasModal}
-                        toggleVisible={this.toggleCanvasModal}
-                    />
                     <View>
                         <Text style={genericStyles.title}>Settings</Text>
                     </View>
                     <ScrollView
                         contentContainerStyle={settingsStyles.container}
+                        keyboardShouldPersistTaps={true}
                     >
                         <View
                             style={{
@@ -64,29 +55,7 @@ export default class Group extends Component<IGroupProps, IGroupState> {
                         />
 
                         <Text style={settingsStyles.header}>Edit Profile</Text>
-                        <TouchableOpacity
-                            onPress={this.toggleCanvasModal.bind(this, true)}
-                            style={{
-                                ...genericStyles.buttonCircular,
-                                ...infoButtonStyles.color,
-                            }}
-                        >
-                            <Ionicons
-                                name="md-information"
-                                size={50}
-                                color="#FFFFFF"
-                            />
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            style={{
-                                ...settingsStyles.button,
-                                ...settingsStyles.submitButton,
-                            }}
-                        >
-                            <Text style={settingsStyles.settingsButtonText}>
-                                SUBMIT
-                            </Text>
-                        </TouchableOpacity>
+                        <SettingsForm userID={this.props.userID} />
                         <View
                             style={{
                                 borderBottomColor: '#AAAAAA',
@@ -109,11 +78,5 @@ export default class Group extends Component<IGroupProps, IGroupState> {
                 </SafeAreaView>
             );
         }
-    }
-
-    public toggleCanvasModal(toggle: boolean) {
-        this.setState({
-            showCanvasModal: toggle,
-        });
     }
 }

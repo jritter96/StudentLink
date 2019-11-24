@@ -15,7 +15,7 @@ export const settingsStyles = StyleSheet.create({
     },
     header: {
         color: '#444444',
-        fontSize: 20,
+        fontSize: 25,
         fontWeight: 'bold',
         marginHorizontal: 20,
     },
