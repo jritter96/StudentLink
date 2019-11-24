@@ -11,6 +11,8 @@ let cpenOgId;
 let perfectMatchId;
 let goodMatchUserId;
 
+let cpenOgGroupId;
+
 beforeAll(async () => {
     await dbHandler.connect();
 });
@@ -69,6 +71,8 @@ test('A user with no matches should have their own group created', async () => {
         .send();
 
     const body = response.body;
+
+    cpenOgGroupId = body._id;
 
     // Check group is added to user
     const CpenOGAfter = await User.findOne({ _id: CpenOG._id });
@@ -133,11 +137,15 @@ test('A perfect match will join the correct group', async () => {
 
     perfectMatchId = perfectMatchUser._id.toString();
 
-    const response = await request(service)
+    const response1 = await request(service)
         .post(`/user/${perfectMatchUser._id}/match`)
         .send();
 
-    const body = response.body;
+    const response2 = await request(service)
+        .post(`/group/join/${cpenOgGroupId}/${perfectMatchUser._id}/`)
+        .send();
+
+    const body = response2.body;
 
     // Check group is added to user
     const perfectMatchUserAfter = await User.findOne({ _id: perfectMatchUser._id });
@@ -189,7 +197,11 @@ test('A good match will join the correct group', async () => {
         .post(`/user/${goodMatchUser._id}/match`)
         .send();
 
-    const body = response.body;
+    const response2 = await request(service)
+        .post(`/group/join/${cpenOgGroupId}/${goodMatchUserId}/`)
+        .send();
+
+    const body = response2.body;
 
     // Check group is added to user
     const goodMatchUserAfter = await User.findOne({ _id: goodMatchUser._id });
@@ -212,32 +224,4 @@ test('A good match will join the correct group', async () => {
 
     // Check group names
     expect(body.names).toEqual([`CPEN OG`, `Perfect Match`, `${goodMatchUser.firstName} ${goodMatchUser.lastName}`]);
-});
-
-test('A user will not join groups they are already in', async () => {
-    const goodMatchUser = await User.findOne({ _id: goodMatchUserId });
-
-    const response = await request(service)
-        .post(`/user/${goodMatchUserId}/match`)
-        .send();
-
-    const body = response.body;
-
-    // Check group members
-    expect(body.members).toEqual([goodMatchUserId]);
-
-    // Check group courses
-    body.courses.forEach(course => {
-        expect(goodMatchUser.courses.includes(course.toString())).toBe(true);
-    });
-    expect(body.courses.length).toEqual(goodMatchUser.courses.length);
-
-    // Check group meeting times
-    body.meeting_times.forEach(day => {
-        expect(goodMatchUser.schedule.includes(day.toString())).toBe(true);
-    });
-    expect(body.meeting_times.length).toEqual(goodMatchUser.schedule.length);
-
-    // Check group names
-    expect(body.names).toEqual([`${goodMatchUser.firstName} ${goodMatchUser.lastName}`]);
 });
