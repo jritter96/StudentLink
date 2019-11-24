@@ -54,6 +54,13 @@ export default class App extends Component<{}, IAppState> {
         };
     }
 
+    componentDidMount() {
+        if (this.state.navigator !== viewEnum.login) {
+            this.state.socket.on("message", newMessage => {
+            this.setState({ chatBody: this.state.chatBody.push(newMessage) })});
+        }
+    }
+
     public render() {
         return (
             <View style={appStyles.container}>
@@ -134,7 +141,7 @@ export default class App extends Component<{}, IAppState> {
         registerForPushNotificationsAsync(this.state.userID);
 
         // initialize socket functionality
-        this.handleSocketConnection();
+            this.handleSocketConnection();
 
         return;
     }
@@ -170,6 +177,11 @@ export default class App extends Component<{}, IAppState> {
         }
         this.setState({ chatBody: newChatBody });
         this.refs.chat.reloadChatroom();
+    }
+
+    public handleNewMessage(newChatObject: any) {
+        this.setState({ chatBody: this.state.chatBody.push(newChatObject) })
+        return;
     }
 
     private showMainView(view: any) {
