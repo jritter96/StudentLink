@@ -98,17 +98,19 @@ export default class App extends Component<{}, IAppState> {
 
         // iterate through groups
         // TODO: populate properly
-        for (const event of groupSchedule) {
-            newSchedule.push({
-                _id: event._id,
-                isCourse: false,
-                eventName: event.groupName,
-                day: event.day || 3,
-                hourStart: event.hourStart || 18,
-                minuteStart: event.minuteStart || 30,
-                hourEnd: event.hourEnd || 20,
-                minuteEnd: event.minuteEnd || 30,
-            });
+        for (const events of groupSchedule) {
+            for (const event of events['scheduled_meeting']) {
+                newSchedule.push({
+                    _id: events._id,
+                    isCourse: false,
+                    eventName: events.groupName,
+                    day: event.day || 3,
+                    hourStart: event.hourStart || 18,
+                    minuteStart: event.minuteStart || 30,
+                    hourEnd: event.hourEnd || 20,
+                    minuteEnd: event.minuteEnd || 30,
+                });
+            }
         }
 
         // sort
@@ -125,6 +127,7 @@ export default class App extends Component<{}, IAppState> {
 
     public handleGroupsChange(groups: any[]) {
         this.setState({ groups });
+        this.reloadChatBody();
     }
 
     public handleSuccessfulLogin(response: any) {
@@ -184,6 +187,29 @@ export default class App extends Component<{}, IAppState> {
         if (this.state.navigator === viewEnum.chat) {
             this.refs.chat.reloadChatroom(groupId);
         }
+    }
+
+    private reloadChatBody() {
+        fetch(`${endpoint}/chat/user/${this.state.userID}`, {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+        })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw `Error: problem retrieving user's chat object`;
+                }
+            })
+            .then(responseJson => {
+                this.setState({ chatBody: responseJson });
+            })
+            .catch(error => {
+                console.log(error);
+            });
     }
 
     private showMainView(view: any) {

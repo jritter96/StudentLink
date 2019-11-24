@@ -48,15 +48,7 @@ export default class Schedule extends Component<IScheduleProps, {}> {
                     </TouchableOpacity>
                 </View>
                 <View style={scheduleStyles.scrollContainer}>
-                    <ScrollView>
-                        {this.renderSchedule()}
-                        <ScheduleCard
-                            isCourse={false}
-                            eventName="Fun Study Group"
-                            eventDate="Tuesday"
-                            eventTime="5:00 - 6:00 PM"
-                        />
-                    </ScrollView>
+                    <ScrollView>{this.renderSchedule()}</ScrollView>
                 </View>
             </SafeAreaView>
         );
