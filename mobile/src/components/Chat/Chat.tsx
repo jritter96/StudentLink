@@ -11,6 +11,7 @@ import { genericStyles } from '../../styles/generic';
 import { scheduleStyles } from '../../styles/schedule';
 import { chatStyles } from '../../styles/chat';
 import { chatEnum } from '../../enum/chatEnum';
+import { hook } from 'cavy';
 
 const MAX_CHARACTERS = 33;
 
@@ -27,7 +28,7 @@ interface ChatState {
     chatSel: any;
 }
 
-export default class Chat extends Component<ChatProps, ChatState> {
+class Chat extends Component<ChatProps, ChatState> {
     constructor(props: any) {
         super(props);
         this.state = {
@@ -172,9 +173,15 @@ export default class Chat extends Component<ChatProps, ChatState> {
 
     public render() {
         return (
-            <SafeAreaView style={genericStyles.container}>
+            <SafeAreaView
+                style={genericStyles.container}
+                ref={this.props.generateTestHook('Chat.screen')}
+            >
                 {this.ShowChatViews(this.state.chatNav)}
             </SafeAreaView>
         );
     }
 }
+
+const TestableChat = hook(Chat);
+export default TestableChat;

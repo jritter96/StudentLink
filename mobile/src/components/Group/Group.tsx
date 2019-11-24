@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { View, SafeAreaView, ActivityIndicator, Modal } from 'react-native';
+import { View, SafeAreaView, ActivityIndicator } from 'react-native';
 import { genericStyles } from '../../styles/generic';
 import DefaultGroupView from './DefaultGroupView';
 import config from '../../../config/config';
 import ChooseAGroupModal from '../Modal/ChooseAGroupModal';
+import { hook } from 'cavy';
 
 interface IGroupProps {
     userID: string;
@@ -20,7 +21,7 @@ interface IGroupState {
 
 const endpoint = config.endpoint;
 
-export default class Group extends Component<IGroupProps, IGroupState> {
+class Group extends Component<IGroupProps, IGroupState> {
     constructor(props) {
         super(props);
         this.state = {
@@ -45,7 +46,10 @@ export default class Group extends Component<IGroupProps, IGroupState> {
 
     public render() {
         return (
-            <SafeAreaView style={genericStyles.container}>
+            <SafeAreaView
+                style={genericStyles.container}
+                ref={this.props.generateTestHook('Group.screen')}
+            >
                 {this.renderGroupView()}
             </SafeAreaView>
         );
@@ -195,3 +199,6 @@ export default class Group extends Component<IGroupProps, IGroupState> {
             });
     }
 }
+
+const TestableGroup = hook(Group);
+export default TestableGroup;

@@ -11,6 +11,7 @@ import {
 import { genericStyles } from '../../styles/generic';
 import { settingsStyles } from '../../styles/settings';
 import SettingsForm from './SettingsForm';
+import { hook } from 'cavy';
 
 interface ISettingsProps {
     userID: string;
@@ -24,10 +25,7 @@ interface ISettingsState {
     isLoading: boolean;
 }
 
-export default class Settings extends Component<
-    ISettingsProps,
-    ISettingsState
-> {
+class Settings extends Component<ISettingsProps, ISettingsState> {
     constructor(props) {
         super(props);
 
@@ -45,7 +43,9 @@ export default class Settings extends Component<
             );
         } else {
             return (
-                <SafeAreaView>
+                <SafeAreaView
+                    ref={this.props.generateTestHook('Settings.screen')}
+                >
                     <View>
                         <Text style={genericStyles.title}>Settings</Text>
                     </View>
@@ -111,6 +111,7 @@ export default class Settings extends Component<
                         />
                         <TouchableOpacity
                             onPress={this.props.handleLogout}
+                            ref={this.props.generateTestHook('Settings.logout')}
                             style={{
                                 ...genericStyles.button,
                                 ...settingsStyles.logoutButton,
@@ -130,3 +131,6 @@ export default class Settings extends Component<
         }
     }
 }
+
+const TestableSettings = hook(Settings);
+export default TestableSettings;

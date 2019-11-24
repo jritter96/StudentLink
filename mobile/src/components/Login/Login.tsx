@@ -10,6 +10,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { loginGradient, loginStyles } from '../../styles/login';
 import LoginForm from './LoginForm';
 import { viewEnum } from '../../enum/viewEnum';
+import { hook } from 'cavy';
 
 interface ILoginProps {
     handleSuccessfulLogin: (id: string) => void;
@@ -17,7 +18,7 @@ interface ILoginProps {
     toggleNavbar: Function;
 }
 
-export default class Login extends Component<ILoginProps, {}> {
+class Login extends Component<ILoginProps, {}> {
     constructor(props: ILoginProps) {
         super(props);
         this.signupPress = this.signupPress.bind(this);
@@ -34,6 +35,7 @@ export default class Login extends Component<ILoginProps, {}> {
                 <KeyboardAvoidingView
                     behavior="padding"
                     style={loginStyles.container}
+                    ref={this.props.generateTestHook('Login.screen')}
                 >
                     <View style={loginStyles.logoContainer}>
                         <View style={loginStyles.logoLine}>
@@ -74,3 +76,6 @@ export default class Login extends Component<ILoginProps, {}> {
         this.props.toggleNavbar(false);
     }
 }
+
+const TestableLogin = hook(Login);
+export default TestableLogin;

@@ -5,6 +5,7 @@ import { groupStyles } from '../../styles/group';
 import GroupContainer from './GroupContainer';
 import { Ionicons } from '@expo/vector-icons';
 import { scheduleStyles } from '../../styles/schedule';
+import { hook } from 'cavy';
 
 interface DefaultGroupProps {
     userID: string;
@@ -12,7 +13,7 @@ interface DefaultGroupProps {
     searchPress: () => void;
 }
 
-export default class DefaultGroupView extends Component<DefaultGroupProps> {
+class DefaultGroupView extends Component<DefaultGroupProps> {
     constructor(props) {
         super(props);
     }
@@ -23,6 +24,7 @@ export default class DefaultGroupView extends Component<DefaultGroupProps> {
                 <View style={genericStyles.titleContainer}>
                     <Text style={scheduleStyles.scheduleTitle}>Groups</Text>
                     <TouchableOpacity
+                        ref={this.props.generateTestHook('Group.searchBtn')}
                         onPress={this.props.searchPress}
                         style={{
                             ...genericStyles.buttonCircular,
@@ -49,3 +51,6 @@ export default class DefaultGroupView extends Component<DefaultGroupProps> {
         ));
     }
 }
+
+const TestableDefaultGroupView = hook(DefaultGroupView);
+export default TestableDefaultGroupView;

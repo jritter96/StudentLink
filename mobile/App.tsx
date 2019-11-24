@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { View, StatusBar } from 'react-native';
+import { Tester, TestHookStore } from 'cavy';
 import io from 'socket.io-client';
 import { appStyles } from './src/styles/app';
 import Login from './src/components/Login/Login';
-import Navbar from './src/components/Navbar/Navbar';
 import Chat from './src/components/Chat/Chat';
 import Group from './src/components/Group/Group';
 import Schedule from './src/components/Schedule/Schedule';
@@ -13,7 +13,15 @@ import registerForPushNotificationsAsync from './src/utils/registerForPushNotifi
 import { viewEnum } from './src/enum/viewEnum';
 import config from './config/config';
 
+import validLoginSpec from './specs/validLoginSpec';
+import invalidLoginSpec from './specs/invalidLoginSpec';
+import groupSearchSpec from './specs/groupSearchSpec';
+import scheduleCourseRefreshSpec from './specs/scheduleCourseRefreshSpec';
+import navbarSpec from './specs/navBarSpec';
+import Navbar from './src/components/Navbar/Navbar';
+
 const endpoint = config.endpoint;
+const testHookStore = new TestHookStore();
 
 interface IAppState {
     chatBody: any[];
@@ -30,7 +38,7 @@ interface IAppState {
 
 console.disableYellowBox = true;
 
-export default class App extends Component<{}, IAppState> {
+export default class AppWrapper extends Component<{}, IAppState> {
     constructor(props: any) {
         super(props);
 
@@ -59,14 +67,35 @@ export default class App extends Component<{}, IAppState> {
 
     public render() {
         return (
-            <View style={appStyles.container}>
-                <StatusBar barStyle={this.renderStatusBar()} />
-                <View style={appStyles.viewContainer}>
-                    {this.showMainView(this.state.navigator)}
+            <Tester
+                specs={[
+                    invalidLoginSpec,
+                    validLoginSpec,
+                    navbarSpec,
+                    groupSearchSpec,
+                    scheduleCourseRefreshSpec,
+                ]}
+                store={testHookStore}
+            >
+                <View style={appStyles.container}>
+                    <StatusBar barStyle={this.renderStatusBar()} />
+                    <View style={appStyles.viewContainer}>
+                        {this.showMainView(this.state.navigator)}
+                    </View>
+                    {this.showNavBar(
+                        this.state.navigator,
+                        this.state.navBarEnable
+                    )}
                 </View>
-                {this.showNavBar(this.state.navigator, this.state.navBarEnable)}
-            </View>
+            </Tester>
         );
+    }
+
+    private showNavBar(showNav: any, navBarEnable: boolean) {
+        if (showNav !== viewEnum.login && navBarEnable) {
+            return <Navbar handleViewChange={this.handleViewChange} />;
+        }
+        return null;
     }
 
     public toggleNavBar(active: boolean) {
@@ -269,13 +298,6 @@ export default class App extends Component<{}, IAppState> {
             default:
                 return null;
         }
-    }
-
-    private showNavBar(showNav: any, navBarEnable: boolean) {
-        if (showNav !== viewEnum.login && navBarEnable) {
-            return <Navbar handleViewChange={this.handleViewChange} />;
-        }
-        return null;
     }
 
     private renderStatusBar() {

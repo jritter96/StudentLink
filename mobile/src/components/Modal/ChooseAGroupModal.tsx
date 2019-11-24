@@ -12,6 +12,7 @@ import { modalStyles } from '../../styles/modal';
 import { Ionicons } from '@expo/vector-icons';
 import GroupContainer from '../Group/GroupContainer';
 import config from '../../../config/config';
+import { hook } from 'cavy';
 
 const endpoint = config.endpoint;
 
@@ -23,9 +24,7 @@ interface ChooseAGroupModalProps {
     isLoading: boolean;
 }
 
-export default class ChooseAGroupModal extends Component<
-    ChooseAGroupModalProps
-> {
+class ChooseAGroupModal extends Component<ChooseAGroupModalProps> {
     constructor(props) {
         super(props);
     }
@@ -52,7 +51,10 @@ export default class ChooseAGroupModal extends Component<
                         <Text style={modalStyles.titleHeader}>
                             Choose a group to join:
                         </Text>
-                        <View style={modalStyles.chooseAGroupContent}>
+                        <View
+                            style={modalStyles.chooseAGroupContent}
+                            ref={this.props.generateTestHook('Group.groupList')}
+                        >
                             {this.renderSearchResults()}
                         </View>
                     </ScrollView>
@@ -89,3 +91,6 @@ export default class ChooseAGroupModal extends Component<
         };
     }
 }
+
+const TestableChooseAGroupModal = hook(ChooseAGroupModal);
+export default TestableChooseAGroupModal;

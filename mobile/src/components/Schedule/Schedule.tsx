@@ -12,6 +12,7 @@ import { scheduleStyles } from '../../styles/schedule';
 import config from '../../../config/config';
 import ScheduleCard from './ScheduleCard';
 import { getDayOfWeek, formatTime } from '../../utils/date';
+import { hook } from 'cavy';
 
 const endpoint = config.endpoint;
 
@@ -21,7 +22,7 @@ interface IScheduleProps {
     handleScheduleChange: (a: any[], b: any[]) => void;
 }
 
-export default class Schedule extends Component<IScheduleProps, {}> {
+class Schedule extends Component<IScheduleProps, {}> {
     constructor(props: IScheduleProps) {
         super(props);
         this.buildSchedule = this.buildSchedule.bind(this);
@@ -37,18 +38,28 @@ export default class Schedule extends Component<IScheduleProps, {}> {
 
     public render() {
         return (
-            <SafeAreaView style={genericStyles.container}>
+            <SafeAreaView
+                style={genericStyles.container}
+                ref={this.props.generateTestHook('Schedule.screen')}
+            >
                 <View style={genericStyles.titleContainer}>
                     <Text style={scheduleStyles.scheduleTitle}>Schedule</Text>
                     <TouchableOpacity
                         onPress={this.buildSchedule}
+                        ref={this.props.generateTestHook(
+                            'Schedule.refreshCoursesBtn'
+                        )}
                         style={genericStyles.buttonCircular}
                     >
                         <Ionicons name="ios-refresh" size={30} color="white" />
                     </TouchableOpacity>
                 </View>
                 <View style={scheduleStyles.scrollContainer}>
-                    <ScrollView>{this.renderSchedule()}</ScrollView>
+                    <ScrollView
+                        ref={this.props.generateTestHook('Schedule.courseList')}
+                    >
+                        {this.renderSchedule()}
+                    </ScrollView>
                 </View>
             </SafeAreaView>
         );
@@ -138,3 +149,6 @@ export default class Schedule extends Component<IScheduleProps, {}> {
         }
     }
 }
+
+const TestableSchedule = hook(Schedule);
+export default TestableSchedule;
