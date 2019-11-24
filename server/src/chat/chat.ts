@@ -17,7 +17,7 @@ export const initializeChat = service => {
             // a user is allocated their own listening room
             socket.join(userId);
 
-            console.log('Joined ' + userId);
+            log.notice(`A new user made socket connection: ${userId}`);
 
             // generate mobile-used chat object
             const initChat = await getChat(userId);
@@ -31,12 +31,9 @@ export const initializeChat = service => {
             const chatMembers = await getChatMembers(sentUserId, sentGroupId);
 
             // iterate through the list and send socket messages to each member
-
-            // for (const member of chatMembers) {
-            //     io.to(member).emit('message', sentGroupId, newMessage);
-            // }
-
-            socket.broadcast.emit('message', sentGroupId, newMessage);
+            for (const member of chatMembers) {
+                io.to(member).emit('message', sentGroupId, newMessage);
+            }
 
             // TODO: emit push notifications
 
