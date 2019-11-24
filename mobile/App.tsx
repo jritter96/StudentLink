@@ -98,17 +98,19 @@ export default class App extends Component<{}, IAppState> {
 
         // iterate through groups
         // TODO: populate properly
-        for (const event of groupSchedule) {
-            newSchedule.push({
-                _id: event._id,
-                isCourse: false,
-                eventName: event.groupName,
-                day: event.day || 3,
-                hourStart: event.hourStart || 18,
-                minuteStart: event.minuteStart || 30,
-                hourEnd: event.hourEnd || 20,
-                minuteEnd: event.minuteEnd || 30,
-            });
+        for (const events of groupSchedule) {
+            for (const event of events['scheduled_meeting']) {
+                newSchedule.push({
+                    _id: events._id,
+                    isCourse: false,
+                    eventName: events.groupName,
+                    day: event.day || 3,
+                    hourStart: event.hourStart || 18,
+                    minuteStart: event.minuteStart || 30,
+                    hourEnd: event.hourEnd || 20,
+                    minuteEnd: event.minuteEnd || 30,
+                });
+            }
         }
 
         // sort
