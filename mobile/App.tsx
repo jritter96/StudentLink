@@ -99,11 +99,11 @@ export default class App extends Component<{}, IAppState> {
                 _id: event._id,
                 isCourse: false,
                 eventName: event.groupName,
-                day: 1,
-                hourStart: 10,
-                minuteStart: 30,
-                hourEnd: 12,
-                minuteEnd: 30,
+                day: event.day || 3,
+                hourStart: event.hourStart || 18,
+                minuteStart: event.minuteStart || 30,
+                hourEnd: event.hourEnd || 20,
+                minuteEnd: event.minuteEnd || 30,
             });
         }
 
