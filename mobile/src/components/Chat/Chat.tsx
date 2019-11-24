@@ -5,7 +5,6 @@ import {
     View,
     Text,
     ScrollView,
-    StatusBar,
 } from 'react-native';
 import Chatroom from './Chatroom';
 import { genericStyles } from '../../styles/generic';
@@ -98,7 +97,6 @@ export default class Chat extends Component<ChatProps, ChatState> {
     private ChatMainView() {
         return (
             <View style={genericStyles.container}>
-                <StatusBar barStyle="dark-content" />
                 <View style={genericStyles.titleContainer}>
                     <Text style={genericStyles.title}>Messages</Text>
                 </View>
