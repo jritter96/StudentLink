@@ -170,18 +170,16 @@ export const joinGroup = async (userId, groupId, callback) => {
                 // day when we first see that the student is at school
                 let atSchoolDay = 0;
 
-            loopA:
-                for (let k = 0; k < newMeetingTimes.length; k++) {
-            loopB:
-                    for (let i = 0; i < newMeetingTimes[k].length; i++) {  
-                        // we also check when we see a zero if it would be early enough to 
+                loopA: for (let k = 0; k < newMeetingTimes.length; k++) {
+                    loopB: for (let i = 0; i < newMeetingTimes[k].length; i++) {
+                        // we also check when we see a zero if it would be early enough to
                         // have a meeting after the class
                         if (newMeetingTimes[k].charAt(i) === '0' && i < newMeetingTimes[k].length - 6) {
                             zeroEncountered = true;
                             meetingTimeIndex = i;
-                            atSchoolDay = k
+                            atSchoolDay = k;
 
-                            while (newMeetingTimes[k].charAt(meetingTimeIndex) === '0'){
+                            while (newMeetingTimes[k].charAt(meetingTimeIndex) === '0') {
                                 meetingTimeIndex++;
                             }
 
@@ -190,21 +188,17 @@ export const joinGroup = async (userId, groupId, callback) => {
                     }
                 }
 
-                console.log('d', atSchoolDay, 'i', meetingTimeIndex);
-
                 let oneCounter = 0;
-            loop1:
-                for (let i = atSchoolDay; i < newMeetingTimes.length; i++) {
+                loop1: for (let i = atSchoolDay; i < newMeetingTimes.length; i++) {
                     oneCounter = 0;
-            loop2:
-                    for (let j = meetingTimeIndex; j < newMeetingTimes[i].length; j++) {
+                    loop2: for (let j = meetingTimeIndex; j < newMeetingTimes[i].length; j++) {
                         if (newMeetingTimes[i].charAt(j) === '1') {
                             oneCounter++;
                         } else if (newMeetingTimes[i].charAt(j) === '0') {
                             oneCounter = 0;
                         }
                         if (oneCounter === 4) {
-                            const hStart = 8 + Math.floor(j/2);
+                            const hStart = 8 + Math.floor(j / 2);
                             group.scheduled_meeting = [
                                 {
                                     day: i,
@@ -213,7 +207,7 @@ export const joinGroup = async (userId, groupId, callback) => {
                                     hourEnd: hStart + 2,
                                     minuteEnd: hStart % 2 ? 0 : 30,
                                 },
-                            ]
+                            ];
                             break loop1;
                         }
                     }
@@ -266,6 +260,7 @@ const createGroup = async (userId, callback) => {
 
         const chat = new Chat({
             groupId,
+            groupName: group.groupName,
             messages: [],
         });
 

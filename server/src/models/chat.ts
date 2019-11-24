@@ -15,6 +15,10 @@ const chatSchema = new mongoose.Schema(
             type: mongoose.Schema.Types.ObjectId,
             required: true,
         },
+        groupName: {
+            type: String,
+            trim: true,
+        },
         messages: [
             {
                 senderId: mongoose.Schema.Types.ObjectId,
