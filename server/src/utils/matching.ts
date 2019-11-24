@@ -194,7 +194,7 @@ const findGroupForUser = async (userId, sortedPotentialMatches, callback) => {
     // log.debug('sortedPotentialMatches:', sortedPotentialMatches);
 };
 
-const joinGroup = async (userId, groupId, callback) => {
+export const joinGroup = async (userId, groupId, callback) => {
     try {
         const user = await User.findOne({ _id: userId });
         const group = await Group.findOne({ _id: groupId });
