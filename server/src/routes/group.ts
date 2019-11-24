@@ -1,5 +1,6 @@
 import * as express from 'express';
 import * as log from 'log';
+import { joinGroup } from '../utils/matching';
 const Group = require('../models/group');
 const User = require('../models/user');
 
@@ -54,6 +55,31 @@ router.post('/', async (req, res) => {
         await user.save();
         await group.save();
         res.status(201).send(group);
+    } catch (error) {
+        res.status(400).send(error);
+    }
+});
+
+/*
+ * Join a group
+ *
+ * POST /group/:groupId/:userId
+ *
+ * Assume that this is called with fields from one user in the req body
+ */
+router.post('/join/:groupId/:userId', async (req, res) => {
+
+    try {
+
+        await joinGroup(req.params.userId, req.params.groupId, (err, newGroup) => {
+            if (err || !newGroup) {
+                res.status(400).send(err);
+            } else {
+                res.status(201).send(newGroup);
+            }
+
+        })
+
     } catch (error) {
         res.status(400).send(error);
     }
