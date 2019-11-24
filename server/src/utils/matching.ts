@@ -65,7 +65,7 @@ const assignPreferenceScores = async (userId, callback) => {
             if (commonCourses && !group.members.includes(user._id)) {
                 pref = (commonCourses.length / numUCourses + commonCourses.length / numGCourses) * pcntIntersect;
                 if (pref > threshold) {
-                    potentialMatches.push({ group: { group }, pref: pref });
+                    potentialMatches.push({ group, pref: pref });
                 }
             }
         });
@@ -161,6 +161,63 @@ export const joinGroup = async (userId, groupId, callback) => {
                 return callback(err);
             } else {
                 group.meeting_times = newMeetingTimes;
+
+                let zeroEncountered = false;
+
+                // index when we first see that the student is at school (first zero)
+                let meetingTimeIndex = 0;
+
+                // day when we first see that the student is at school
+                let atSchoolDay = 0;
+
+            loopA:
+                for (let k = 0; k < newMeetingTimes.length; k++) {
+            loopB:
+                    for (let i = 0; i < newMeetingTimes[k].length; i++) {  
+                        // we also check when we see a zero if it would be early enough to 
+                        // have a meeting after the class
+                        if (newMeetingTimes[k].charAt(i) === '0' && i < newMeetingTimes[k].length - 6) {
+                            zeroEncountered = true;
+                            meetingTimeIndex = i;
+                            atSchoolDay = k
+
+                            while (newMeetingTimes[k].charAt(meetingTimeIndex) === '0'){
+                                meetingTimeIndex++;
+                            }
+
+                            break loopA;
+                        }
+                    }
+                }
+
+                console.log('d', atSchoolDay, 'i', meetingTimeIndex);
+
+                let oneCounter = 0;
+            loop1:
+                for (let i = atSchoolDay; i < newMeetingTimes.length; i++) {
+                    oneCounter = 0;
+            loop2:
+                    for (let j = meetingTimeIndex; j < newMeetingTimes[i].length; j++) {
+                        if (newMeetingTimes[i].charAt(j) === '1') {
+                            oneCounter++;
+                        } else if (newMeetingTimes[i].charAt(j) === '0') {
+                            oneCounter = 0;
+                        }
+                        if (oneCounter === 4) {
+                            const hStart = 8 + Math.floor(j/2);
+                            group.scheduled_meeting = [
+                                {
+                                    day: i,
+                                    hourStart: hStart,
+                                    minuteStart: hStart % 2 ? 0 : 30,
+                                    hourEnd: hStart + 2,
+                                    minuteEnd: hStart % 2 ? 0 : 30,
+                                },
+                            ]
+                            break loop1;
+                        }
+                    }
+                }
             }
         });
 

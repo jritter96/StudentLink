@@ -40,6 +40,15 @@ const groupSchema = new mongoose.Schema(
             type: String,
             trim: true,
         },
+        scheduled_meeting: [
+            {
+                day: Number,
+                hourStart: Number,
+                minuteStart: Number,
+                hourEnd: Number,
+                minuteEnd: Number,
+            },
+        ],
     },
     {
         timestamps: true,
