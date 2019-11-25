@@ -142,7 +142,7 @@ export default class Signup extends Component<SignupProps, SignupState> {
                             returnKeyType="next"
                             secureTextEntry
                             onSubmitEditing={() =>
-                                this.notificationTokenInput.focus()
+                                this.canvasTokenInput.focus()
                             }
                             onChangeText={this.handlePasswordUpdate}
                             ref={input => (this.passwordInput = input)}
