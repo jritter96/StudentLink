@@ -34,6 +34,29 @@ export const pushUserJoinedGroup = async (userTokens, userNew) => {
 };
 
 /*
+ * userToken: a user push token
+ * userNew: a name of the user sending the message
+ * message: message contents
+ */
+export const pushChatMessage = async (userToken, userNew, message) => {
+    let options = {};
+
+    userToken.forEach(token => {
+        options = {
+            url: endpoint,
+            headers: pushHeaders,
+            body: JSON.stringify(buildPushNotification(token, `${userNew}: ${message}`)),
+        };
+
+        request.post(options, (err, res) => {
+            if (err) {
+                log.error(`Error sending ChatMessage push notification: ${err}`);
+            }
+        });
+    });
+};
+
+/*
  * userId: target for StudentLink test push notification
  *
  * sends a test push notification to a registered user in the StudentLink
