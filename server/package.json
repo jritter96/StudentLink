@@ -32,7 +32,7 @@
     "dependencies": {
         "async": "^3.1.0",
         "bcrypt": "^3.0.7",
-        "express": "^4.17.1",
+        "express": "^4.17.3",
         "log": "^6.0.0",
         "log-node": "^7.0.0",
         "mongoose": "^5.7.5",
